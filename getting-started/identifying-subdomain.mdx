@@ -1,0 +1,64 @@
+---
+title: "Identifying your subdomain"
+description: "Learn how to identify your workspace subdomain for API requests."
+---
+
+## What is a subdomain?
+
+A subdomain is the part of your workspace URL that comes before the main domain. For example, in the URL:
+
+```
+https://spinkart.neetorecord.com
+```
+
+The subdomain is: **spinkart**
+
+This subdomain is crucial for making API requests, as it identifies your specific workspace within NeetoRecord.
+
+## Step-by-step instructions
+<Steps>
+  <Step title="Locate your workspace URL">
+    You can usually find this in your browser's address bar when logged into your workspace.
+
+    Example:
+    ```
+    https://your-subdomain.neetorecord.com
+    ```
+  </Step>
+
+  <Step title="Identify the main domain">
+    Our main domain is: `neetorecord.com`
+  </Step>
+
+  <Step title="Extract the part before the main domain">
+    Everything before `neetorecord.com` is your subdomain.
+
+    **Example:**
+    - URL: `https://marketing.neetorecord.com`
+    - Subdomain: `marketing`
+  </Step>
+</Steps>
+
+## Using Your Subdomain in API Requests
+
+Once you've identified your subdomain, you'll use it in all API requests. The base URL format is:
+
+```
+https://{your-subdomain}.neetorecord.com/api/external/v1
+```
+
+For example, if your subdomain is `mycompany`, your API base URL would be:
+
+```
+https://mycompany.neetorecord.com/api/external/v1
+```
+
+## Common Examples
+
+Here are some common subdomain patterns:
+
+| Type       | Example URL                              | Subdomain        |
+| ---------- | ---------------------------------------- | ---------------- |
+| Company    | `https://acmecorp.neetorecord.com`       | `acmecorp`       |
+| Department | `https://marketing.neetorecord.com`      | `marketing`      |
+| Project    | `https://product-launch.neetorecord.com` | `product-launch` |

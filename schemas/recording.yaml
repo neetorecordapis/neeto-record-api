@@ -1,0 +1,100 @@
+components:
+  schemas:
+    # Tag object structure
+    tag:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the tag.
+        name:
+          type: string
+          description: Name of the tag.
+        style:
+          type: string
+          description: Style/color of the tag.
+
+    # Recording object structure
+    recording:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the recording.
+        title:
+          type: string
+          nullable: true
+          description: Custom title set by the user.
+        default_title:
+          type: string
+          description: Auto-generated title for the recording.
+        duration:
+          type: number
+          nullable: true
+          description: Duration of the recording in seconds.
+        view_count:
+          type: integer
+          description: Number of times the recording has been viewed.
+        is_uploaded:
+          type: boolean
+          description: Whether the recording has been fully uploaded.
+        requested:
+          type: boolean
+          description: Whether the recording was requested from someone.
+        summary:
+          type: string
+          nullable: true
+          description: AI-generated summary of the recording.
+        public_link_id:
+          type: string
+          nullable: true
+          description: Public link identifier used in the watch URL.
+        transcoded_url:
+          type: string
+          nullable: true
+          description: CloudFront signed URL for the transcoded video.
+        thumbnail_url:
+          type: string
+          nullable: true
+          description: URL for the recording thumbnail image.
+        user_name:
+          type: string
+          description: Display name of the user who created the recording.
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/tag"
+          description: Tags associated with the recording.
+        folder_name:
+          type: string
+          nullable: true
+          description: Name of the folder containing the recording.
+        folder_id:
+          type: string
+          nullable: true
+          description: Unique identifier of the folder containing the recording.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recording was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recording was last updated.
+        uploaded_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the recording was uploaded.
+
+    # Recording list response structure
+    recording_list_response:
+      type: object
+      properties:
+        recordings:
+          type: array
+          items:
+            $ref: "#/components/schemas/recording"
+          description: List of recordings.
+        pagination:
+          $ref: "../schemas/common.yaml#/components/schemas/pagination"

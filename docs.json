@@ -1,0 +1,81 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "NeetoRecord API",
+  "description": "NeetoRecord API docs guide to manage recordings from external channels",
+  "theme": "mint",
+  "colors": {
+    "primary": "#10B981",
+    "light": "#34D399",
+    "dark": "#059669"
+  },
+  "logo": "/assets/logo.svg",
+  "favicon": "/assets/favicon.svg",
+  "navbar": {
+    "links": [
+      {
+        "label": "Blog",
+        "href": "https://www.neeto.com/neetorecord/blog"
+      },
+      {
+        "label": "Help center",
+        "href": "https://help.neetorecord.com/"
+      },
+      {
+        "label": "NeetoRecord",
+        "href": "https://neetorecord.com/"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/neetohq",
+      "linkedin": "https://www.linkedin.com/company/neeto",
+      "youtube": "https://www.youtube.com/channel/UCoQ3Kv2JdZ51WZJ3QFFcI9g",
+      "slack": "https://www.launchpass.com/neetohq"
+    }
+  },
+  "navigation": {
+    "pages": [
+      {
+        "group": "Getting Started",
+        "icon": "rocket",
+        "pages": [
+          "getting-started/introduction",
+          "getting-started/identifying-subdomain",
+          "getting-started/authentication",
+          "getting-started/quickstart",
+          "getting-started/pagination",
+          "getting-started/response-codes"
+        ]
+      },
+      {
+        "group": "Recordings API",
+        "icon": "video",
+        "pages": [
+          "api-reference/recordings/list-recordings"
+        ]
+      }
+    ]
+  },
+  "api": {
+    "params": {
+      "expanded": "all"
+    },
+    "playground": {
+      "display": "interactive",
+      "proxy": true
+    },
+    "examples": {
+      "languages": ["curl", "javascript", "python"],
+      "defaults": "all"
+    }
+  },
+  "styling": {
+    "eyebrows": "section",
+    "codeblocks": "system"
+  },
+  "appearance": {
+    "default": "light",
+    "strict": true
+  }
+}

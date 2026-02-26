@@ -1,0 +1,79 @@
+# Server configuration used across all endpoints
+servers:
+  - description: NeetoRecord APIs
+    url: https://{your-subdomain}.neetorecord.com/api/external/v1
+    variables:
+      your-subdomain:
+        default: spinkart
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/identifying-subdomain).
+
+# Common API Key header parameter
+api_key_header:
+  in: header
+  name: X-Api-Key
+  description: X-Api-Key is used to authenticate requests using an API key. Provide your API key in this header to access protected endpoints. Refer to [Authentication](/getting-started/authentication) for more information.
+  required: true
+  schema:
+    type: string
+
+# Common Accept header parameter
+accept_header:
+  in: header
+  name: Accept
+  description: Specifies the expected response format. Must be set to `application/json` for proper API communication.
+  required: true
+  schema:
+    type: string
+    enum: ['application/json']
+    default: 'application/json'
+
+# Common pagination parameters
+page_number_param:
+  in: query
+  name: page_number
+  description: Retrieve paginated results by specifying the desired page number. If this parameter is absent, all results will be returned.
+  required: false
+  schema:
+    type: integer
+
+page_size_param:
+  in: query
+  name: page_size
+  description: Set the number of results returned in the response. Defaulting to 30 when omitted.
+  required: false
+  schema:
+    type: integer
+
+# Common pagination parameters
+pagination_parameters:
+  - in: query
+    name: page_number
+    description: Retrieve paginated results by specifying the desired page number. If this parameter is absent, all results will be returned.
+    required: false
+    schema:
+      type: integer
+  - in: query
+    name: page_size
+    description: Set the number of results returned in the response. Defaulting to 30 when omitted.
+    required: false
+    schema:
+      type: integer
+
+components:
+  schemas:
+    # Pagination object structure (for NeetoRecord APIs)
+    pagination:
+      type: object
+      properties:
+        total_records:
+          type: integer
+          description: Total number of records.
+        total_pages:
+          type: integer
+          description: Total number of pages available.
+        current_page_number:
+          type: integer
+          description: Current page number.
+        page_size:
+          type: integer
+          description: Number of records per page.

@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Recordings APIs
+  version: 1.0.0
+
+servers:
+  $ref: '../schemas/common.yaml#/servers'
+
+tags:
+  - name: Recordings
+    description: APIs to list recordings in your workspace.
+
+paths:
+  /recordings:
+    get:
+      summary: List all recordings
+      tags:
+        - Recordings
+      description: Retrieve a paginated list of all recordings in your workspace. Results are ordered by creation date (newest first).
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/page_number_param'
+        - $ref: '../schemas/common.yaml#/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved recordings.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording_list_response'
+        '401':
+          description: Unauthorized - Invalid or missing API key.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Could not authenticate, invalid API Key"
