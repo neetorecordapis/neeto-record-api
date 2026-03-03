@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Recordings APIs
+  version: 1.0.0
+servers:
+  - description: NeetoRecord APIs
+    url: https://{your-subdomain}.neetorecord.com/api/external/v1
+    variables:
+      your-subdomain:
+        default: spinkart
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/identifying-subdomain).
+tags:
+  - name: Recordings
+    description: APIs to list recordings in your workspace.
+paths:
+  /recordings:
+    get:
+      summary: List all recordings
+      tags:
+        - Recordings
+      description: Retrieve a paginated list of all recordings in your workspace. Results are ordered by creation date (newest first).
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - $ref: '#/components/parameters/page_number_param'
+        - $ref: '#/components/parameters/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved recordings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/recording_list_response'
+              example:
+                recordings:
+                  - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    title: Product demo walkthrough
+                    duration: 125.5
+                    view_count: 42
+                    is_uploaded: true
+                    requested: false
+                    summary: Overview of the main features and how to get started with the product.
+                    public_link_id: x9y8z7w6v5u4t3s2
+                    created_at: '2026-02-15T10:30:00.000Z'
+                    updated_at: '2026-02-15T11:45:00.000Z'
+                    uploaded_at: '2026-02-15T10:35:00.000Z'
+                    public_url: https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2
+                    thumbnail_url: https://cdn.example.com/thumbnails/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg?v=1
+                    user_name: Jane Smith
+                    tags:
+                      - id: tag-001
+                        name: Demo
+                        style: blue
+                    folder_name: Sales
+                    folder_id: f1a2b3c4-d5e6-7890-abcd-ef1234567890
+                  - id: b2c3d4e5-f6a7-8901-bcde-f23456789012
+                    title: Sprint planning meeting
+                    duration: 1842
+                    view_count: 5
+                    is_uploaded: true
+                    requested: true
+                    summary: Transcript too brief to summarize meaningfully.
+                    public_link_id: a1b2c3d4e5f6g7h8
+                    created_at: '2026-02-14T09:00:00.000Z'
+                    updated_at: '2026-02-14T09:52:00.000Z'
+                    uploaded_at: '2026-02-14T09:15:00.000Z'
+                    public_url: https://your-workspace.neetorecord.com/watch/a1b2c3d4e5f6g7h8
+                    thumbnail_url: https://cdn.example.com/thumbnails/b2c3d4e5-f6a7-8901-bcde-f23456789012.jpg?v=1
+                    user_name: John Doe
+                    tags: []
+                    folder_name: null
+                    folder_id: null
+                pagination:
+                  total_records: 150
+                  total_pages: 5
+                  current_page_number: 1
+                  page_size: 30
+components:
+  parameters:
+    api_key_header:
+      in: header
+      name: X-Api-Key
+      description: X-Api-Key is used to authenticate requests using an API key. Provide your API key in this header to access protected endpoints. Refer to [Authentication](/getting-started/authentication) for more information.
+      required: true
+      schema:
+        type: string
+    accept_header:
+      in: header
+      name: Accept
+      description: Specifies the expected response format. Must be set to `application/json` for proper API communication.
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+    page_number_param:
+      in: query
+      name: page_number
+      description: Retrieve paginated results by specifying the desired page number. If this parameter is absent, all results will be returned.
+      required: false
+      schema:
+        type: integer
+    page_size_param:
+      in: query
+      name: page_size
+      description: Set the number of results returned in the response. Defaulting to 30 when omitted.
+      required: false
+      schema:
+        type: integer
+  schemas:
+    tag:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the tag.
+        name:
+          type: string
+          description: Name of the tag.
+        style:
+          type: string
+          description: Style/color of the tag.
+    recording:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the recording.
+        title:
+          type: string
+          nullable: true
+          description: Custom title set by the user.
+        default_title:
+          type: string
+          description: Auto-generated title for the recording.
+        duration:
+          type: number
+          nullable: true
+          description: Duration of the recording in seconds.
+        view_count:
+          type: integer
+          description: Number of times the recording has been viewed.
+        is_uploaded:
+          type: boolean
+          description: Whether the recording has been fully uploaded.
+        requested:
+          type: boolean
+          description: Whether the recording was requested from someone.
+        summary:
+          type: string
+          nullable: true
+          description: AI-generated summary of the recording.
+        public_link_id:
+          type: string
+          nullable: true
+          description: Public link identifier used in the watch URL.
+        transcoded_url:
+          type: string
+          nullable: true
+          description: CloudFront signed URL for the transcoded video.
+        thumbnail_url:
+          type: string
+          nullable: true
+          description: URL for the recording thumbnail image.
+        user_name:
+          type: string
+          description: Display name of the user who created the recording.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/tag'
+          description: Tags associated with the recording.
+        folder_name:
+          type: string
+          nullable: true
+          description: Name of the folder containing the recording.
+        folder_id:
+          type: string
+          nullable: true
+          description: Unique identifier of the folder containing the recording.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recording was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recording was last updated.
+        uploaded_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the recording was uploaded.
+    pagination:
+      type: object
+      properties:
+        total_records:
+          type: integer
+          description: Total number of records.
+        total_pages:
+          type: integer
+          description: Total number of pages available.
+        current_page_number:
+          type: integer
+          description: Current page number.
+        page_size:
+          type: integer
+          description: Number of records per page.
+    recording_list_response:
+      type: object
+      properties:
+        recordings:
+          type: array
+          items:
+            $ref: '#/components/schemas/recording'
+          description: List of recordings.
+        pagination:
+          $ref: '#/components/schemas/pagination'

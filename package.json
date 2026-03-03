@@ -6,7 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "@redocly/cli": "^2.11.1",
-    "mint": "^4.2.81",
+    "mint": "4.2.81",
     "nodemon": "^3.1.10"
   },
   "scripts": {
