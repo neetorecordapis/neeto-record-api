@@ -24,6 +24,7 @@ paths:
         - $ref: '../schemas/common.yaml#/page_size_param'
       responses:
         '200':
+          description: Successfully retrieved recordings.
           content:
             application/json:
               schema:
