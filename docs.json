@@ -49,7 +49,7 @@
         ]
       },
       {
-        "group": "Recordings API",
+        "group": "Recordings",
         "icon": "video",
         "pages": [
           "api-reference/recordings/list-recordings"
