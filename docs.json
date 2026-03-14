@@ -52,7 +52,7 @@
         "group": "Recordings",
         "icon": "video",
         "pages": [
-          "api-reference/recordings/list-recordings"
+          "api-reference/recordings/list"
         ]
       }
     ]
