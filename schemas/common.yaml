@@ -11,7 +11,7 @@ servers:
 api_key_header:
   in: header
   name: X-Api-Key
-  description: X-Api-Key is used to authenticate requests using an API key. Provide your API key in this header to access protected endpoints. Refer to [Authentication](/getting-started/authentication) for more information.
+  description: API key. Refer to [Authentication](/getting-started/authentication) for more information.
   required: true
   schema:
     type: string
@@ -20,7 +20,7 @@ api_key_header:
 accept_header:
   in: header
   name: Accept
-  description: Specifies the expected response format. Must be set to `application/json` for proper API communication.
+  description: Must be `application/json`.
   required: true
   schema:
     type: string
@@ -31,7 +31,7 @@ accept_header:
 page_number_param:
   in: query
   name: page_number
-  description: Retrieve paginated results by specifying the desired page number. If this parameter is absent, all results will be returned.
+  description: Page number. If absent, all results are returned.
   required: false
   schema:
     type: integer
@@ -39,7 +39,7 @@ page_number_param:
 page_size_param:
   in: query
   name: page_size
-  description: Set the number of results returned in the response. Defaulting to 30 when omitted.
+  description: Number of results per page. Defaults to 30.
   required: false
   schema:
     type: integer
@@ -48,13 +48,13 @@ page_size_param:
 pagination_parameters:
   - in: query
     name: page_number
-    description: Retrieve paginated results by specifying the desired page number. If this parameter is absent, all results will be returned.
+    description: Page number. If absent, all results are returned.
     required: false
     schema:
       type: integer
   - in: query
     name: page_size
-    description: Set the number of results returned in the response. Defaulting to 30 when omitted.
+    description: Number of results per page. Defaults to 30.
     required: false
     schema:
       type: integer

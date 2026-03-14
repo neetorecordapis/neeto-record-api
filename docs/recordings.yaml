@@ -16,7 +16,7 @@ paths:
       summary: List all recordings
       tags:
         - Recordings
-      description: Retrieve a paginated list of all recordings in your workspace. Results are ordered by creation date (newest first).
+      description: List all recordings.
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'
         - $ref: '../schemas/common.yaml#/accept_header'
