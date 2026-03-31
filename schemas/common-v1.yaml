@@ -1,7 +1,7 @@
 # Server configuration used across all endpoints
 servers:
   - description: NeetoRecord APIs
-    url: https://{your-subdomain}.neetorecord.com/api/external/v2
+    url: https://{your-subdomain}.neetorecord.com/api/external/v1
     variables:
       your-subdomain:
         default: spinkart

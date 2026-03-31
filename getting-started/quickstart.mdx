@@ -9,14 +9,14 @@ Let's retrieve all recordings in your workspace using a [GET request](https://en
 
 <CodeGroup>
 ```bash curl
-curl -X GET "https://{your-subdomain}.neetorecord.com/api/external/v1/recordings" \
+curl -X GET "https://{your-subdomain}.neetorecord.com/api/external/v2/recordings" \
   -H 'X-Api-Key: your-api-key' \
   -H 'Content-Type: application/json'
 ```
 
 ```javascript JavaScript
 const response = await fetch(
-  "https://{your-subdomain}.neetorecord.com/api/external/v1/recordings",
+  "https://{your-subdomain}.neetorecord.com/api/external/v2/recordings",
   {
     method: "GET",
     headers: {
@@ -33,7 +33,7 @@ console.log(data);
 ```python Python
 import requests
 
-url = "https://{your-subdomain}.neetorecord.com/api/external/v1/recordings"
+url = "https://{your-subdomain}.neetorecord.com/api/external/v2/recordings"
 headers = {
     "X-Api-Key": "your-api-key",
     "Content-Type": "application/json"
@@ -49,7 +49,7 @@ print(data)
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-    CURLOPT_URL => "https://{your-subdomain}.neetorecord.com/api/external/v1/recordings",
+    CURLOPT_URL => "https://{your-subdomain}.neetorecord.com/api/external/v2/recordings",
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
         "X-Api-Key: your-api-key",
