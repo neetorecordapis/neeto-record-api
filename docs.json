@@ -60,6 +60,7 @@
         "icon": "user-group",
         "pages": [
           "api-reference/team-members/list",
+          "api-reference/team-members/get",
           "api-reference/team-members/add",
           "api-reference/team-members/update",
           "api-reference/team-members/remove"

@@ -106,7 +106,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: "13c02be6-8bd4-4dda-b9e6-07df53feb8a4"
+            example: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
       responses:
         '200':
           description: OK - Team member removed successfully
@@ -144,7 +144,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: "13c02be6-8bd4-4dda-b9e6-07df53feb8a4"
+            example: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
       requestBody:
         required: true
         content:
