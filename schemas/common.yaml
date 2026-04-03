@@ -68,12 +68,16 @@ components:
         total_records:
           type: integer
           description: Total number of records.
+          example: 95
         total_pages:
           type: integer
           description: Total number of pages available.
+          example: 4
         current_page_number:
           type: integer
           description: Current page number.
+          example: 1
         page_size:
           type: integer
           description: Number of records per page.
+          example: 30

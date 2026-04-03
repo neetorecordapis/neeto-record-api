@@ -9,6 +9,14 @@ description: "Understand the HTTP status codes returned by the NeetoRecord API."
   The request was successful and the server returned the requested data.
 </ResponseField>
 
+<ResponseField name='201 Created'>
+  The request was successful and a new resource was created. Returned for POST requests that create new resources.
+</ResponseField>
+
+<ResponseField name='204 No Content'>
+  The request was successful but there is no content to return. Typically returned for DELETE operations.
+</ResponseField>
+
 ## Error codes
 
 <ResponseField name='400 Bad Request'>
@@ -59,13 +67,13 @@ description: "Understand the HTTP status codes returned by the NeetoRecord API."
 
 When an error occurs, the API returns a JSON response with error details:
 
-```json Error Response Example
+```json 401 Unauthorized
 {
-  "message": "The provided API key is invalid or expired"
+  "error": "Could not authenticate, invalid API Key"
 }
 ```
 
-<ResponseField name='error.message' type='string'>
+<ResponseField name='error' type='string'>
   A human-readable error message.
 </ResponseField>
 
