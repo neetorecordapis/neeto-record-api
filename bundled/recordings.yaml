@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
   title: NeetoRecord Recordings APIs
-  version: 1.0.0
+  version: 2.0.0
 servers:
   - description: NeetoRecord APIs
-    url: https://{your-subdomain}.neetorecord.com/api/external/v1
+    url: https://{your-subdomain}.neetorecord.com/api/external/v2
     variables:
       your-subdomain:
         default: spinkart
@@ -35,6 +35,7 @@ paths:
                 recordings:
                   - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
                     title: Product demo walkthrough
+                    default_title: Recording 2026-02-15
                     duration: 125.5
                     view_count: 42
                     is_uploaded: true
@@ -45,6 +46,7 @@ paths:
                     updated_at: '2026-02-15T11:45:00.000Z'
                     uploaded_at: '2026-02-15T10:35:00.000Z'
                     public_url: https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2
+                    transcoded_url: https://cdn.neetorecord.com/recordings/a1b2c3d4/transcoded.m3u8?signature=...
                     thumbnail_url: https://cdn.example.com/thumbnails/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg?v=1
                     user_name: Jane Smith
                     tags:
@@ -55,6 +57,7 @@ paths:
                     folder_id: f1a2b3c4-d5e6-7890-abcd-ef1234567890
                   - id: b2c3d4e5-f6a7-8901-bcde-f23456789012
                     title: Sprint planning meeting
+                    default_title: Recording 2026-02-14
                     duration: 1842
                     view_count: 5
                     is_uploaded: true
@@ -65,6 +68,7 @@ paths:
                     updated_at: '2026-02-14T09:52:00.000Z'
                     uploaded_at: '2026-02-14T09:15:00.000Z'
                     public_url: https://your-workspace.neetorecord.com/watch/a1b2c3d4e5f6g7h8
+                    transcoded_url: null
                     thumbnail_url: https://cdn.example.com/thumbnails/b2c3d4e5-f6a7-8901-bcde-f23456789012.jpg?v=1
                     user_name: John Doe
                     tags: []
@@ -155,6 +159,10 @@ components:
           type: string
           nullable: true
           description: Public link identifier used in the watch URL.
+        public_url:
+          type: string
+          nullable: true
+          description: Public watch URL for the recording.
         transcoded_url:
           type: string
           nullable: true
@@ -198,15 +206,19 @@ components:
         total_records:
           type: integer
           description: Total number of records.
+          example: 95
         total_pages:
           type: integer
           description: Total number of pages available.
+          example: 4
         current_page_number:
           type: integer
           description: Current page number.
+          example: 1
         page_size:
           type: integer
           description: Number of records per page.
+          example: 30
     recording_list_response:
       type: object
       properties:

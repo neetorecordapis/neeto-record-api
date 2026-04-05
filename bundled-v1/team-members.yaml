@@ -108,7 +108,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 13c02be6-8bd4-4dda-b9e6-07df53feb8a4
+            example: aaaabbbb-cccc-dddd-eeee-ffff00001111
       responses:
         '200':
           description: OK - Team member removed successfully
@@ -145,7 +145,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 13c02be6-8bd4-4dda-b9e6-07df53feb8a4
+            example: aaaabbbb-cccc-dddd-eeee-ffff00001111
       requestBody:
         required: true
         content:
@@ -223,36 +223,48 @@ components:
         id:
           type: string
           format: uuid
+          example: aaaabbbb-cccc-dddd-eeee-ffff00001111
         email:
           type: string
+          example: oliver@example.com
         first_name:
           type: string
+          example: Oliver
         last_name:
           type: string
+          example: Smith
         time_zone:
           type: string
+          example: Asia/Kolkata
         profile_image_url:
           type: string
           nullable: true
+          example: null
         active:
           type: boolean
+          example: true
         organization_role:
           type: string
+          example: Admin
     pagination:
       type: object
       properties:
         total_records:
           type: integer
           description: Total number of records.
+          example: 95
         total_pages:
           type: integer
           description: Total number of pages available.
+          example: 4
         current_page_number:
           type: integer
           description: Current page number.
+          example: 1
         page_size:
           type: integer
           description: Number of records per page.
+          example: 30
     team_member_list_response:
       allOf:
         - type: object
