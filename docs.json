@@ -60,9 +60,21 @@
         "icon": "user-group",
         "pages": [
           "api-reference/team-members/list",
+          "api-reference/team-members/get",
           "api-reference/team-members/add",
           "api-reference/team-members/update",
           "api-reference/team-members/remove"
+        ]
+      },
+      {
+        "group": "API v1 (Deprecated)",
+        "icon": "clock-rotate-left",
+        "pages": [
+          "api-reference-v1/recordings/list",
+          "api-reference-v1/team-members/list",
+          "api-reference-v1/team-members/add",
+          "api-reference-v1/team-members/update",
+          "api-reference-v1/team-members/remove"
         ]
       }
     ]

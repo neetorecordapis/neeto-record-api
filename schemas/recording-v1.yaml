@@ -49,10 +49,6 @@ components:
           type: string
           nullable: true
           description: Public link identifier used in the watch URL.
-        public_url:
-          type: string
-          nullable: true
-          description: Public watch URL for the recording.
         transcoded_url:
           type: string
           nullable: true
@@ -101,4 +97,4 @@ components:
             $ref: "#/components/schemas/recording"
           description: List of recordings.
         pagination:
-          $ref: "../schemas/common.yaml#/components/schemas/pagination"
+          $ref: "../schemas/common-v1.yaml#/components/schemas/pagination"

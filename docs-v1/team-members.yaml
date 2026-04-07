@@ -1,25 +1,25 @@
 openapi: 3.0.3
 info:
   title: NeetoRecord Team Members APIs
-  version: 2.0.0
+  version: 1.0.0
 
 servers:
-  $ref: '../schemas/common.yaml#/servers'
+  $ref: '../schemas/common-v1.yaml#/servers'
 
 tags:
   - name: Team Members
     description: APIs to manage team members in the workspace.
 
 paths:
-  /team-members:
+  /team_members:
     get:
       summary: List team members
       tags:
         - Team Members
       description: List team members in the workspace.
       parameters:
-        - $ref: '../schemas/common.yaml#/api_key_header'
-        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common-v1.yaml#/api_key_header'
+        - $ref: '../schemas/common-v1.yaml#/accept_header'
         - in: query
           name: email
           description: Filter team members by email address.
@@ -28,8 +28,8 @@ paths:
             type: string
             format: email
             example: "oliver@example.com"
-        - $ref: '../schemas/common.yaml#/page_number_param'
-        - $ref: '../schemas/common.yaml#/page_size_param'
+        - $ref: '../schemas/common-v1.yaml#/page_number_param'
+        - $ref: '../schemas/common-v1.yaml#/page_size_param'
       responses:
         '200':
           description: OK - Request succeeded
@@ -44,8 +44,8 @@ paths:
         - Team Members
       description: Add team members to the workspace.
       parameters:
-        - $ref: '../schemas/common.yaml#/api_key_header'
-        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common-v1.yaml#/api_key_header'
+        - $ref: '../schemas/common-v1.yaml#/accept_header'
       requestBody:
         required: true
         content:
@@ -79,8 +79,8 @@ paths:
               required:
                 - emails
       responses:
-        '201':
-          description: Created - Users added successfully
+        '200':
+          description: OK - Users added successfully
           content:
             application/json:
               schema:
@@ -90,18 +90,18 @@ paths:
                     type: string
                     example: "Users added successfully"
 
-  /team-members/{team_member_id}:
-    get:
-      summary: Get team member details
+  /team_members/{team_member_id}:
+    delete:
+      summary: Remove team member
       tags:
         - Team Members
-      description: Retrieves details of a specific team member.
+      description: Remove team members from the workspace.
       parameters:
-        - $ref: '../schemas/common.yaml#/api_key_header'
-        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common-v1.yaml#/api_key_header'
+        - $ref: '../schemas/common-v1.yaml#/accept_header'
         - in: path
           name: team_member_id
-          description: ID of the team member. You can get this by listing all team members using the [List team members](/api-reference/team-members/list) API.
+          description: Id of the team member that you want to remove. You can get `team_member_id` by listing all team members using our [List team members](/api-reference-v1/team-members/list) API. Here you will see id for each team member.
           required: true
           schema:
             type: string
@@ -109,34 +109,15 @@ paths:
             example: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
       responses:
         '200':
-          description: OK - Request succeeded
+          description: OK - Team member removed successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  team_member:
-                    $ref: '../schemas/team-member.yaml#/components/schemas/team_member'
-
-    delete:
-      summary: Remove team member
-      tags:
-        - Team Members
-      description: Remove team members from the workspace.
-      parameters:
-        - $ref: '../schemas/common.yaml#/api_key_header'
-        - $ref: '../schemas/common.yaml#/accept_header'
-        - in: path
-          name: team_member_id
-          description: Id of the team member that you want to remove. You can get `team_member_id` by listing all team members using our [List team members](/api-reference/team-members/list) API. Here you will see id for each team member.
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
-      responses:
-        '204':
-          description: No Content - Team member removed successfully
+                  message:
+                    type: string
+                    example: "Team member has been removed"
         '422':
           description: Unprocessable Entity - Cannot remove the last admin of the workspace
           content:
@@ -154,11 +135,11 @@ paths:
         - Team Members
       description: Update a team member.
       parameters:
-        - $ref: '../schemas/common.yaml#/api_key_header'
-        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common-v1.yaml#/api_key_header'
+        - $ref: '../schemas/common-v1.yaml#/accept_header'
         - in: path
           name: team_member_id
-          description: Id of the team member that you want to update. You can get `team_member_id` by listing all team members using our [List team members](/api-reference/team-members/list) API. Here you will see id for each team member.
+          description: Id of the team member that you want to update. You can get `team_member_id` by listing all team members using our [List team members](/api-reference-v1/team-members/list) API. Here you will see id for each team member.
           required: true
           schema:
             type: string
