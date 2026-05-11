@@ -8,7 +8,7 @@ servers:
     variables:
       your-subdomain:
         default: spinkart
-        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/identifying-subdomain).
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/workspace-subdomain).
 tags:
   - name: Recordings
     description: APIs to list recordings in your workspace.
