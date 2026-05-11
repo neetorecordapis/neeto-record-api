@@ -43,7 +43,6 @@
           "getting-started/introduction",
           "getting-started/identifying-subdomain",
           "getting-started/authentication",
-          "getting-started/quickstart",
           "getting-started/pagination",
           "getting-started/response-codes"
         ]
