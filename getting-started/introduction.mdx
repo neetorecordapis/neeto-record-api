@@ -7,14 +7,10 @@ The NeetoRecord API is organized around [REST](https://en.wikipedia.org/wiki/RES
 
 Before you start with NeetoRecord APIs you will need the following:
 
-1. [Workspace Subdomain](/getting-started/workspace-subdomain).
-2. [An API key](/getting-started/authentication).
+1. [Workspace subdomain](/getting-started/workspace-subdomain).
+2. [API key](/getting-started/authentication).
 
-## Quick start
-
-Get started with the NeetoRecord API in minutes. Make your first API call and retrieve your recordings. You should have your [API key](/getting-started/authentication) and [Workspace Subdomain](/getting-started/workspace-subdomain) ready with you.
-
-### Step 1: Make Your First API Call
+## Making your first API call
 
 Let's retrieve all recordings in your workspace using a [GET request](https://en.wikipedia.org/wiki/HTTP#Request_methods):
 
@@ -83,70 +79,7 @@ print_r($data);
   `your-api-key` with your actual API key.
 </Warning>
 
-### Step 2: Understanding the Response
-
-A successful response will look like this [JSON](https://en.wikipedia.org/wiki/JSON) format:
-
-```json
-{
-  "recordings": [
-    {
-      "id": "recording-123",
-      "title": "Product Demo",
-      "default_title": "Recording 2025-01-15",
-      "duration": 120.5,
-      "view_count": 42,
-      "is_uploaded": true,
-      "requested": false,
-      "summary": "A walkthrough of the new product features.",
-      "public_link_id": "abc123",
-      "transcoded_url": "https://cdn.neetorecord.com/...",
-      "thumbnail_url": "https://cdn.neetorecord.com/...",
-      "user_name": "Jane Smith",
-      "tags": [
-        {
-          "id": "tag-1",
-          "name": "Demo",
-          "style": "blue"
-        }
-      ],
-      "folder_name": "Product Demos",
-      "folder_id": "folder-1",
-      "created_at": "2025-01-15T10:30:00Z",
-      "updated_at": "2025-01-15T10:30:00Z",
-      "uploaded_at": "2025-01-15T10:31:00Z"
-    }
-  ],
-  "pagination": {
-    "total_records": 1,
-    "total_pages": 1,
-    "current_page_number": 1,
-    "page_size": 30
-  }
-}
-```
-
-### Next Steps
-
-Now that you've made your first [API](https://en.wikipedia.org/wiki/API) call, you can:
-
-<CardGroup cols={3}>
-  <Card title='Explore API reference' href='/api-reference/recordings/list' icon='code'>
-    Browse all available endpoints and their detailed documentation.
-  </Card>
-  <Card title='Pagination' href='/getting-started/pagination' icon='list'>
-    Understand how to paginate through API responses efficiently.
-  </Card>
-  <Card
-    title='HTTP response codes'
-    href='/getting-started/response-codes'
-    icon='reply'
-  >
-    Learn what different response codes mean and how to handle them.
-  </Card>
-</CardGroup>
-
-<Card icon="question" title='Need help?'>
+<Card title='Need help?'>
   Visit our [help center](https://help.neetorecord.com) or contact us by sending
   an email to [support@neetorecord.com](mailto:support@neetorecord.com).
 </Card>
