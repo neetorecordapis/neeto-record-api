@@ -31,16 +31,16 @@
 /* Navigation links - default state */
 [data-nav="true"] a,
 #navbar-transition a,
-.navbar-link,
-nav a {
+#navbar a,
+.navbar-link {
   color: var(--text-white) !important;
 }
 
 /* Navigation links - hover state */
 [data-nav="true"] a:hover,
 #navbar-transition a:hover,
-.navbar-link:hover,
-nav a:hover {
+#navbar a:hover,
+.navbar-link:hover {
   color: var(--text-light) !important;
 }
 
