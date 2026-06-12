@@ -13,6 +13,8 @@
   "scripts": {
     "build:dev": "nodemon --exec 'scripts/bundle.sh'",
     "docs:preview": "mint dev",
+    "check:openapi": "mint openapi-check",
+    "check:links": "mint broken-links",
     "prepare": "husky",
     "build": "scripts/bundle.sh"
   },
