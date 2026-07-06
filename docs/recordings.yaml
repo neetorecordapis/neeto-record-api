@@ -77,3 +77,79 @@ paths:
                   total_pages: 5
                   current_page_number: 1
                   page_size: 30
+
+  /recordings/{id}/screenshot:
+    get:
+      summary: Get a screenshot at a timestamp
+      tags:
+        - Recordings
+      description: >-
+        Extracts a still frame of the recording at the given timestamp and returns a presigned URL
+        to the image. If `is_screenshot_ready` is `false`, the recording's downloadable video is
+        not up to date yet — call `POST /recordings/{id}/trigger-mp4` to regenerate it, then retry.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - in: path
+          name: id
+          required: true
+          description: The recording ID (`public_link_id`) from the watch URL.
+          schema:
+            type: string
+        - in: query
+          name: timestamp
+          required: true
+          description: Timestamp in seconds (may be fractional) of the frame to capture.
+          schema:
+            type: number
+            minimum: 0
+        - in: query
+          name: image_format
+          required: false
+          description: "Image format: `png` or `jpeg`. Defaults to `png`."
+          schema:
+            type: string
+            enum: ['png', 'jpeg']
+            default: 'png'
+      responses:
+        '200':
+          description: Screenshot URL generated, or not ready yet.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recording_id:
+                    type: string
+                  timestamp:
+                    type: number
+                  image_format:
+                    type: string
+                  is_screenshot_ready:
+                    type: boolean
+                    description: >-
+                      `false` when the recording's video file is outdated. Call
+                      `POST /recordings/{id}/trigger-mp4` to regenerate it, then retry.
+                  screenshot_url:
+                    type: string
+                    description: Presigned URL to the image. Present only when `is_screenshot_ready` is `true`.
+                  url_expires_in_seconds:
+                    type: integer
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                timestamp: 12.5
+                image_format: "png"
+                is_screenshot_ready: true
+                screenshot_url: "https://neeto-record-transcoded-recordings.s3.amazonaws.com/.../frames/12500.png?X-Amz-Signature=..."
+                url_expires_in_seconds: 600
+        '422':
+          description: Invalid timestamp or image format, recording still processing, or extraction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Timestamp must be a number between 0 and 125.5 seconds."

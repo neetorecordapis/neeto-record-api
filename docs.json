@@ -51,7 +51,8 @@
         "group": "Recordings",
         "icon": "video",
         "pages": [
-          "api-reference/recordings/list"
+          "api-reference/recordings/list",
+          "api-reference/recordings/screenshot"
         ]
       },
       {
