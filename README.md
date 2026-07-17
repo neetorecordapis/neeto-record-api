@@ -1,6 +1,8 @@
 # NeetoRecord API Docs
 
-This repository contains the documentation for the [NeetoRecord APIs](https://apidocs.neetorecord.com/getting-started/introduction), built using [Mintlify](https://mintlify.com/).
+This repository contains the documentation for the
+[NeetoRecord APIs](https://apidocs.neetorecord.com/getting-started/introduction), built using
+[Mintlify](https://mintlify.com/).
 
 ## Development Setup
 
@@ -34,7 +36,7 @@ This repository contains the documentation for the [NeetoRecord APIs](https://ap
 
 5. ### Build the API
 
-   After making code changes you must run `yarn build:dev`. This will make changes in the `bundled` folder which is what mintlify uses.
-   You should NEVER make changes to the `bundled` folder directly.
+   After making code changes you must run `yarn build:dev`. This will make changes in the `bundled` folder which is what
+   mintlify uses. You should NEVER make changes to the `bundled` folder directly.
 
    Refer to [llm.md](llm.md) for more info.
