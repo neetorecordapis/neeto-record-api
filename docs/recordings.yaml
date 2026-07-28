@@ -8,7 +8,7 @@ servers:
 
 tags:
   - name: Recordings
-    description: APIs to list recordings in your workspace.
+    description: APIs to retrieve and manage recordings in your workspace.
 
 paths:
   /recordings:
@@ -93,7 +93,9 @@ paths:
         - in: path
           name: id
           required: true
-          description: The recording ID (`public_link_id`) from the watch URL.
+          description: >-
+            The recording's `id` (UUID) or its `public_link_id` (the short code in the watch URL).
+            Both are accepted.
           schema:
             type: string
         - in: query
@@ -118,6 +120,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - recording_id
+                  - timestamp
+                  - image_format
+                  - is_screenshot_ready
                 properties:
                   recording_id:
                     type: string
@@ -125,6 +132,7 @@ paths:
                     type: number
                   image_format:
                     type: string
+                    enum: ['png', 'jpeg']
                   is_screenshot_ready:
                     type: boolean
                     description: >-
@@ -132,15 +140,18 @@ paths:
                       `POST /recordings/{id}/trigger-mp4` to regenerate it, then retry.
                   screenshot_url:
                     type: string
-                    description: Presigned URL to the image. Present only when `is_screenshot_ready` is `true`.
+                    description: >-
+                      Presigned URL to the image. Omitted entirely when `is_screenshot_ready` is `false`.
                   url_expires_in_seconds:
                     type: integer
+                    description: >-
+                      Lifetime of the presigned URL. Omitted entirely when `is_screenshot_ready` is `false`.
               example:
                 recording_id: "x9y8z7w6v5u4t3s2"
                 timestamp: 12.5
                 image_format: "png"
                 is_screenshot_ready: true
-                screenshot_url: "https://neeto-record-transcoded-recordings.s3.amazonaws.com/.../frames/12500.png?X-Amz-Signature=..."
+                screenshot_url: "https://example-bucket.s3.amazonaws.com/.../frames/12500.png?X-Amz-Signature=..."
                 url_expires_in_seconds: 600
         '422':
           description: Invalid timestamp or image format, recording still processing, or extraction failed.
@@ -153,3 +164,46 @@ paths:
                     type: string
               example:
                 error: "Timestamp must be a number between 0 and 125.5 seconds."
+
+  /recordings/{id}/trigger-mp4:
+    post:
+      summary: Regenerate the downloadable MP4
+      tags:
+        - Recordings
+      description: >-
+        Regenerates the recording's downloadable MP4 when it is out of date. Call this after a
+        screenshot request returns `is_screenshot_ready: false`, then retry the screenshot once
+        the status is `ready`.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - in: path
+          name: id
+          required: true
+          description: >-
+            The recording's `id` (UUID) or its `public_link_id` (the short code in the watch URL).
+            Both are accepted.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Regeneration status for the recording.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - recording_id
+                  - status
+                properties:
+                  recording_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: ['ready', 'generating', 'already_generating']
+                    description: >-
+                      `ready` when the MP4 is already up to date, `generating` when regeneration
+                      has just been queued, and `already_generating` when a conversion is in progress.
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                status: "generating"

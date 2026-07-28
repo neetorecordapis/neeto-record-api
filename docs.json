@@ -52,7 +52,8 @@
         "icon": "video",
         "pages": [
           "api-reference/recordings/list",
-          "api-reference/recordings/screenshot"
+          "api-reference/recordings/screenshot",
+          "api-reference/recordings/trigger-mp4"
         ]
       },
       {
