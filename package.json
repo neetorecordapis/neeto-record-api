@@ -16,7 +16,9 @@
     "check:openapi": "mint openapi-check",
     "check:links": "mint broken-links",
     "prepare": "husky",
-    "build": "scripts/bundle.sh"
+    "cli:catalog": "neetorecord commands > cli/catalog.json",
+    "cli:build": "node scripts/generate-cli-reference.mjs",
+    "build": "scripts/bundle.sh && yarn cli:build"
   },
   "nodemonConfig": {
     "ext": "yaml",

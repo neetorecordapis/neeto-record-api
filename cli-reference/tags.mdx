@@ -1,0 +1,49 @@
+---
+title: "tags"
+description: "List the recording tags used in the workspace."
+---
+
+import TagsList from "/snippets/cli/tags/list.mdx";
+
+Tags label recordings for filtering and search. They are created implicitly:
+passing a name that does not exist yet to
+[`recordings update --tag`](/cli-reference/recordings#recordings-update) creates
+the tag, so there is no separate create command. For fields and response
+details, see the [API reference](/api-reference/tags/list).
+
+<Info>
+  Sample output on this page is the JSON envelope you get with `--json`. On a
+  terminal the same data prints as a table or a key-value list. See
+  [Output formats](/cli/output-formats).
+</Info>
+
+## tags list
+
+Lists every tag in the workspace with the number of recordings carrying it. Use
+it to check the exact spelling of a tag before passing it to
+`recordings update`.
+
+```bash
+neetorecord tags list
+```
+
+<TagsList />
+
+```json
+{
+  "data": [
+    {
+      "id": "b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54",
+      "name": "demo",
+      "style": "secondary",
+      "recording_count": 12
+    }
+  ],
+  "pagination": {
+    "total_records": 15,
+    "total_pages": 1,
+    "current_page_number": 1,
+    "page_size": 30
+  }
+}
+```

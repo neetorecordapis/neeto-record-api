@@ -1,0 +1,527 @@
+[
+  {
+    "command": "neetorecord analytics",
+    "description": "View organization analytics",
+    "subcommands": [
+      {
+        "command": "neetorecord analytics show",
+        "description": "Show organization-wide analytics",
+        "flags": [
+          {
+            "name": "from-date",
+            "type": "string",
+            "description": "Start date filter (ISO format, e.g. '2024-01-01')"
+          },
+          {
+            "name": "to-date",
+            "type": "string",
+            "description": "End date filter (ISO format, e.g. '2024-12-31')"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord doctor",
+    "description": "Check CLI health and connectivity"
+  },
+  {
+    "command": "neetorecord folders",
+    "description": "Manage recording folders",
+    "subcommands": [
+      {
+        "command": "neetorecord folders create",
+        "description": "Create a new folder",
+        "flags": [
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Folder name",
+            "required": true
+          },
+          {
+            "name": "parent-folder-id",
+            "type": "string",
+            "description": "Parent folder ID (for nested folders)"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord folders list",
+        "description": "List all folders",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord login",
+    "description": "Authenticate to NeetoRecord via browser"
+  },
+  {
+    "command": "neetorecord logout",
+    "description": "Sign out and clear saved credentials",
+    "flags": [
+      {
+        "name": "all",
+        "type": "bool",
+        "default": "false",
+        "description": "Sign out of every saved subdomain"
+      }
+    ]
+  },
+  {
+    "command": "neetorecord recording-requests",
+    "description": "Manage recording requests",
+    "subcommands": [
+      {
+        "command": "neetorecord recording-requests create",
+        "description": "Create a recording request",
+        "flags": [
+          {
+            "name": "created-by-email",
+            "type": "string",
+            "description": "Email of the recording requester",
+            "required": true
+          },
+          {
+            "name": "request-instructions",
+            "type": "string",
+            "description": "Instructions shown to the person who will upload the recording"
+          },
+          {
+            "name": "request-notes",
+            "type": "string",
+            "description": "Private notes for this request"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "Title of the requested recording",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord recordings",
+    "description": "Manage recordings",
+    "subcommands": [
+      {
+        "command": "neetorecord recordings analytics",
+        "description": "Get view analytics for a recording"
+      },
+      {
+        "command": "neetorecord recordings chapter-status",
+        "description": "Check chapter generation status for a recording"
+      },
+      {
+        "command": "neetorecord recordings chapters",
+        "description": "Get chapters for a recording"
+      },
+      {
+        "command": "neetorecord recordings create-cta",
+        "description": "Add a CTA to a recording",
+        "flags": [
+          {
+            "name": "background-color",
+            "type": "string",
+            "default": "#000000",
+            "description": "Button background color hex"
+          },
+          {
+            "name": "end",
+            "type": "float64",
+            "default": "0",
+            "description": "End time in seconds",
+            "required": true
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Button label text",
+            "required": true
+          },
+          {
+            "name": "link",
+            "type": "string",
+            "description": "URL the button links to"
+          },
+          {
+            "name": "position",
+            "type": "string",
+            "default": "top-right",
+            "description": "Position: top-right, top-left, bottom-right, bottom-left"
+          },
+          {
+            "name": "show-only-at-end",
+            "type": "bool",
+            "default": "false",
+            "description": "Only show at end of recording"
+          },
+          {
+            "name": "start",
+            "type": "float64",
+            "default": "0",
+            "description": "Start time in seconds",
+            "required": true
+          },
+          {
+            "name": "text-color",
+            "type": "string",
+            "default": "#FFFFFF",
+            "description": "Button text color hex"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings ctas",
+        "description": "List CTAs for a recording"
+      },
+      {
+        "command": "neetorecord recordings delete",
+        "description": "Delete a recording"
+      },
+      {
+        "command": "neetorecord recordings download-url",
+        "description": "Get a presigned download URL for a recording",
+        "flags": [
+          {
+            "name": "format",
+            "type": "string",
+            "default": "mp4",
+            "description": "Download format: 'mp4' or 'webm'"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings embed-code",
+        "description": "Get the embed code for a recording"
+      },
+      {
+        "command": "neetorecord recordings list",
+        "description": "List recordings",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings screenshot",
+        "description": "Get a URL to a still-frame screenshot of a recording at a timestamp",
+        "flags": [
+          {
+            "name": "format",
+            "type": "string",
+            "default": "png",
+            "description": "Image format: 'png' or 'jpeg'"
+          },
+          {
+            "name": "timestamp",
+            "type": "float64",
+            "default": "0",
+            "description": "Timestamp in seconds of the frame to capture",
+            "required": true
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings search",
+        "description": "Search recordings by title",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          },
+          {
+            "name": "query",
+            "type": "string",
+            "description": "Title search query",
+            "required": true
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings search-by-transcript",
+        "description": "Search recordings by transcript content",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          },
+          {
+            "name": "query",
+            "type": "string",
+            "description": "Text to search in transcripts",
+            "required": true
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings share-link",
+        "description": "Get the public share link for a recording"
+      },
+      {
+        "command": "neetorecord recordings show",
+        "description": "Show a recording"
+      },
+      {
+        "command": "neetorecord recordings transcript",
+        "description": "Get transcript for a recording"
+      },
+      {
+        "command": "neetorecord recordings transcript-status",
+        "description": "Check transcript generation status for a recording"
+      },
+      {
+        "command": "neetorecord recordings trigger-chapters",
+        "description": "Trigger chapter generation for a recording"
+      },
+      {
+        "command": "neetorecord recordings trigger-mp4",
+        "description": "Trigger MP4 generation for a recording"
+      },
+      {
+        "command": "neetorecord recordings trigger-transcript",
+        "description": "Trigger transcript generation for a recording",
+        "flags": [
+          {
+            "name": "language",
+            "type": "string",
+            "description": "Language code (e.g. 'en')"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord recordings update",
+        "description": "Update a recording",
+        "flags": [
+          {
+            "name": "folder-id",
+            "type": "string",
+            "description": "Folder ID to move to (empty to remove from folder)"
+          },
+          {
+            "name": "summary",
+            "type": "string",
+            "description": "New summary"
+          },
+          {
+            "name": "tag",
+            "type": "stringArray",
+            "default": "[]",
+            "description": "Tag name (repeatable; replaces all existing tags)"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "New title"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord setup",
+    "description": "Set up NeetoRecord for AI coding assistants",
+    "subcommands": [
+      {
+        "command": "neetorecord setup claude",
+        "description": "Register NeetoRecord plugin with Claude Code"
+      },
+      {
+        "command": "neetorecord setup codex",
+        "description": "Add NeetoRecord instructions for OpenAI Codex"
+      },
+      {
+        "command": "neetorecord setup copilot",
+        "description": "Add NeetoRecord instructions for GitHub Copilot"
+      },
+      {
+        "command": "neetorecord setup cursor",
+        "description": "Write NeetoRecord rules for Cursor IDE"
+      },
+      {
+        "command": "neetorecord setup gemini",
+        "description": "Add NeetoRecord instructions for Gemini CLI"
+      },
+      {
+        "command": "neetorecord setup windsurf",
+        "description": "Write NeetoRecord rules for Windsurf IDE"
+      }
+    ]
+  },
+  {
+    "command": "neetorecord tags",
+    "description": "List recording tags",
+    "subcommands": [
+      {
+        "command": "neetorecord tags list",
+        "description": "List all tags",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord team-members",
+    "description": "Manage team members",
+    "subcommands": [
+      {
+        "command": "neetorecord team-members create",
+        "description": "Invite team members",
+        "flags": [
+          {
+            "name": "email",
+            "type": "stringArray",
+            "default": "[]",
+            "description": "Email address to invite (repeatable)",
+            "required": true
+          },
+          {
+            "name": "invited-by",
+            "type": "string",
+            "description": "Inviter name or email"
+          },
+          {
+            "name": "role",
+            "type": "string",
+            "description": "Organization role",
+            "required": true
+          },
+          {
+            "name": "send-invitation-email",
+            "type": "bool",
+            "default": "true",
+            "description": "Send invitation email"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord team-members delete",
+        "description": "Remove a team member"
+      },
+      {
+        "command": "neetorecord team-members list",
+        "description": "List team members",
+        "flags": [
+          {
+            "name": "email",
+            "type": "string",
+            "description": "Filter by email address"
+          },
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          }
+        ]
+      },
+      {
+        "command": "neetorecord team-members show",
+        "description": "Show a team member"
+      },
+      {
+        "command": "neetorecord team-members update",
+        "description": "Update a team member",
+        "flags": [
+          {
+            "name": "email",
+            "type": "string",
+            "description": "New email address"
+          },
+          {
+            "name": "first-name",
+            "type": "string",
+            "description": "First name"
+          },
+          {
+            "name": "last-name",
+            "type": "string",
+            "description": "Last name"
+          },
+          {
+            "name": "role",
+            "type": "string",
+            "description": "Organization role"
+          },
+          {
+            "name": "time-zone",
+            "type": "string",
+            "description": "Time zone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "command": "neetorecord update",
+    "description": "Update the CLI to the latest version"
+  },
+  {
+    "command": "neetorecord version",
+    "description": "Print the CLI version"
+  },
+  {
+    "command": "neetorecord whoami",
+    "description": "Show current authenticated user(s)"
+  }
+]

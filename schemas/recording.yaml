@@ -102,3 +102,249 @@ components:
           description: List of recordings.
         pagination:
           $ref: "../schemas/common.yaml#/components/schemas/pagination"
+
+    # Chapter object structure
+    chapter:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the chapter.
+        start:
+          type: number
+          description: Start time of the chapter, in seconds from the beginning of the recording.
+
+    # Chapters response structure
+    chapters_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        chapters:
+          type: array
+          items:
+            $ref: "#/components/schemas/chapter"
+          description: Chapters of the recording. Empty until chapters have been generated.
+
+    # Transcript segment structure
+    transcript_segment:
+      type: object
+      description: >-
+        A timestamped span of the transcript. Segments are passed through from the
+        transcription engine, so additional engine-specific fields may be present.
+      properties:
+        start:
+          type: number
+          description: Start time of the segment, in seconds.
+        end:
+          type: number
+          description: End time of the segment, in seconds.
+        text:
+          type: string
+          description: Text spoken during the segment.
+
+    # Transcript response structure
+    transcript_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        transcript:
+          type: object
+          properties:
+            text:
+              type: string
+              nullable: true
+              description: Full transcript text. `null` when no transcript has been generated.
+            segments:
+              type: array
+              items:
+                $ref: "#/components/schemas/transcript_segment"
+              description: Timestamped segments. Empty when no transcript has been generated.
+
+    # Transcript status response structure
+    transcript_status_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        status:
+          type: string
+          enum: ["not_applicable", "unexecuted", "in_progress", "failed", "success"]
+          description: State of the most recent transcript generation.
+        has_transcript:
+          type: boolean
+          description: Whether the recording currently has transcript text.
+
+    # Chapter status response structure
+    chapter_status_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        status:
+          type: string
+          enum: ["unexecuted", "in_progress", "failed", "success"]
+          description: State of the most recent chapter generation.
+        has_chapters:
+          type: boolean
+          description: Whether the recording currently has chapters.
+
+    # Generation trigger response structure
+    generation_trigger_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        status:
+          type: string
+          enum: ["triggered"]
+          description: Always `triggered`. Generation runs in the background.
+
+    # Share link response structure
+    share_link_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        public_url:
+          type: string
+          nullable: true
+          description: Public watch URL of the recording.
+        is_expired:
+          type: boolean
+          description: Whether the recording has passed its expiry date.
+        access_control_protected:
+          type: boolean
+          description: Whether viewers must authenticate before watching.
+
+    # Embed code response structure
+    embed_code_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        embed_url:
+          type: string
+          description: URL loaded by the embedded player.
+        embed_html:
+          type: string
+          description: Ready to paste iframe markup.
+
+    # Download URL response structure
+    download_url_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        file_format:
+          type: string
+          enum: ["mp4", "webm"]
+          description: Format the URL points at.
+        is_download_file_ready:
+          type: boolean
+          description: >-
+            `false` when the MP4 is out of date. Call `POST /recordings/{id}/trigger-mp4`
+            to regenerate it, then retry.
+        download_url:
+          type: string
+          description: Presigned download URL. Omitted entirely when `is_download_file_ready` is `false`.
+        url_expires_in_seconds:
+          type: integer
+          description: >-
+            Lifetime of the presigned URL, 600 seconds for `mp4` and 60 for `webm`.
+            Omitted entirely when `is_download_file_ready` is `false`.
+
+    # Views by day entry structure
+    views_by_day_entry:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Day the views were recorded on.
+        count:
+          type: integer
+          description: Number of views on that day.
+
+    # Recording analytics response structure
+    recording_analytics_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        total_views:
+          type: integer
+          description: Total number of views for the recording.
+        views_by_day:
+          type: array
+          items:
+            $ref: "#/components/schemas/views_by_day_entry"
+          description: View counts grouped by day, oldest first.
+
+    # CTA object structure
+    cta:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the CTA.
+        label:
+          type: string
+          description: Text shown on the button.
+        link:
+          type: string
+          nullable: true
+          description: URL the button opens.
+        start:
+          type: number
+          description: Time in seconds at which the button appears.
+        end:
+          type: number
+          description: Time in seconds at which the button disappears.
+        position:
+          type: string
+          enum: ["top-right", "top-left", "bottom-right", "bottom-left"]
+          description: Corner of the player the button is anchored to.
+        show_only_at_end:
+          type: boolean
+          description: Whether the button is shown only after the recording finishes.
+
+    # CTA list response structure
+    cta_list_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        ctas:
+          type: array
+          items:
+            $ref: "#/components/schemas/cta"
+          description: CTAs configured on the recording.
+
+    # CTA create response structure
+    cta_create_response:
+      allOf:
+        - $ref: "#/components/schemas/cta"
+        - type: object
+          properties:
+            recording_id:
+              type: string
+              description: Public link identifier of the recording.
+            background_color:
+              type: string
+              description: Button background color, as a hex string.
+            text_color:
+              type: string
+              description: Button text color, as a hex string.

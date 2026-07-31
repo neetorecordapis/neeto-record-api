@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Folders APIs
+  version: 2.0.0
+
+servers:
+  $ref: '../schemas/common.yaml#/servers'
+
+tags:
+  - name: Folders
+    description: APIs to list and create the folders that recordings are organized into.
+
+paths:
+  /folders:
+    get:
+      summary: List all folders
+      tags:
+        - Folders
+      description: Lists every folder in the workspace, with the number of recordings in each.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/page_number_param'
+        - $ref: '../schemas/common.yaml#/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved folders.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/folder.yaml#/components/schemas/folder_list_response'
+              example:
+                folders:
+                  - id: "hqzptnv"
+                    name: "Product demos"
+                    parent_id: null
+                    recording_count: 12
+                    created_at: "2026-02-02T11:40:18.000Z"
+                  - id: "wbrkxdm"
+                    name: "Onboarding"
+                    parent_id: "hqzptnv"
+                    recording_count: 3
+                    created_at: "2026-02-14T08:12:03.000Z"
+                pagination:
+                  total_records: 8
+                  total_pages: 1
+                  current_page_number: 1
+                  page_size: 30
+
+    post:
+      summary: Create a folder
+      tags:
+        - Folders
+      description: >-
+        Creates a folder. Pass `parent_folder_id` to nest it inside an existing folder.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - folder
+              properties:
+                folder:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the folder.
+                      example: "Onboarding"
+                    parent_folder_id:
+                      type: string
+                      description: >-
+                        Folder to nest the new folder under. Accepts the `id` returned by the
+                        List folders API.
+                      example: "hqzptnv"
+      responses:
+        '200':
+          description: The folder was created.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/folder.yaml#/components/schemas/folder_create_response'
+              example:
+                id: "wbrkxdm"
+                name: "Onboarding"
+                parent_id: "hqzptnv"
+                created_at: "2026-02-14T08:12:03.000Z"
+        '404':
+          description: The parent folder does not exist in this workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "RecordingFolder does not exist."
+        '422':
+          description: The request body is missing the `folder` key or the folder `name`.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "param is missing or the value is empty or invalid: name"

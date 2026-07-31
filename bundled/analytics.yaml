@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Analytics APIs
+  version: 2.0.0
+servers:
+  - description: NeetoRecord APIs
+    url: https://{your-subdomain}.neetorecord.com/api/external/v2
+    variables:
+      your-subdomain:
+        default: spinkart
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/workspace-subdomain).
+tags:
+  - name: Analytics
+    description: APIs to retrieve workspace wide recording and view counts.
+paths:
+  /analytics:
+    get:
+      summary: Get workspace analytics
+      tags:
+        - Analytics
+      description: Retrieves how many uploaded recordings and views the workspace has, along with its ten most watched recordings. For a single recording's view history, use the [Get view analytics for a recording](/api-reference/recordings/analytics) API.
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - in: query
+          name: from_date
+          required: false
+          description: Only count recordings created on or after this date, in `YYYY-MM-DD` format. Filters on when a recording was created, not when it was viewed.
+          schema:
+            type: string
+            format: date
+            example: '2026-01-01'
+        - in: query
+          name: to_date
+          required: false
+          description: Only count recordings created on or before this date, in `YYYY-MM-DD` format.
+          schema:
+            type: string
+            format: date
+            example: '2026-06-30'
+      responses:
+        '200':
+          description: Successfully retrieved analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/organization_analytics_response'
+              example:
+                total_recordings: 95
+                total_views: 1840
+                top_recordings:
+                  - id: x9y8z7w6v5u4t3s2
+                    title: Product demo walkthrough
+                    view_count: 42
+                  - id: a1b2c3d4e5f6g7h8
+                    title: Sprint planning meeting
+                    view_count: 5
+        '422':
+          description: A date could not be parsed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                error: Invalid from_date '2026-13-01'. Expected ISO format (e.g. '2024-01-01').
+components:
+  parameters:
+    api_key_header:
+      in: header
+      name: X-Api-Key
+      description: API key. Refer to [Authentication](/getting-started/authentication) for more information.
+      required: true
+      schema:
+        type: string
+    accept_header:
+      in: header
+      name: Accept
+      description: Must be `application/json`.
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+  schemas:
+    top_recording:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Public link identifier of the recording.
+          example: 4f9c2a1b7e5d3086af12
+        title:
+          type: string
+          description: Title of the recording, falling back to its auto generated title.
+          example: Product demo walkthrough
+        view_count:
+          type: integer
+          description: Total number of views for the recording.
+          example: 42
+    organization_analytics_response:
+      type: object
+      properties:
+        total_recordings:
+          type: integer
+          description: Number of uploaded recordings in the workspace, within the date range when one is given.
+          example: 95
+        total_views:
+          type: integer
+          description: Sum of views across those recordings.
+          example: 1840
+        top_recordings:
+          type: array
+          items:
+            $ref: '#/components/schemas/top_recording'
+          description: The ten most watched recordings, most viewed first.
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human readable error message.

@@ -27,6 +27,17 @@ accept_header:
     enum: ['application/json']
     default: 'application/json'
 
+# Common recording identifier path parameter
+recording_id_param:
+  in: path
+  name: id
+  required: true
+  description: >-
+    The recording's `id` (UUID) or its `public_link_id` (the short code in the watch URL).
+    Both are accepted.
+  schema:
+    type: string
+
 # Common pagination parameters
 page_number_param:
   in: query
@@ -60,7 +71,26 @@ pagination_parameters:
       type: integer
 
 components:
+  responses:
+    # Returned when the recording is not in the workspace the API key belongs to
+    recording_not_found:
+      description: The recording does not exist in this workspace.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            error: "Recording does not exist."
+
   schemas:
+    # Error object structure
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human readable error message.
+
     # Pagination object structure (for NeetoRecord APIs)
     pagination:
       type: object

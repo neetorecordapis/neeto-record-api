@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Tags APIs
+  version: 2.0.0
+servers:
+  - description: NeetoRecord APIs
+    url: https://{your-subdomain}.neetorecord.com/api/external/v2
+    variables:
+      your-subdomain:
+        default: spinkart
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/workspace-subdomain).
+tags:
+  - name: Tags
+    description: APIs to list the recording tags used in your workspace.
+paths:
+  /tags:
+    get:
+      summary: List all tags
+      tags:
+        - Tags
+      description: 'Lists every tag in the workspace, with the number of recordings carrying it. Tags are created implicitly: sending a name that does not exist yet in `tag_names` on the [Update a recording](/api-reference/recordings/update) API creates the tag, so there is no separate create endpoint.'
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - $ref: '#/components/parameters/page_number_param'
+        - $ref: '#/components/parameters/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved tags.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tag_list_response'
+              example:
+                tags:
+                  - id: b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54
+                    name: demo
+                    style: secondary
+                    recording_count: 12
+                  - id: d94a1e63-7f52-4c80-b3a6-1e8d0c5f7b29
+                    name: internal
+                    style: secondary
+                    recording_count: 4
+                pagination:
+                  total_records: 15
+                  total_pages: 1
+                  current_page_number: 1
+                  page_size: 30
+components:
+  parameters:
+    api_key_header:
+      in: header
+      name: X-Api-Key
+      description: API key. Refer to [Authentication](/getting-started/authentication) for more information.
+      required: true
+      schema:
+        type: string
+    accept_header:
+      in: header
+      name: Accept
+      description: Must be `application/json`.
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+    page_number_param:
+      in: query
+      name: page_number
+      description: Page number. If absent, all results are returned.
+      required: false
+      schema:
+        type: integer
+    page_size_param:
+      in: query
+      name: page_size
+      description: Number of results per page. Defaults to 30.
+      required: false
+      schema:
+        type: integer
+  schemas:
+    tag_with_count:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the tag.
+          example: b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54
+        name:
+          type: string
+          description: Name of the tag.
+          example: demo
+        style:
+          type: string
+          description: Style used when the tag is displayed.
+          example: secondary
+        recording_count:
+          type: integer
+          description: Number of recordings carrying the tag.
+          example: 12
+    pagination:
+      type: object
+      properties:
+        total_records:
+          type: integer
+          description: Total number of records.
+          example: 95
+        total_pages:
+          type: integer
+          description: Total number of pages available.
+          example: 4
+        current_page_number:
+          type: integer
+          description: Current page number.
+          example: 1
+        page_size:
+          type: integer
+          description: Number of records per page.
+          example: 30
+    tag_list_response:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/tag_with_count'
+          description: List of tags.
+        pagination:
+          $ref: '#/components/schemas/pagination'

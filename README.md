@@ -40,3 +40,27 @@ This repository contains the documentation for the
    mintlify uses. You should NEVER make changes to the `bundled` folder directly.
 
    Refer to [llm.md](llm.md) for more info.
+
+## CLI command reference
+
+The pages under `cli-reference/` combine hand written prose with generated flag
+tables. Two things are generated from `cli/catalog.json` and must never be
+edited by hand, because the next build overwrites them:
+
+- `snippets/cli/**` - the per command flag tables.
+- `cli-reference/overview.mdx` - the commands overview.
+
+To refresh them after the CLI ships new commands or flags:
+
+```bash
+yarn cli:catalog   # re-snapshots cli/catalog.json from the installed neetorecord binary
+yarn cli:build     # regenerates snippets/cli/** and cli-reference/overview.mdx
+```
+
+`yarn cli:catalog` reads whichever `neetorecord` is on your `PATH`, so run
+`neetorecord update` first or build the binary from the latest `main` of
+[neeto-record-cli](https://github.com/neetozone/neeto-record-cli). A stale
+binary silently drops newer commands from the docs.
+
+Everything else under `cli-reference/` and `cli/` is hand written. `yarn build`
+runs `cli:build` after bundling the OpenAPI specs.

@@ -1,0 +1,148 @@
+---
+title: "Commands overview"
+description: "Every neetorecord command grouped by resource, with links to the full reference."
+---
+
+## Global flags
+
+These flags work on every command and are left out of the per-command flag tables below. See [Output formats](/cli/output-formats) for details.
+
+| Flag | Description |
+| --- | --- |
+| `--json` | Output as JSON |
+| `--quiet` | Output raw data only (no envelope) |
+| `--toon` | Output in TOON format (token-optimized for AI agents) |
+| `--subdomain` | Override saved subdomain |
+
+### analytics
+
+View organization analytics
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord analytics show`](/cli-reference/analytics) | Show organization-wide analytics |
+
+### doctor
+
+Check CLI health and connectivity
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord doctor`](/cli-reference/utility) | Check CLI health and connectivity |
+
+### folders
+
+Manage recording folders
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord folders create`](/cli-reference/folders) | Create a new folder |
+| [`neetorecord folders list`](/cli-reference/folders) | List all folders |
+
+### login
+
+Authenticate to NeetoRecord via browser
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord login`](/cli-reference/utility) | Authenticate to NeetoRecord via browser |
+
+### logout
+
+Sign out and clear saved credentials
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord logout`](/cli-reference/utility) | Sign out and clear saved credentials |
+
+### recording-requests
+
+Manage recording requests
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord recording-requests create`](/cli-reference/recording-requests) | Create a recording request |
+
+### recordings
+
+Manage recordings
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord recordings analytics`](/cli-reference/recordings) | Get view analytics for a recording |
+| [`neetorecord recordings chapter-status`](/cli-reference/recordings) | Check chapter generation status for a recording |
+| [`neetorecord recordings chapters`](/cli-reference/recordings) | Get chapters for a recording |
+| [`neetorecord recordings create-cta`](/cli-reference/recordings) | Add a CTA to a recording |
+| [`neetorecord recordings ctas`](/cli-reference/recordings) | List CTAs for a recording |
+| [`neetorecord recordings delete`](/cli-reference/recordings) | Delete a recording |
+| [`neetorecord recordings download-url`](/cli-reference/recordings) | Get a presigned download URL for a recording |
+| [`neetorecord recordings embed-code`](/cli-reference/recordings) | Get the embed code for a recording |
+| [`neetorecord recordings list`](/cli-reference/recordings) | List recordings |
+| [`neetorecord recordings screenshot`](/cli-reference/recordings) | Get a URL to a still-frame screenshot of a recording at a timestamp |
+| [`neetorecord recordings search`](/cli-reference/recordings) | Search recordings by title |
+| [`neetorecord recordings search-by-transcript`](/cli-reference/recordings) | Search recordings by transcript content |
+| [`neetorecord recordings share-link`](/cli-reference/recordings) | Get the public share link for a recording |
+| [`neetorecord recordings show`](/cli-reference/recordings) | Show a recording |
+| [`neetorecord recordings transcript`](/cli-reference/recordings) | Get transcript for a recording |
+| [`neetorecord recordings transcript-status`](/cli-reference/recordings) | Check transcript generation status for a recording |
+| [`neetorecord recordings trigger-chapters`](/cli-reference/recordings) | Trigger chapter generation for a recording |
+| [`neetorecord recordings trigger-mp4`](/cli-reference/recordings) | Trigger MP4 generation for a recording |
+| [`neetorecord recordings trigger-transcript`](/cli-reference/recordings) | Trigger transcript generation for a recording |
+| [`neetorecord recordings update`](/cli-reference/recordings) | Update a recording |
+
+### setup
+
+Set up NeetoRecord for AI coding assistants
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord setup claude`](/cli-reference/utility) | Register NeetoRecord plugin with Claude Code |
+| [`neetorecord setup codex`](/cli-reference/utility) | Add NeetoRecord instructions for OpenAI Codex |
+| [`neetorecord setup copilot`](/cli-reference/utility) | Add NeetoRecord instructions for GitHub Copilot |
+| [`neetorecord setup cursor`](/cli-reference/utility) | Write NeetoRecord rules for Cursor IDE |
+| [`neetorecord setup gemini`](/cli-reference/utility) | Add NeetoRecord instructions for Gemini CLI |
+| [`neetorecord setup windsurf`](/cli-reference/utility) | Write NeetoRecord rules for Windsurf IDE |
+
+### tags
+
+List recording tags
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord tags list`](/cli-reference/tags) | List all tags |
+
+### team-members
+
+Manage team members
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord team-members create`](/cli-reference/team-members) | Invite team members |
+| [`neetorecord team-members delete`](/cli-reference/team-members) | Remove a team member |
+| [`neetorecord team-members list`](/cli-reference/team-members) | List team members |
+| [`neetorecord team-members show`](/cli-reference/team-members) | Show a team member |
+| [`neetorecord team-members update`](/cli-reference/team-members) | Update a team member |
+
+### update
+
+Update the CLI to the latest version
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord update`](/cli-reference/utility) | Update the CLI to the latest version |
+
+### version
+
+Print the CLI version
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord version`](/cli-reference/utility) | Print the CLI version |
+
+### whoami
+
+Show current authenticated user(s)
+
+| Command | Description |
+| --- | --- |
+| [`neetorecord whoami`](/cli-reference/utility) | Show current authenticated user(s) |

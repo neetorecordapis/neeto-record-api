@@ -1,0 +1,533 @@
+---
+title: "recordings"
+description: "List, search, update, and delete recordings, and work with their transcripts, chapters, links, and CTAs."
+---
+
+import RecordingsList from "/snippets/cli/recordings/list.mdx";
+import RecordingsSearch from "/snippets/cli/recordings/search.mdx";
+import RecordingsSearchByTranscript from "/snippets/cli/recordings/search-by-transcript.mdx";
+import RecordingsUpdate from "/snippets/cli/recordings/update.mdx";
+import RecordingsTriggerTranscript from "/snippets/cli/recordings/trigger-transcript.mdx";
+import RecordingsDownloadUrl from "/snippets/cli/recordings/download-url.mdx";
+import RecordingsScreenshot from "/snippets/cli/recordings/screenshot.mdx";
+import RecordingsCreateCta from "/snippets/cli/recordings/create-cta.mdx";
+
+Recordings are the core NeetoRecord resource. For fields and response details,
+see the [API reference](/api-reference/recordings/list).
+
+Every command below takes the recording as a positional argument. That argument
+accepts either the recording's `id` or its `public_link_id`, which is the last
+segment of a watch URL such as
+`https://acme.neetorecord.com/watch/4f9c2a1b7e5d3086af12`.
+
+<Info>
+  Sample output on this page is the JSON envelope you get with `--json`. On a
+  terminal the same data prints as a table or a key-value list. See
+  [Output formats](/cli/output-formats).
+</Info>
+
+## recordings list
+
+Lists the recordings in the workspace, newest first. Use it to find a recording
+id to pass to the other commands.
+
+```bash
+neetorecord recordings list --page 1 --page-size 30
+```
+
+<RecordingsList />
+
+```json
+{
+  "data": [
+    {
+      "id": "3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d",
+      "title": "Sprint demo",
+      "default_title": "Recording on 12 Jul 2025",
+      "duration": 412.5,
+      "view_count": 24,
+      "is_uploaded": true,
+      "requested": false,
+      "summary": "Walkthrough of the new folders view.",
+      "public_link_id": "4f9c2a1b7e5d3086af12",
+      "created_at": "2025-07-12T09:14:22.000Z",
+      "updated_at": "2025-07-12T10:02:41.000Z",
+      "uploaded_at": "2025-07-12T09:21:05.000Z",
+      "public_url": "https://acme.neetorecord.com/watch/4f9c2a1b7e5d3086af12",
+      "transcoded_url": "https://cdn.neetorecord.com/transcoded/4f9c2a1b7e5d3086af12/index.m3u8",
+      "thumbnail_url": "https://cdn.neetorecord.com/thumbnails/4f9c2a1b7e5d3086af12.jpg",
+      "user_name": "Oliver Smith",
+      "tags": [
+        {
+          "id": "b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54",
+          "name": "demo",
+          "style": "secondary"
+        }
+      ],
+      "folder_name": "Product demos",
+      "folder_id": "8c1d4e77-2b3a-4f56-9e08-7d5c6b4a3f21"
+    }
+  ],
+  "breadcrumbs": [
+    { "label": "Show", "command": "neetorecord recordings show <id>" }
+  ],
+  "pagination": {
+    "total_records": 95,
+    "total_pages": 4,
+    "current_page_number": 1,
+    "page_size": 30
+  }
+}
+```
+
+## recordings show
+
+Shows one recording in full.
+
+```bash
+neetorecord recordings show 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+The output is the same recording object that `list` returns, wrapped in `data`
+with no pagination block.
+
+## recordings search
+
+Searches recordings by title. Use it when you know roughly what a recording is
+called but not its id.
+
+```bash
+neetorecord recordings search --query "sprint"
+```
+
+<RecordingsSearch />
+
+The output matches `recordings list`.
+
+## recordings search-by-transcript
+
+Searches the text of recording transcripts. Use it to find the recording where
+something was said, rather than one whose title matches.
+
+```bash
+neetorecord recordings search-by-transcript --query "pricing page"
+```
+
+<RecordingsSearchByTranscript />
+
+The output matches `recordings list`.
+
+## recordings update
+
+Renames a recording, replaces its summary, moves it between folders, or replaces
+its tags. Only the flags you pass are changed.
+
+```bash
+neetorecord recordings update 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
+  --title "Sprint demo, July" \
+  --tag demo --tag internal
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+<RecordingsUpdate />
+
+`--tag` replaces every tag on the recording, so pass the complete list each
+time. Tags that do not exist yet are created. Passing `--folder-id ""` removes
+the recording from its folder. `--folder-id` accepts the id returned by
+[`folders list`](/cli-reference/folders).
+
+The output is the updated recording object, wrapped in `data`.
+
+## recordings delete
+
+Deletes a recording and everything derived from it. This cannot be undone.
+
+```bash
+neetorecord recordings delete 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```
+Recording deleted.
+```
+
+## recordings transcript
+
+Prints the full transcript with its timestamped segments.
+
+```bash
+neetorecord recordings transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "transcript": {
+      "text": "Let me walk through the new folders view.",
+      "segments": [
+        {
+          "start": 0.0,
+          "end": 3.4,
+          "text": "Let me walk through the new folders view."
+        }
+      ]
+    }
+  }
+}
+```
+
+## recordings transcript-status
+
+Reports whether a transcript exists and where generation has got to. Check this
+before polling for transcript text.
+
+```bash
+neetorecord recordings transcript-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "success",
+    "has_transcript": true
+  }
+}
+```
+
+## recordings trigger-transcript
+
+Starts transcript generation, or regenerates an existing transcript in another
+language. Generation runs in the background.
+
+```bash
+neetorecord recordings trigger-transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --language en
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+<RecordingsTriggerTranscript />
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "triggered"
+  }
+}
+```
+
+## recordings chapters
+
+Prints the auto generated chapters of a recording.
+
+```bash
+neetorecord recordings chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "chapters": [
+      { "title": "Intro", "start": 0 },
+      { "title": "Folders view", "start": 48 }
+    ]
+  }
+}
+```
+
+## recordings chapter-status
+
+Reports whether chapters exist and where generation has got to.
+
+```bash
+neetorecord recordings chapter-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "success",
+    "has_chapters": true
+  }
+}
+```
+
+## recordings trigger-chapters
+
+Starts chapter generation for a recording. It needs a transcript, so run
+`trigger-transcript` first if the recording does not have one.
+
+```bash
+neetorecord recordings trigger-chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "triggered"
+  }
+}
+```
+
+## recordings share-link
+
+Prints the public watch link, and whether that link has expired or is behind
+access control.
+
+```bash
+neetorecord recordings share-link 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "public_url": "https://acme.neetorecord.com/watch/4f9c2a1b7e5d3086af12",
+    "is_expired": false,
+    "access_control_protected": false
+  }
+}
+```
+
+## recordings embed-code
+
+Prints the iframe snippet for embedding a recording in another page.
+
+```bash
+neetorecord recordings embed-code 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "embed_url": "https://acme.neetorecord.com/embeds/3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d",
+    "embed_html": "<iframe src=\"https://acme.neetorecord.com/embeds/3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d\" width=\"100%\" height=\"480\" frameborder=\"0\" allowfullscreen></iframe>"
+  }
+}
+```
+
+## recordings download-url
+
+Returns a presigned URL for downloading the recording. The URL is short lived,
+so fetch it right before you use it.
+
+```bash
+neetorecord recordings download-url 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --format mp4
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+<RecordingsDownloadUrl />
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "file_format": "mp4",
+    "is_download_file_ready": true,
+    "download_url": "https://cdn.neetorecord.com/downloads/4f9c2a1b7e5d3086af12.mp4?Expires=1752312000",
+    "url_expires_in_seconds": 600
+  }
+}
+```
+
+When the MP4 has not been prepared yet, the response carries
+`"is_download_file_ready": false` and no URL. Run `trigger-mp4`, then try again.
+
+## recordings trigger-mp4
+
+Starts preparing the downloadable MP4 for a recording. Run it when
+`download-url` reports that the file is not ready.
+
+```bash
+neetorecord recordings trigger-mp4 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "generating"
+  }
+}
+```
+
+`status` is `generating` when regeneration was queued, `already_generating`
+when a conversion is already running, and `ready` when the MP4 is already up to
+date.
+
+## recordings screenshot
+
+Returns a URL to a still frame captured at a timestamp. Useful for pulling a
+thumbnail out of a recording, or for looking at what was on screen when
+something was said.
+
+```bash
+neetorecord recordings screenshot 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
+  --timestamp 48.5 --format png
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+<RecordingsScreenshot />
+
+`--timestamp` must fall within the recording's duration.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "timestamp": 48.5,
+    "image_format": "png",
+    "is_screenshot_ready": true,
+    "screenshot_url": "https://cdn.neetorecord.com/screenshots/4f9c2a1b7e5d3086af12-48.5.png?Expires=1752312000",
+    "url_expires_in_seconds": 600
+  }
+}
+```
+
+## recordings analytics
+
+Reports the view count for a single recording, broken down by day.
+
+```bash
+neetorecord recordings analytics 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "total_views": 24,
+    "views_by_day": [
+      { "date": "2025-07-12", "count": 9 },
+      { "date": "2025-07-13", "count": 15 }
+    ]
+  }
+}
+```
+
+For workspace wide numbers, see [`analytics show`](/cli-reference/analytics).
+
+## recordings ctas
+
+Lists the call to action buttons configured on a recording.
+
+```bash
+neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+```json
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "ctas": [
+      {
+        "id": "c47e2f81-6a90-4b3d-8e21-5f0c9d7b1a63",
+        "label": "Book a demo",
+        "link": "https://acme.neetocal.com/meeting-with-oliver",
+        "start": 30.0,
+        "end": 90.0,
+        "position": "top-right",
+        "show_only_at_end": false
+      }
+    ]
+  }
+}
+```
+
+## recordings create-cta
+
+Adds a call to action button that appears over the video for a time range.
+
+```bash
+neetorecord recordings create-cta 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
+  --label "Book a demo" \
+  --link "https://acme.neetocal.com/meeting-with-oliver" \
+  --start 30 --end 90 --position bottom-right
+```
+
+**Required arguments**
+
+- `<id>` - the recording id or public link id.
+
+<RecordingsCreateCta />
+
+```json
+{
+  "data": {
+    "id": "c47e2f81-6a90-4b3d-8e21-5f0c9d7b1a63",
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "label": "Book a demo",
+    "link": "https://acme.neetocal.com/meeting-with-oliver",
+    "start": 30.0,
+    "end": 90.0,
+    "position": "bottom-right",
+    "background_color": "#000000",
+    "text_color": "#FFFFFF",
+    "show_only_at_end": false
+  }
+}
+```

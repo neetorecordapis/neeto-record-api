@@ -1,0 +1,36 @@
+components:
+  schemas:
+    # Top recording entry structure
+    top_recording:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Public link identifier of the recording.
+          example: "4f9c2a1b7e5d3086af12"
+        title:
+          type: string
+          description: Title of the recording, falling back to its auto generated title.
+          example: "Product demo walkthrough"
+        view_count:
+          type: integer
+          description: Total number of views for the recording.
+          example: 42
+
+    # Organization analytics response structure
+    organization_analytics_response:
+      type: object
+      properties:
+        total_recordings:
+          type: integer
+          description: Number of uploaded recordings in the workspace, within the date range when one is given.
+          example: 95
+        total_views:
+          type: integer
+          description: Sum of views across those recordings.
+          example: 1840
+        top_recordings:
+          type: array
+          items:
+            $ref: "#/components/schemas/top_recording"
+          description: The ten most watched recordings, most viewed first.

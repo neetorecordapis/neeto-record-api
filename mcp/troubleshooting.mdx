@@ -1,0 +1,118 @@
+---
+title: "Troubleshooting"
+description: "What to check when an assistant cannot reach NeetoRecord."
+---
+
+<AccordionGroup>
+  <Accordion title="The assistant does not see any NeetoRecord tools">
+    **Restart the client first.** Every client reads its MCP config at startup,
+    and Cursor can also reload the window from the command palette. Then check
+    the items for your kind of client.
+
+    On Claude or ChatGPT, which connect over OAuth, confirm the connector was
+    actually added and that you completed the sign in rather than closing the
+    browser tab partway. In ChatGPT the plugin is only created once you tick the
+    risk acknowledgement.
+
+    On Claude Code, Cursor, VS Code, or Windsurf, which read a JSON config file:
+
+    1. **Check the config key.** Claude Code, Cursor, Gemini CLI, and Windsurf
+       nest servers under `mcpServers`. VS Code uses `servers`, and Codex uses a
+       `[mcp_servers.<name>]` section in TOML. A server under the wrong key is
+       ignored silently.
+    2. **Check the URL key.** Windsurf expects `serverUrl`, and Gemini CLI
+       expects `httpUrl` because it reserves `url` for SSE. Claude Code, Codex,
+       Cursor, and VS Code expect `url`.
+    3. **Check the endpoint.** It is
+       `https://connect.neetorecord.com/mcp/messages`, with no trailing slash.
+    4. **Check the syntax.** In JSON a trailing comma or an unclosed brace makes
+       the whole file unreadable, which takes out any other servers too.
+
+    Full snippets for each client are on [Connect your assistant](/mcp/connect).
+  </Accordion>
+
+  <Accordion title="The connection is refused or unauthorized">
+    On an API key connection, the `Authorization` header must read
+    `Bearer YOUR_API_KEY`, with the word `Bearer` and a single space before the
+    key. Confirm the key has not been revoked, and that it belongs to the
+    workspace you expect: a key generated in one workspace does not work in
+    another. Generate a new key from
+    [workspace settings](https://help.neetorecord.com/articles/api-keys) if you
+    are unsure.
+
+    On an OAuth connection there is no key to check. Remove the connector and
+    add it again to run the sign in from the start.
+  </Accordion>
+
+  <Accordion title="The OAuth sign in fails at the workspace step">
+    The first screen asks for a workspace subdomain, not a full URL or an email
+    address. For `acme.neetorecord.com`, enter `acme`. See
+    [Workspace subdomain](/getting-started/workspace-subdomain).
+
+    If you have more than one workspace, the assistant reaches the one you
+    picked here. Connect the server once per workspace to reach several.
+  </Accordion>
+
+  <Accordion title="An OAuth connected assistant sees fewer recordings than expected">
+    That is the scoping working as intended. An OAuth connection acts as the
+    person who approved it, so listings and searches come back filtered to your
+    permissions, and asking for a specific recording you cannot open is refused
+    rather than answered.
+
+    If the assistant genuinely needs to reach everything in the workspace, that
+    is what an API key connection is for. See
+    [Authentication](/mcp/authentication).
+  </Accordion>
+
+  <Accordion title="The assistant reaches the wrong workspace">
+    An OAuth connection covers the workspaces you approved it from. Name the
+    workspace in your prompt, or ask the assistant to list the workspaces it can
+    reach. To add another one, run the sign in again from that workspace.
+  </Accordion>
+
+  <Accordion title="VS Code never offers the tools">
+    MCP needs VS Code 1.99 or later with GitHub Copilot running in Agent mode.
+    Check the version, switch Copilot to Agent mode, and confirm that
+    `.vscode/mcp.json` is in the workspace you have open. VS Code prompts for
+    your API key the first time the server is used, so answer that prompt.
+  </Accordion>
+
+  <Accordion title="Windsurf connects but the tools are missing">
+    Enable the server under **Settings → Cascade → MCP Servers** after saving
+    the config. Windsurf also caps the total number of tools at 100 across every
+    connected server, so turn off servers you are not using and reload.
+  </Accordion>
+
+  <Accordion title="The assistant says a recording was not found">
+    Workspace tools only reach recordings in the workspace the API key belongs
+    to. For a recording in someone else's workspace, the assistant has to use
+    the public tools, and those work only when the recording is publicly
+    accessible with no sign in required. Check that the watch URL's subdomain
+    matches the workspace you connected.
+  </Accordion>
+
+  <Accordion title="A transcript, chapters, or a screenshot come back empty">
+    Those are generated after a recording is uploaded, and they may not exist
+    yet. Ask the assistant to check the transcript or chapter status and to
+    trigger generation, then try again once it reports success. A screenshot
+    also needs an up to date MP4, so the assistant may have to start MP4
+    generation first.
+
+    Public recordings can also have transcripts or downloads switched off by
+    their owner, in which case there is nothing to fetch.
+  </Accordion>
+
+  <Accordion title="Claude shows the connector as unauthorized">
+    Custom connectors are added under **Settings → Connectors**, and the
+    connector has to be authorized against your workspace before it can be used.
+    Remove and re-add it if the authorization did not complete. The same
+    connector list backs claude.ai, the Claude desktop app, and Cowork, so
+    fixing it in one fixes it everywhere.
+  </Accordion>
+</AccordionGroup>
+
+## Still stuck
+
+Reach us through the [help center](https://help.neetorecord.com), or at
+[support@neetorecord.com](mailto:support@neetorecord.com). Tell us which client
+you are using and what the assistant reports when it tries a NeetoRecord tool.

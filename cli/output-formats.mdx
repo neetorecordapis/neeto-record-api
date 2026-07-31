@@ -1,0 +1,96 @@
+---
+title: "Output formats"
+description: "Tables on a terminal, JSON when piped, plus quiet and TOON modes."
+---
+
+Every command picks its output format from the terminal and the global flags.
+On a terminal you get a readable table or key-value list. Anywhere else, and
+whenever a format flag is set, you get machine readable output.
+
+| Flag | Output |
+| --- | --- |
+| _none, on a terminal_ | Table for lists, key-value for a single resource, with breadcrumbs. |
+| _none, when piped or redirected_ | JSON envelope. |
+| `--json` | JSON envelope, even on a terminal. |
+| `--quiet` | Raw data only, with no envelope. |
+| `--toon` | TOON, a compact encoding for AI agents. |
+
+When more than one flag is set the precedence is `--toon`, then `--quiet`, then
+`--json`, then the default.
+
+## Pretty output
+
+```bash
+neetorecord recordings list
+```
+
+Lists print as a table, single resources as a key-value list, and both end with
+breadcrumbs suggesting the command to run next:
+
+```
+  Show: neetorecord recordings show <id>
+```
+
+## JSON envelope
+
+```bash
+neetorecord recordings list --json
+```
+
+```json
+{
+  "data": [
+    {
+      "id": "9f8b1c2d",
+      "title": "Sprint demo",
+      "duration": 412.5,
+      "view_count": 24
+    }
+  ],
+  "breadcrumbs": [
+    { "label": "Show", "command": "neetorecord recordings show <id>" }
+  ],
+  "pagination": {
+    "total_records": 95,
+    "total_pages": 4,
+    "current_page_number": 1,
+    "page_size": 30
+  }
+}
+```
+
+`data` holds the resource or the array of resources. `breadcrumbs` is left out
+when a command has none, and `pagination` appears only on list commands.
+
+## Quiet output
+
+`--quiet` drops the envelope and prints the payload alone. For commands that
+create or update a resource it prints just the identifier, and for `delete` it
+prints `success`. That makes it the right choice inside a shell pipeline:
+
+```bash
+id=$(neetorecord folders create --name "Onboarding" --quiet)
+neetorecord recordings update 9f8b1c2d --folder-id "$id" --quiet
+```
+
+## TOON output
+
+`--toon` emits [TOON](https://github.com/toon-format/toon), a token optimized
+encoding of the same data. It carries the same fields as the JSON envelope in
+noticeably fewer tokens, which matters when the output is going into an AI
+assistant's context window.
+
+```bash
+neetorecord recordings list --toon
+```
+
+## Pagination
+
+List commands take `--page` and `--page-size`, with a maximum page size of 100.
+The `pagination` block reports `current_page_number`, `total_pages`,
+`total_records`, and `page_size`, so a script can keep incrementing `--page`
+until it reaches `total_pages`.
+
+```bash
+neetorecord recordings list --page 2 --page-size 50 --json
+```

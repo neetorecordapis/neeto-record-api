@@ -1,0 +1,52 @@
+---
+title: "Introduction"
+description: "Manage NeetoRecord recordings, folders, tags, and analytics from the terminal."
+---
+
+`neetorecord` is the command line interface for NeetoRecord. It calls the same
+v2 REST API that powers the web app, so anything you can read or change through
+the [API](/api-reference/recordings/list) you can also do from a shell script, a
+CI job, or an AI coding assistant.
+
+## Why use the CLI
+
+<CardGroup cols={2}>
+  <Card title="No API key to manage" icon="key">
+    `neetorecord login` signs you in through the browser and stores a session
+    per workspace. There is no key to paste into a config file or a CI secret.
+  </Card>
+  <Card title="Readable and scriptable" icon="terminal">
+    Commands print a table on a terminal and JSON when piped. `--quiet` prints
+    the bare identifier, which is what you want inside a shell pipeline.
+  </Card>
+  <Card title="Several workspaces at once" icon="layer-group">
+    Sign in to as many subdomains as you need and choose one per command with
+    `--subdomain`.
+  </Card>
+  <Card title="Ready for AI assistants" icon="robot">
+    `--toon` trims output tokens, and `neetorecord setup` teaches Claude Code,
+    Cursor, Windsurf, Copilot, Gemini, and Codex how to drive the CLI.
+  </Card>
+</CardGroup>
+
+## Prerequisites
+
+- A NeetoRecord workspace, and your [workspace subdomain](/getting-started/workspace-subdomain).
+- macOS, Linux, or Windows.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/cli/installation">
+    Install the CLI with Homebrew, a shell script, or PowerShell.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/cli/authentication">
+    Sign in, switch workspaces, and check who you are signed in as.
+  </Card>
+  <Card title="Output formats" icon="brackets-curly" href="/cli/output-formats">
+    Tables, JSON envelopes, quiet mode, and TOON.
+  </Card>
+  <Card title="Commands" icon="list" href="/cli-reference/overview">
+    Every command grouped by resource.
+  </Card>
+</CardGroup>

@@ -1,0 +1,35 @@
+components:
+  schemas:
+    # Tag object structure, with usage count
+    tag_with_count:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the tag.
+          example: "b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54"
+        name:
+          type: string
+          description: Name of the tag.
+          example: "demo"
+        style:
+          type: string
+          description: Style used when the tag is displayed.
+          example: "secondary"
+        recording_count:
+          type: integer
+          description: Number of recordings carrying the tag.
+          example: 12
+
+    # Tag list response structure
+    tag_list_response:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/tag_with_count"
+          description: List of tags.
+        pagination:
+          $ref: "../schemas/common.yaml#/components/schemas/pagination"

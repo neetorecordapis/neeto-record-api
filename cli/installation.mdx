@@ -1,0 +1,82 @@
+---
+title: "Installation"
+description: "Install the NeetoRecord CLI on macOS, Linux, or Windows."
+---
+
+## Install
+
+<CodeGroup>
+
+```bash macOS
+brew install neetozone/tap/neetorecord
+```
+
+```bash Linux
+curl -fsSL https://neetorecord.com/cli/install.sh | sh
+```
+
+```powershell Windows
+irm https://neetorecord.com/cli/install.ps1 | iex
+```
+
+</CodeGroup>
+
+The formula lives in the `neetozone/tap` tap. Passing the fully qualified name
+taps it for you, so there is no separate `brew tap` step. To upgrade a Homebrew
+install later, run `brew upgrade neetorecord`.
+
+The shell script downloads the binary for your platform and installs it to
+`/usr/local/bin`, asking for `sudo` only if that directory is not writable. The
+PowerShell script installs to `%LOCALAPPDATA%\Programs\neetorecord` and adds
+that directory to your user `PATH`.
+
+### Other options
+
+<AccordionGroup>
+  <Accordion title="Shell script on macOS">
+    If you would rather not use Homebrew, the Linux shell script works on macOS
+    too:
+
+    ```bash
+    curl -fsSL https://neetorecord.com/cli/install.sh | sh
+    ```
+  </Accordion>
+  <Accordion title="Command Prompt on Windows">
+    ```cmd
+    curl -fsSL https://neetorecord.com/cli/install.cmd -o install.cmd && install.cmd
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Verify the install
+
+```bash
+neetorecord version
+```
+
+```
+neetorecord 1.2.2 (commit: 1f96f14, built: 2025-07-14)
+```
+
+`neetorecord --help` lists every command, and `neetorecord doctor` checks that
+the binary can reach your workspace.
+
+## Upgrade
+
+```bash
+neetorecord update
+```
+
+`update` detects how the CLI was installed and runs the matching upgrade: `brew
+upgrade` for a Homebrew install, the install script otherwise, and the
+PowerShell script on Windows.
+
+<Tip>
+  Shell completions are generated from the command tree at install time. Re-run
+  `neetorecord completion <shell>` after upgrading so completions cover the new
+  commands. See [Shell completion](/cli-reference/utility#shell-completion).
+</Tip>
+
+## Next step
+
+Sign in to your workspace: [Authentication](/cli/authentication).

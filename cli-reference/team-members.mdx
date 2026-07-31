@@ -1,0 +1,145 @@
+---
+title: "team-members"
+description: "List, invite, update, and remove the people in your NeetoRecord workspace."
+---
+
+import TeamMembersList from "/snippets/cli/team-members/list.mdx";
+import TeamMembersCreate from "/snippets/cli/team-members/create.mdx";
+import TeamMembersUpdate from "/snippets/cli/team-members/update.mdx";
+
+Team members are the people in the workspace. For fields and response details,
+see the [API reference](/api-reference/team-members/list).
+
+<Info>
+  Sample output on this page is the JSON envelope you get with `--json`. On a
+  terminal the same data prints as a table or a key-value list. See
+  [Output formats](/cli/output-formats).
+</Info>
+
+## team-members list
+
+Lists the members of the workspace. Pass `--email` to look one up without
+paging through the list.
+
+```bash
+neetorecord team-members list --email oliver@example.com
+```
+
+<TeamMembersList />
+
+```json
+{
+  "data": [
+    {
+      "id": "aaaabbbb-cccc-dddd-eeee-ffff00001111",
+      "email": "oliver@example.com",
+      "first_name": "Oliver",
+      "last_name": "Smith",
+      "time_zone": "Asia/Kolkata",
+      "profile_image_url": null,
+      "active": true,
+      "organization_role": "Admin"
+    }
+  ],
+  "breadcrumbs": [
+    { "label": "Show", "command": "neetorecord team-members show <id>" }
+  ],
+  "pagination": {
+    "total_records": 24,
+    "total_pages": 1,
+    "current_page_number": 1,
+    "page_size": 30
+  }
+}
+```
+
+## team-members show
+
+Shows one member.
+
+```bash
+neetorecord team-members show aaaabbbb-cccc-dddd-eeee-ffff00001111
+```
+
+**Required arguments**
+
+- `<id>` - the team member id, as returned by `team-members list`.
+
+```json
+{
+  "data": {
+    "team_member": {
+      "id": "aaaabbbb-cccc-dddd-eeee-ffff00001111",
+      "email": "oliver@example.com",
+      "first_name": "Oliver",
+      "last_name": "Smith",
+      "time_zone": "Asia/Kolkata",
+      "profile_image_url": null,
+      "active": true,
+      "organization_role": "Admin"
+    }
+  }
+}
+```
+
+## team-members create
+
+Invites one or more people to the workspace. Repeat `--email` to invite several
+at once.
+
+```bash
+neetorecord team-members create \
+  --email oliver@example.com --email sam@example.com \
+  --role Standard \
+  --invited-by admin@example.com
+```
+
+<TeamMembersCreate />
+
+`--role` must match one of the roles configured on your workspace's Roles page,
+and it is case sensitive. Pass `--send-invitation-email=false` to add people
+without emailing them.
+
+```json
+{
+  "data": {
+    "message": "Users added successfully"
+  }
+}
+```
+
+## team-members update
+
+Changes a member's name, email, time zone, or role. Only the flags you pass are
+changed.
+
+```bash
+neetorecord team-members update aaaabbbb-cccc-dddd-eeee-ffff00001111 \
+  --first-name Oliver --last-name Smith --role Admin
+```
+
+**Required arguments**
+
+- `<id>` - the team member id, as returned by `team-members list`.
+
+<TeamMembersUpdate />
+
+The output is the updated team member, wrapped in `data`.
+
+## team-members delete
+
+Removes a member from the workspace.
+
+```bash
+neetorecord team-members delete aaaabbbb-cccc-dddd-eeee-ffff00001111
+```
+
+**Required arguments**
+
+- `<id>` - the team member id, as returned by `team-members list`.
+
+```
+Team member removed.
+```
+
+Removing the last admin of a workspace is rejected.

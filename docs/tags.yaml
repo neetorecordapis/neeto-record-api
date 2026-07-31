@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Tags APIs
+  version: 2.0.0
+
+servers:
+  $ref: '../schemas/common.yaml#/servers'
+
+tags:
+  - name: Tags
+    description: APIs to list the recording tags used in your workspace.
+
+paths:
+  /tags:
+    get:
+      summary: List all tags
+      tags:
+        - Tags
+      description: >-
+        Lists every tag in the workspace, with the number of recordings carrying it. Tags are
+        created implicitly: sending a name that does not exist yet in `tag_names` on the
+        [Update a recording](/api-reference/recordings/update) API creates the tag, so there is no
+        separate create endpoint.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/page_number_param'
+        - $ref: '../schemas/common.yaml#/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved tags.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/tag.yaml#/components/schemas/tag_list_response'
+              example:
+                tags:
+                  - id: "b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54"
+                    name: "demo"
+                    style: "secondary"
+                    recording_count: 12
+                  - id: "d94a1e63-7f52-4c80-b3a6-1e8d0c5f7b29"
+                    name: "internal"
+                    style: "secondary"
+                    recording_count: 4
+                pagination:
+                  total_records: 15
+                  total_pages: 1
+                  current_page_number: 1
+                  page_size: 30

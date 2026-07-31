@@ -1,0 +1,103 @@
+---
+title: "Tools"
+description: "Every tool the NeetoRecord MCP server exposes, grouped by resource."
+---
+
+You do not call these by name. Ask for what you want and the assistant picks the
+tool. The list is here so you know what is possible, and so you can nudge an
+assistant that reaches for the wrong thing.
+
+Every tool takes an optional `workspace` argument, the subdomain of a connected
+workspace. Left out, it uses the workspace the connection was set up with.
+
+## Recordings
+
+Backed by the recordings endpoints. For field level detail, see the
+[API reference](/api-reference/recordings/list).
+
+| Tool | What it does |
+| --- | --- |
+| [`ListRecordings`](/api-reference/recordings/list) | Lists recordings with optional filters and pagination. |
+| [`GetRecording`](/api-reference/recordings/get) | Gets full details of one recording by id. |
+| [`SearchRecordingsByTitle`](/api-reference/recordings/search) | Exact or partial title search across recordings. |
+| [`SearchRecordingsByTranscript`](/api-reference/recordings/search-by-transcript) | Full text search across transcript content. |
+| [`UpdateRecording`](/api-reference/recordings/update) | Updates a recording's title, summary, or tags. |
+| [`MoveRecordingToFolder`](/api-reference/recordings/update) | Moves a recording into a folder, or out of its current one. |
+| [`DeleteRecording`](/api-reference/recordings/delete) | Permanently deletes a recording and everything derived from it. |
+
+<Warning>
+  `DeleteRecording` cannot be undone. Assistants are told it is destructive, but
+  confirm what is about to be deleted before you approve the call.
+</Warning>
+
+## Transcripts and chapters
+
+| Tool | What it does |
+| --- | --- |
+| [`GetTranscript`](/api-reference/recordings/transcript) | Gets the full transcript with timestamps. |
+| [`GetTranscriptStatus`](/api-reference/recordings/transcript-status) | Reports whether a transcript exists and how generation is going. |
+| [`TriggerTranscriptGeneration`](/api-reference/recordings/trigger-transcript) | Starts or restarts transcript generation. |
+| [`GetChapters`](/api-reference/recordings/chapters) | Gets the auto generated chapters. |
+| [`GetChapterStatus`](/api-reference/recordings/chapter-status) | Reports whether chapters exist and how generation is going. |
+| [`TriggerChapterGeneration`](/api-reference/recordings/trigger-chapters) | Starts chapter generation. |
+
+## Sharing and media
+
+| Tool | What it does |
+| --- | --- |
+| [`GetShareLink`](/api-reference/recordings/share-link) | Gets the public share link, and whether it is expired or access controlled. |
+| [`GetEmbedCode`](/api-reference/recordings/embed-code) | Gets the HTML embed code for a recording. |
+| [`GetDownloadUrl`](/api-reference/recordings/download-url) | Gets a presigned download URL, valid for a limited time. |
+| [`TriggerMp4Generation`](/api-reference/recordings/trigger-mp4) | Starts preparing the downloadable MP4. |
+| [`GetScreenshot`](/api-reference/recordings/screenshot) | Captures a still frame at a timestamp and returns the image inline. |
+
+## Folders and tags
+
+| Tool | What it does |
+| --- | --- |
+| [`ListFolders`](/api-reference/folders/list) | Lists the recording folders in the workspace. |
+| [`CreateFolder`](/api-reference/folders/create) | Creates a folder, optionally nested under another. |
+| [`ListTags`](/api-reference/tags/list) | Lists the recording tags in the workspace. |
+
+## Calls to action
+
+| Tool | What it does |
+| --- | --- |
+| [`ListCtas`](/api-reference/recordings/ctas) | Lists the CTA buttons configured on a recording. |
+| [`CreateCta`](/api-reference/recordings/create-cta) | Adds a CTA button to a recording for a time range. |
+
+## Analytics
+
+| Tool | What it does |
+| --- | --- |
+| [`GetOrganizationAnalytics`](/api-reference/analytics/get) | Aggregate recording and view counts across the workspace. |
+| [`GetRecordingAnalytics`](/api-reference/recordings/analytics) | View analytics for one recording. |
+
+## Recording requests
+
+| Tool | What it does |
+| --- | --- |
+| [`CreateRecordingRequest`](/api-reference/recording-requests/create) | Creates a recording request for an active user in the workspace. |
+
+## Public recordings
+
+These reach recordings in other workspaces, and only when the recording is
+publicly accessible with no sign in required. They return less than their
+workspace counterparts, and they respect what the owner allowed, so a transcript
+or a download may be unavailable.
+
+| Tool | What it does |
+| --- | --- |
+| `GetPublicRecordingDetails` | Gets details of a publicly accessible recording. |
+| `GetPublicTranscript` | Gets its transcript with timestamps. |
+| `GetPublicChapters` | Gets its chapters. |
+| `GetPublicShareLink` | Gets its share link. |
+| `GetPublicEmbedCode` | Gets its embed code. |
+| `GetPublicDownloadUrl` | Gets a presigned download URL for it. |
+| `GetPublicScreenshot` | Captures a still frame from it at a timestamp. |
+
+## Workspaces
+
+| Tool | What it does |
+| --- | --- |
+| `ListWorkspaces` | Lists the workspaces this connection can reach, with their subdomains. |

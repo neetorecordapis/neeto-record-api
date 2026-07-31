@@ -1,0 +1,103 @@
+---
+title: "Authentication"
+description: "Sign in to NeetoRecord from the CLI and work with more than one workspace."
+---
+
+The CLI signs in through the browser and stores a session per workspace. It does
+not use the `X-Api-Key` header that the [REST API](/getting-started/authentication)
+uses, so there is no API key to create or rotate for CLI use.
+
+## Sign in
+
+```bash
+neetorecord login --subdomain acme
+```
+
+```
+Authenticated as oliver@example.com on acme.neetorecord.com.
+```
+
+Without `--subdomain` the command asks for it:
+
+```
+Enter your NeetoRecord subdomain (e.g., 'acme' for acme.neetorecord.com):
+```
+
+The subdomain is the first part of your workspace URL. If you sign in to
+NeetoRecord at `acme.neetorecord.com`, the subdomain is `acme`. See
+[Workspace subdomain](/getting-started/workspace-subdomain).
+
+`login` opens your browser to complete the sign in and writes the resulting
+session to `~/.config/neetorecord/auth.json`. Running it again for the same
+subdomain refreshes that entry.
+
+## Check who you are signed in as
+
+```bash
+neetorecord whoami
+```
+
+```
+Authenticated as oliver@example.com on acme.neetorecord.com (default).
+```
+
+With several workspaces signed in, `whoami` lists all of them, and
+`neetorecord whoami --subdomain acme` shows just one.
+
+## Working with several workspaces
+
+`auth.json` holds one entry per subdomain. Which one a command uses depends on
+how many are signed in:
+
+| Signed in workspaces | What happens |
+| --- | --- |
+| None | Every command that calls the API fails with `Not authenticated. Run 'neetorecord login' to authenticate.` |
+| One | That workspace is the default. `--subdomain` is optional. |
+| Two or more | `--subdomain <name>` is required on every command that calls the API, including `doctor`. The error lists the signed in subdomains. |
+
+```bash
+neetorecord recordings list --subdomain acme
+```
+
+## Sign out
+
+```bash
+neetorecord logout --subdomain acme
+```
+
+```
+Signed out of acme.neetorecord.com.
+```
+
+<Info>
+  `neetorecord logout` with no flags signs out of the only workspace when
+  exactly one is signed in, and errors when several are. `--all` signs out of
+  every workspace at once.
+</Info>
+
+## Check connectivity
+
+`doctor` reports authentication, API reachability, and the CLI version in one
+go. It is the first thing to run when a command fails for a reason you cannot
+place.
+
+```bash
+neetorecord doctor
+```
+
+```
+✓ Authentication: authenticated as oliver@example.com on acme.neetorecord.com
+✓ API connection: https://acme.neetorecord.com (responding in 214ms)
+✓ CLI version: 1.2.2
+```
+
+## Point the CLI at another environment
+
+Set `NEETORECORD_BASE_URL` to override the default
+`https://<subdomain>.neetorecord.com` host. This is meant for local and staging
+servers.
+
+```bash
+export NEETORECORD_BASE_URL=http://acme.lvh.me:8980
+neetorecord login --subdomain acme
+```

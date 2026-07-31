@@ -90,14 +90,7 @@ paths:
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'
         - $ref: '../schemas/common.yaml#/accept_header'
-        - in: path
-          name: id
-          required: true
-          description: >-
-            The recording's `id` (UUID) or its `public_link_id` (the short code in the watch URL).
-            Both are accepted.
-          schema:
-            type: string
+        - $ref: '../schemas/common.yaml#/recording_id_param'
         - in: query
           name: timestamp
           required: true
@@ -177,14 +170,7 @@ paths:
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'
         - $ref: '../schemas/common.yaml#/accept_header'
-        - in: path
-          name: id
-          required: true
-          description: >-
-            The recording's `id` (UUID) or its `public_link_id` (the short code in the watch URL).
-            Both are accepted.
-          schema:
-            type: string
+        - $ref: '../schemas/common.yaml#/recording_id_param'
       responses:
         '200':
           description: Regeneration status for the recording.
@@ -207,3 +193,612 @@ paths:
               example:
                 recording_id: "x9y8z7w6v5u4t3s2"
                 status: "generating"
+
+  /recordings/{id}:
+    get:
+      summary: Get a recording
+      tags:
+        - Recordings
+      description: Retrieves a single recording.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the recording.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording'
+              example:
+                id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                title: "Product demo walkthrough"
+                default_title: "Recording 2026-02-15"
+                duration: 125.5
+                view_count: 42
+                is_uploaded: true
+                requested: false
+                summary: "Overview of the main features and how to get started with the product."
+                public_link_id: "x9y8z7w6v5u4t3s2"
+                created_at: "2026-02-15T10:30:00.000Z"
+                updated_at: "2026-02-15T11:45:00.000Z"
+                uploaded_at: "2026-02-15T10:35:00.000Z"
+                public_url: "https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2"
+                transcoded_url: "https://cdn.neetorecord.com/recordings/a1b2c3d4/transcoded.m3u8?signature=..."
+                thumbnail_url: "https://cdn.example.com/thumbnails/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg?v=1"
+                user_name: "Oliver Smith"
+                tags:
+                  - id: "b21f7c90-4d3e-4a15-9c68-0f2e8b7a6d54"
+                    name: "Demo"
+                    style: "secondary"
+                folder_name: "Sales"
+                folder_id: "f1a2b3c4-d5e6-7890-abcd-ef1234567890"
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+    patch:
+      summary: Update a recording
+      tags:
+        - Recordings
+      description: >-
+        Updates a recording's title, summary, folder, or tags. Only the attributes present in the
+        request body are changed.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - recording
+              properties:
+                recording:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: New title for the recording.
+                      example: "Product demo walkthrough, February"
+                    summary:
+                      type: string
+                      description: New summary for the recording.
+                      example: "Covers folders, tags, and sharing."
+                    folder_id:
+                      type: string
+                      nullable: true
+                      description: >-
+                        Folder to move the recording into. Accepts the folder `id` returned by the
+                        [List folders](/api-reference/folders/list) API. Send an empty value to
+                        remove the recording from its folder.
+                      example: "hqzptnv"
+                    tag_names:
+                      type: array
+                      items:
+                        type: string
+                      description: >-
+                        Replaces every tag on the recording, so send the complete list. Names that do
+                        not exist yet are created.
+                      example: ["demo", "internal"]
+      responses:
+        '200':
+          description: Successfully updated the recording.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording'
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+        '422':
+          description: The request body is missing the `recording` key, or the folder does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "param is missing or the value is empty or invalid: recording"
+
+    delete:
+      summary: Delete a recording
+      tags:
+        - Recordings
+      description: >-
+        Permanently deletes a recording along with everything derived from it. This cannot be undone.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '204':
+          description: The recording was deleted.
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/search:
+    get:
+      summary: Search recordings by title
+      tags:
+        - Recordings
+      description: Searches recordings whose title matches the query.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - in: query
+          name: query
+          required: true
+          description: Text to match against recording titles.
+          schema:
+            type: string
+            example: "demo"
+        - $ref: '../schemas/common.yaml#/page_number_param'
+        - $ref: '../schemas/common.yaml#/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved matching recordings.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording_list_response'
+        '422':
+          description: The `query` parameter is missing.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "param is missing or the value is empty or invalid: query"
+
+  /recordings/search-by-transcript:
+    get:
+      summary: Search recordings by transcript
+      tags:
+        - Recordings
+      description: >-
+        Searches the text of recording transcripts. Use this to find the recording where something
+        was said, rather than one whose title matches.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - in: query
+          name: query
+          required: true
+          description: Text to match against transcript content.
+          schema:
+            type: string
+            example: "pricing page"
+        - $ref: '../schemas/common.yaml#/page_number_param'
+        - $ref: '../schemas/common.yaml#/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved matching recordings.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording_list_response'
+        '422':
+          description: The `query` parameter is missing.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "param is missing or the value is empty or invalid: query"
+
+  /recordings/{id}/transcript:
+    get:
+      summary: Get the transcript
+      tags:
+        - Recordings
+      description: >-
+        Retrieves the full transcript with its timestamped segments. Both fields come back empty
+        when no transcript has been generated yet.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the transcript.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/transcript_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                transcript:
+                  text: "Let me walk through the new folders view."
+                  segments:
+                    - start: 0.0
+                      end: 3.4
+                      text: "Let me walk through the new folders view."
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/transcript-status:
+    get:
+      summary: Check transcript generation status
+      tags:
+        - Recordings
+      description: >-
+        Reports whether the recording has transcript text and how the most recent generation ended.
+        Poll this after `POST /recordings/{id}/trigger-transcript`.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Current transcript generation status.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/transcript_status_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                status: "success"
+                has_transcript: true
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/trigger-transcript:
+    post:
+      summary: Generate the transcript
+      tags:
+        - Recordings
+      description: >-
+        Queues transcript generation, or regenerates an existing transcript in another language.
+        Generation runs in the background, so poll
+        `GET /recordings/{id}/transcript-status` for the outcome.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  description: >-
+                    Language code to transcribe in, for example `en`. Send `auto`, or leave it out,
+                    to let the transcription engine detect the language.
+                  example: "en"
+      responses:
+        '200':
+          description: Transcript generation was queued.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/generation_trigger_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                status: "triggered"
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/chapters:
+    get:
+      summary: Get chapters
+      tags:
+        - Recordings
+      description: >-
+        Retrieves the auto generated chapters of a recording. The list is empty until chapters have
+        been generated.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the chapters.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/chapters_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                chapters:
+                  - title: "Intro"
+                    start: 0
+                  - title: "Folders view"
+                    start: 48
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/chapter-status:
+    get:
+      summary: Check chapter generation status
+      tags:
+        - Recordings
+      description: >-
+        Reports whether the recording has chapters and how the most recent generation ended. Poll
+        this after `POST /recordings/{id}/trigger-chapters`.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Current chapter generation status.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/chapter_status_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                status: "success"
+                has_chapters: true
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/trigger-chapters:
+    post:
+      summary: Generate chapters
+      tags:
+        - Recordings
+      description: >-
+        Queues chapter generation. Chapters are derived from the transcript, so generate the
+        transcript first when the recording does not have one. Generation runs in the background,
+        so poll `GET /recordings/{id}/chapter-status` for the outcome.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Chapter generation was queued.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/generation_trigger_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                status: "triggered"
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/share-link:
+    get:
+      summary: Get the share link
+      tags:
+        - Recordings
+      description: >-
+        Retrieves the public watch link for a recording, along with whether that link has expired or
+        sits behind access control.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the share link.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/share_link_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                public_url: "https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2"
+                is_expired: false
+                access_control_protected: false
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/embed-code:
+    get:
+      summary: Get the embed code
+      tags:
+        - Recordings
+      description: Retrieves the iframe markup for embedding a recording in another page.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the embed code.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/embed_code_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                embed_url: "https://your-workspace.neetorecord.com/embeds/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                embed_html: "<iframe src=\"https://your-workspace.neetorecord.com/embeds/a1b2c3d4-e5f6-7890-abcd-ef1234567890\" width=\"100%\" height=\"480\" frameborder=\"0\" allowfullscreen></iframe>"
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/download-url:
+    get:
+      summary: Get a download URL
+      tags:
+        - Recordings
+      description: >-
+        Returns a presigned URL for downloading the recording. The URL is short lived, so request it
+        immediately before use. If `is_download_file_ready` is `false`, the MP4 is out of date. Call
+        `POST /recordings/{id}/trigger-mp4` to regenerate it, then retry.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+        - in: query
+          name: file_format
+          required: false
+          description: "Download format: `mp4` or `webm`. Defaults to `mp4`."
+          schema:
+            type: string
+            enum: ['mp4', 'webm']
+            default: 'mp4'
+      responses:
+        '200':
+          description: Download URL generated, or the MP4 is not ready yet.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/download_url_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                file_format: "mp4"
+                is_download_file_ready: true
+                download_url: "https://example-bucket.s3.amazonaws.com/.../recording.mp4?X-Amz-Signature=..."
+                url_expires_in_seconds: 600
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/analytics:
+    get:
+      summary: Get view analytics for a recording
+      tags:
+        - Recordings
+      description: >-
+        Retrieves the total view count for a recording, broken down by day. For workspace wide
+        numbers, use the [Analytics](/api-reference/analytics/get) API.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/recording_analytics_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                total_views: 42
+                views_by_day:
+                  - date: "2026-02-15"
+                    count: 27
+                  - date: "2026-02-16"
+                    count: 15
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+  /recordings/{id}/ctas:
+    get:
+      summary: List CTAs
+      tags:
+        - Recordings
+      description: Lists the call to action buttons configured on a recording.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the CTAs.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/cta_list_response'
+              example:
+                recording_id: "x9y8z7w6v5u4t3s2"
+                ctas:
+                  - id: "c47e2f81-6a90-4b3d-8e21-5f0c9d7b1a63"
+                    label: "Book a demo"
+                    link: "https://your-workspace.neetocal.com/meeting-with-oliver"
+                    start: 30.0
+                    end: 90.0
+                    position: "top-right"
+                    show_only_at_end: false
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+
+    post:
+      summary: Add a CTA
+      tags:
+        - Recordings
+      description: >-
+        Adds a call to action button that appears over the video between the given start and end
+        times.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cta
+              properties:
+                cta:
+                  type: object
+                  required:
+                    - label
+                    - start
+                    - end
+                  properties:
+                    label:
+                      type: string
+                      description: Text shown on the button.
+                      example: "Book a demo"
+                    link:
+                      type: string
+                      description: URL the button opens.
+                      example: "https://your-workspace.neetocal.com/meeting-with-oliver"
+                    start:
+                      type: number
+                      description: Time in seconds at which the button appears.
+                      example: 30
+                    end:
+                      type: number
+                      description: Time in seconds at which the button disappears.
+                      example: 90
+                    position:
+                      type: string
+                      enum: ['top-right', 'top-left', 'bottom-right', 'bottom-left']
+                      default: 'top-right'
+                      description: Corner of the player the button is anchored to.
+                    background_color:
+                      type: string
+                      default: '#000000'
+                      description: Button background color, as a hex string.
+                      example: "#000000"
+                    text_color:
+                      type: string
+                      default: '#FFFFFF'
+                      description: Button text color, as a hex string.
+                      example: "#FFFFFF"
+                    show_only_at_end:
+                      type: boolean
+                      default: false
+                      description: Show the button only after the recording finishes.
+      responses:
+        '200':
+          description: The CTA was created.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/recording.yaml#/components/schemas/cta_create_response'
+              example:
+                id: "c47e2f81-6a90-4b3d-8e21-5f0c9d7b1a63"
+                recording_id: "x9y8z7w6v5u4t3s2"
+                label: "Book a demo"
+                link: "https://your-workspace.neetocal.com/meeting-with-oliver"
+                start: 30.0
+                end: 90.0
+                position: "top-right"
+                background_color: "#000000"
+                text_color: "#FFFFFF"
+                show_only_at_end: false
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+        '422':
+          description: The request body is missing the `cta` key, or a required attribute is absent.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "param is missing or the value is empty or invalid: cta"

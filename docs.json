@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "NeetoRecord API",
-  "description": "NeetoRecord API docs guide to manage recordings from external channels",
+  "name": "NeetoRecord Docs",
+  "description": "Developer documentation for NeetoRecord: the REST API, the command line interface, and the MCP server",
   "theme": "mint",
   "colors": {
     "primary": "#10B981",
@@ -35,47 +35,155 @@
     }
   },
   "navigation": {
-    "pages": [
+    "tabs": [
       {
-        "group": "Getting Started",
-        "icon": "rocket",
-        "pages": [
-          "getting-started/introduction",
-          "getting-started/workspace-subdomain",
-          "getting-started/authentication",
-          "getting-started/pagination",
-          "getting-started/response-codes"
+        "tab": "API Reference",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              "getting-started/introduction",
+              "getting-started/workspace-subdomain",
+              "getting-started/authentication",
+              "getting-started/pagination",
+              "getting-started/response-codes"
+            ]
+          },
+          {
+            "group": "Recordings",
+            "icon": "video",
+            "pages": [
+              "api-reference/recordings/list",
+              "api-reference/recordings/get",
+              "api-reference/recordings/update",
+              "api-reference/recordings/delete",
+              "api-reference/recordings/search",
+              "api-reference/recordings/search-by-transcript",
+              "api-reference/recordings/transcript",
+              "api-reference/recordings/transcript-status",
+              "api-reference/recordings/trigger-transcript",
+              "api-reference/recordings/chapters",
+              "api-reference/recordings/chapter-status",
+              "api-reference/recordings/trigger-chapters",
+              "api-reference/recordings/share-link",
+              "api-reference/recordings/embed-code",
+              "api-reference/recordings/download-url",
+              "api-reference/recordings/screenshot",
+              "api-reference/recordings/trigger-mp4",
+              "api-reference/recordings/analytics",
+              "api-reference/recordings/ctas",
+              "api-reference/recordings/create-cta"
+            ]
+          },
+          {
+            "group": "Folders",
+            "icon": "folder",
+            "pages": [
+              "api-reference/folders/list",
+              "api-reference/folders/create"
+            ]
+          },
+          {
+            "group": "Tags",
+            "icon": "tag",
+            "pages": [
+              "api-reference/tags/list"
+            ]
+          },
+          {
+            "group": "Recording Requests",
+            "icon": "paper-plane",
+            "pages": [
+              "api-reference/recording-requests/create"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "icon": "chart-line",
+            "pages": [
+              "api-reference/analytics/get"
+            ]
+          },
+          {
+            "group": "Team Members",
+            "icon": "user-group",
+            "pages": [
+              "api-reference/team-members/list",
+              "api-reference/team-members/get",
+              "api-reference/team-members/add",
+              "api-reference/team-members/update",
+              "api-reference/team-members/remove"
+            ]
+          },
+          {
+            "group": "API v1 (Deprecated)",
+            "icon": "clock-rotate-left",
+            "pages": [
+              "api-reference-v1/recordings/list",
+              "api-reference-v1/team-members/list",
+              "api-reference-v1/team-members/add",
+              "api-reference-v1/team-members/update",
+              "api-reference-v1/team-members/remove"
+            ]
+          }
         ]
       },
       {
-        "group": "Recordings",
-        "icon": "video",
-        "pages": [
-          "api-reference/recordings/list",
-          "api-reference/recordings/screenshot",
-          "api-reference/recordings/trigger-mp4"
+        "tab": "CLI",
+        "icon": "rectangle-terminal",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              "cli/introduction",
+              "cli/installation",
+              "cli/authentication",
+              "cli/output-formats",
+              "cli/ai-assistants",
+              "cli/troubleshooting"
+            ]
+          },
+          {
+            "group": "Commands",
+            "icon": "terminal",
+            "pages": [
+              "cli-reference/overview",
+              "cli-reference/recordings",
+              "cli-reference/folders",
+              "cli-reference/tags",
+              "cli-reference/recording-requests",
+              "cli-reference/analytics",
+              "cli-reference/team-members",
+              "cli-reference/utility"
+            ]
+          }
         ]
       },
       {
-        "group": "Team Members",
-        "icon": "user-group",
-        "pages": [
-          "api-reference/team-members/list",
-          "api-reference/team-members/get",
-          "api-reference/team-members/add",
-          "api-reference/team-members/update",
-          "api-reference/team-members/remove"
-        ]
-      },
-      {
-        "group": "API v1 (Deprecated)",
-        "icon": "clock-rotate-left",
-        "pages": [
-          "api-reference-v1/recordings/list",
-          "api-reference-v1/team-members/list",
-          "api-reference-v1/team-members/add",
-          "api-reference-v1/team-members/update",
-          "api-reference-v1/team-members/remove"
+        "tab": "MCP",
+        "icon": "plug",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              "mcp/introduction",
+              "mcp/authentication",
+              "mcp/connect",
+              "mcp/examples",
+              "mcp/troubleshooting"
+            ]
+          },
+          {
+            "group": "Reference",
+            "icon": "wrench",
+            "pages": [
+              "mcp/tools"
+            ]
+          }
         ]
       }
     ]
@@ -89,7 +197,11 @@
       "proxy": true
     },
     "examples": {
-      "languages": ["curl", "javascript", "python"],
+      "languages": [
+        "curl",
+        "javascript",
+        "python"
+      ],
       "defaults": "all"
     }
   },

@@ -1,0 +1,223 @@
+openapi: 3.0.3
+info:
+  title: NeetoRecord Folders APIs
+  version: 2.0.0
+servers:
+  - description: NeetoRecord APIs
+    url: https://{your-subdomain}.neetorecord.com/api/external/v2
+    variables:
+      your-subdomain:
+        default: spinkart
+        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/workspace-subdomain).
+tags:
+  - name: Folders
+    description: APIs to list and create the folders that recordings are organized into.
+paths:
+  /folders:
+    get:
+      summary: List all folders
+      tags:
+        - Folders
+      description: Lists every folder in the workspace, with the number of recordings in each.
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - $ref: '#/components/parameters/page_number_param'
+        - $ref: '#/components/parameters/page_size_param'
+      responses:
+        '200':
+          description: Successfully retrieved folders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/folder_list_response'
+              example:
+                folders:
+                  - id: hqzptnv
+                    name: Product demos
+                    parent_id: null
+                    recording_count: 12
+                    created_at: '2026-02-02T11:40:18.000Z'
+                  - id: wbrkxdm
+                    name: Onboarding
+                    parent_id: hqzptnv
+                    recording_count: 3
+                    created_at: '2026-02-14T08:12:03.000Z'
+                pagination:
+                  total_records: 8
+                  total_pages: 1
+                  current_page_number: 1
+                  page_size: 30
+    post:
+      summary: Create a folder
+      tags:
+        - Folders
+      description: Creates a folder. Pass `parent_folder_id` to nest it inside an existing folder.
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - folder
+              properties:
+                folder:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the folder.
+                      example: Onboarding
+                    parent_folder_id:
+                      type: string
+                      description: Folder to nest the new folder under. Accepts the `id` returned by the List folders API.
+                      example: hqzptnv
+      responses:
+        '200':
+          description: The folder was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/folder_create_response'
+              example:
+                id: wbrkxdm
+                name: Onboarding
+                parent_id: hqzptnv
+                created_at: '2026-02-14T08:12:03.000Z'
+        '404':
+          description: The parent folder does not exist in this workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                error: RecordingFolder does not exist.
+        '422':
+          description: The request body is missing the `folder` key or the folder `name`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                error: 'param is missing or the value is empty or invalid: name'
+components:
+  parameters:
+    api_key_header:
+      in: header
+      name: X-Api-Key
+      description: API key. Refer to [Authentication](/getting-started/authentication) for more information.
+      required: true
+      schema:
+        type: string
+    accept_header:
+      in: header
+      name: Accept
+      description: Must be `application/json`.
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+        default: application/json
+    page_number_param:
+      in: query
+      name: page_number
+      description: Page number. If absent, all results are returned.
+      required: false
+      schema:
+        type: integer
+    page_size_param:
+      in: query
+      name: page_size
+      description: Number of results per page. Defaults to 30.
+      required: false
+      schema:
+        type: integer
+  schemas:
+    folder:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the folder.
+          example: hqzptnv
+        name:
+          type: string
+          description: Name of the folder.
+          example: Product demos
+        parent_id:
+          type: string
+          nullable: true
+          description: Identifier of the parent folder, or `null` for a top level folder.
+          example: null
+        recording_count:
+          type: integer
+          description: Number of recordings directly inside the folder.
+          example: 12
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the folder was created.
+          example: '2026-02-02T11:40:18.000Z'
+    pagination:
+      type: object
+      properties:
+        total_records:
+          type: integer
+          description: Total number of records.
+          example: 95
+        total_pages:
+          type: integer
+          description: Total number of pages available.
+          example: 4
+        current_page_number:
+          type: integer
+          description: Current page number.
+          example: 1
+        page_size:
+          type: integer
+          description: Number of records per page.
+          example: 30
+    folder_list_response:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            $ref: '#/components/schemas/folder'
+          description: List of folders.
+        pagination:
+          $ref: '#/components/schemas/pagination'
+    folder_create_response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the folder.
+          example: wbrkxdm
+        name:
+          type: string
+          description: Name of the folder.
+          example: Onboarding
+        parent_id:
+          type: string
+          nullable: true
+          description: Identifier of the parent folder, or `null` for a top level folder.
+          example: hqzptnv
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the folder was created.
+          example: '2026-02-14T08:12:03.000Z'
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human readable error message.

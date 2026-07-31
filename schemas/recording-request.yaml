@@ -1,0 +1,27 @@
+components:
+  schemas:
+    # Recording request create response structure
+    recording_request_create_response:
+      type: object
+      properties:
+        recording_request:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier for the requested recording.
+              example: "7d2e5b90-1c34-4a68-b7f5-9e0a2c3d4b18"
+            title:
+              type: string
+              description: Title of the requested recording.
+              example: "Walk me through the billing bug"
+            request_url:
+              type: string
+              description: URL to share with the person who will record and upload the video.
+              example: "https://your-workspace.neetorecord.com/request/7d2e5b90-1c34-4a68-b7f5-9e0a2c3d4b18"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp when the request was created.
+              example: "2026-02-14T08:31:47.000Z"

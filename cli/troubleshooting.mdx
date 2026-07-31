@@ -1,0 +1,86 @@
+---
+title: "Troubleshooting"
+description: "Common NeetoRecord CLI errors and how to clear them."
+---
+
+Run `neetorecord doctor` first. It checks authentication, reachability of your
+workspace, and the installed version in one pass, and each check runs
+independently so one failure does not hide the rest.
+
+```bash
+neetorecord doctor
+```
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="Not authenticated. Run 'neetorecord login' to authenticate.">
+    No workspace is signed in. Run `neetorecord login --subdomain <name>` and
+    complete the browser sign in. See [Authentication](/cli/authentication).
+  </Accordion>
+
+  <Accordion title="Multiple subdomains authenticated (acme, beta); specify --subdomain.">
+    More than one workspace is signed in, so the CLI will not guess which one
+    you mean. Add `--subdomain <name>` to the command. `logout` says
+    `specify --subdomain or --all` instead, because `--all` signs out of every
+    workspace at once. `neetorecord whoami` lists what is signed in.
+  </Accordion>
+
+  <Accordion title="Not authenticated for &quot;foo&quot;. Authenticated subdomains: acme, beta.">
+    The `--subdomain` value does not match any saved session. Check the spelling
+    against `neetorecord whoami`, and sign in to that workspace if it is
+    missing.
+  </Accordion>
+
+  <Accordion title="Subdomain not found. Please check that you entered the correct subdomain.">
+    The subdomain passed to `login` does not resolve to a NeetoRecord workspace.
+    It is the first part of your workspace URL: for `acme.neetorecord.com`, the
+    subdomain is `acme`. See [Workspace subdomain](/getting-started/workspace-subdomain).
+  </Accordion>
+
+  <Accordion title="required flag(s) &quot;query&quot; not set">
+    A required flag is missing. Run the command with `--help`, or check the flag
+    table on that command's [reference page](/cli-reference/overview).
+  </Accordion>
+
+  <Accordion title="command not found: neetorecord">
+    The binary is not on your `PATH`. The shell installer puts it in
+    `/usr/local/bin` and the PowerShell installer in
+    `%LOCALAPPDATA%\Programs\neetorecord`, adding that directory to your user
+    `PATH`. Open a new shell after installing so the change takes effect, and
+    see [Installation](/cli/installation).
+  </Accordion>
+
+  <Accordion title="Completions do not include a new command">
+    Completion scripts are generated from the command tree at the moment you
+    install them, so they go stale after an upgrade. Re-run
+    `neetorecord completion <shell>` and start a new shell. See
+    [Shell completion](/cli-reference/utility#shell-completion).
+  </Accordion>
+
+  <Accordion title="Claude Code not found (~/.claude/ does not exist).">
+    `neetorecord setup claude` looks for a Claude Code config directory in your
+    home directory. Run Claude Code once so it creates `~/.claude/`, then run
+    setup again.
+  </Accordion>
+</AccordionGroup>
+
+## API errors
+
+Errors returned by NeetoRecord come through with the server's own message. In
+JSON output they arrive inside the envelope, so inspect the payload for `error`
+or `errors` keys. A few worth knowing:
+
+| Situation | What you see |
+| --- | --- |
+| A screenshot before the MP4 is ready | `is_screenshot_ready: false`. Run [`recordings trigger-mp4`](/cli-reference/recordings#recordings-trigger-mp4), then retry. |
+| A download URL before the MP4 is ready | `is_download_file_ready: false`. Same fix. |
+| A screenshot timestamp past the end of a recording | `Timestamp must be a number between 0 and <duration> seconds.` |
+| Removing the last admin | The request is rejected, because a workspace must keep at least one admin. |
+
+## Reporting a problem
+
+Include the output of `neetorecord version` and `neetorecord doctor`, and the
+command you ran with `--json` so the response envelope is visible. Reach us
+through the [help center](https://help.neetorecord.com) or at
+[support@neetorecord.com](mailto:support@neetorecord.com).

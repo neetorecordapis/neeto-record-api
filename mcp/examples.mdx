@@ -1,0 +1,64 @@
+---
+title: "Examples"
+description: "Things to ask an AI assistant once it is connected to NeetoRecord."
+---
+
+These are prompts, not commands. Ask in your own words. What follows each one is
+the work the assistant does through the [tools](/mcp/tools) to answer.
+
+## Find the recording where something was said
+
+> Which of our recordings talks about the pricing page redesign? Jump to the
+> part where it comes up.
+
+The assistant searches transcripts rather than titles, then reads the matching
+transcript and reports the timestamped segment. Ask it to show you what was on
+screen at that moment and it captures the frame at that timestamp.
+
+## Turn a recording into written notes
+
+> Summarize yesterday's sprint demo as bullet points, with a timestamp for each
+> section.
+
+The assistant pulls the transcript and the chapters and writes them up. If the
+recording has no transcript yet, it can start generation and check the status
+before continuing.
+
+## Share a recording
+
+> Give me the share link for the onboarding walkthrough, and the embed code for
+> the docs site.
+
+The assistant looks the recording up by title, then returns the public link and
+the iframe snippet. It also sees whether the link has expired or is behind
+access control.
+
+## Tidy up the library
+
+> Move every recording tagged "demo" from last quarter into a Product demos
+> folder.
+
+The assistant lists the tags and folders, creates the folder if it is missing,
+and moves the recordings one by one.
+
+## Check how recordings are doing
+
+> How many views did we get last month, and which recording did best?
+
+The assistant reads workspace wide analytics for the date range and can drill
+into a single recording's day by day view counts.
+
+## Ask a teammate for a recording
+
+> Ask Sam to record a walkthrough of the billing bug and send me the link.
+
+The assistant creates a recording request and returns the URL to pass on.
+
+## Work with a recording from another workspace
+
+> Here is a NeetoRecord link a customer sent us. What is in it?
+
+For a publicly accessible recording outside your workspace, the assistant falls
+back to the public tools and reads its details, transcript, and chapters. This
+works only when the recording needs no sign in, and it respects whatever the
+owner allowed, so transcripts or downloads may be unavailable.

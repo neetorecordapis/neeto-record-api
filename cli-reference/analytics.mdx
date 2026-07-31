@@ -1,0 +1,51 @@
+---
+title: "analytics"
+description: "Workspace wide recording and view counts, with the most watched recordings."
+---
+
+import AnalyticsShow from "/snippets/cli/analytics/show.mdx";
+
+Workspace level numbers across every uploaded recording. For the view history of
+a single recording, use
+[`recordings analytics`](/cli-reference/recordings#recordings-analytics). For
+fields and response details, see the [API reference](/api-reference/analytics/get).
+
+<Info>
+  Sample output on this page is the JSON envelope you get with `--json`. On a
+  terminal the same data prints as a table or a key-value list. See
+  [Output formats](/cli/output-formats).
+</Info>
+
+## analytics show
+
+Reports how many recordings and views the workspace has, plus its ten most
+watched recordings. Pass a date range to scope it to recordings created in that
+window.
+
+```bash
+neetorecord analytics show --from-date 2025-01-01 --to-date 2025-06-30
+```
+
+<AnalyticsShow />
+
+Both dates are ISO format (`YYYY-MM-DD`) and both are optional. `--from-date`
+and `--to-date` filter on when a recording was created, not when it was viewed.
+
+```json
+{
+  "data": {
+    "total_recordings": 95,
+    "total_views": 1840,
+    "top_recordings": [
+      {
+        "id": "4f9c2a1b7e5d3086af12",
+        "title": "Sprint demo",
+        "view_count": 24
+      }
+    ]
+  }
+}
+```
+
+The `id` of a top recording is its public link id, which
+[`recordings show`](/cli-reference/recordings#recordings-show) accepts.

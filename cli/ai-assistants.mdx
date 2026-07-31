@@ -1,0 +1,70 @@
+---
+title: "AI assistants"
+description: "Let Claude Code, Cursor, Windsurf, Copilot, Gemini, and Codex drive the NeetoRecord CLI."
+---
+
+`neetorecord setup <assistant>` writes the rules file that teaches an AI coding
+assistant how to use the CLI: how authentication works, what the global flags
+do, how output is shaped, and how to discover commands it has not seen before.
+
+## Set up an assistant
+
+```bash
+neetorecord setup claude
+```
+
+| Subcommand | What it writes |
+| --- | --- |
+| `setup claude` | Extracts the NeetoRecord plugin to `~/.config/neetorecord/claude-plugin` and prints the two slash commands that finish the install. |
+| `setup cursor` | `.cursor/rules/neetorecord.mdc` in the current directory. |
+| `setup windsurf` | `.windsurf/rules/neetorecord.md` in the current directory. |
+| `setup copilot` | Appends a `## NeetoRecord CLI` section to `.github/copilot-instructions.md`. |
+| `setup gemini` | Appends a `## NeetoRecord CLI` section to `GEMINI.md`. |
+| `setup codex` | Appends a `## NeetoRecord CLI` section to `AGENTS.md`. |
+
+The Cursor, Windsurf, Copilot, and Codex files are written relative to the
+current directory, so run those from the root of the project you want them in.
+Cursor and Windsurf rules are left alone if the file already exists. The append
+mode commands replace their own section and leave the rest of the file
+untouched, so re-running them after a CLI upgrade is safe.
+
+### Claude Code
+
+`setup claude` needs Claude Code to have been run at least once, so that
+`~/.claude/` exists. It extracts the plugin and then prints the slash commands
+to run inside Claude Code:
+
+```
+/plugin marketplace add ~/.config/neetorecord/claude-plugin
+/plugin install neetorecord@neetorecord
+```
+
+Claude Code installs plugins through those interactive commands, so there is no
+shell equivalent.
+
+## What makes the CLI work well for agents
+
+<CardGroup cols={2}>
+  <Card title="Self describing" icon="list-tree">
+    `neetorecord commands` prints the whole command tree with every flag as
+    JSON. An assistant can read it instead of guessing at a flag.
+  </Card>
+  <Card title="Fewer tokens" icon="feather">
+    `--toon` carries the same data as the JSON envelope in a compact encoding,
+    which keeps large listings from filling the context window.
+  </Card>
+  <Card title="Predictable errors" icon="triangle-exclamation">
+    Every command exits non-zero on failure and writes one line to stderr, so a
+    failure is easy to detect and to act on.
+  </Card>
+  <Card title="Chainable output" icon="link">
+    `--quiet` prints just the identifier after a create or update, which is what
+    an assistant needs to feed the next command.
+  </Card>
+</CardGroup>
+
+## MCP instead of the CLI
+
+Assistants that speak the Model Context Protocol can talk to NeetoRecord
+directly, with no binary to install. See the [MCP documentation](/mcp/introduction)
+for the hosted server and its per client setup.

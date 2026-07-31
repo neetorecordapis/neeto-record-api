@@ -1,0 +1,76 @@
+---
+title: "folders"
+description: "List and create the folders that recordings are organized into."
+---
+
+import FoldersList from "/snippets/cli/folders/list.mdx";
+import FoldersCreate from "/snippets/cli/folders/create.mdx";
+
+Folders group recordings in the workspace and can be nested. Move a recording
+into a folder with [`recordings update --folder-id`](/cli-reference/recordings#recordings-update).
+For fields and response details, see the [API reference](/api-reference/folders/list).
+
+<Info>
+  Sample output on this page is the JSON envelope you get with `--json`. On a
+  terminal the same data prints as a table or a key-value list. See
+  [Output formats](/cli/output-formats).
+</Info>
+
+## folders list
+
+Lists every folder in the workspace with the number of recordings in each.
+
+```bash
+neetorecord folders list --page-size 50
+```
+
+<FoldersList />
+
+```json
+{
+  "data": [
+    {
+      "id": "hqzptnv",
+      "name": "Product demos",
+      "parent_id": null,
+      "recording_count": 12,
+      "created_at": "2025-06-02T11:40:18.000Z"
+    }
+  ],
+  "pagination": {
+    "total_records": 8,
+    "total_pages": 1,
+    "current_page_number": 1,
+    "page_size": 50
+  }
+}
+```
+
+## folders create
+
+Creates a folder. Pass `--parent-folder-id` to nest it under an existing one.
+
+```bash
+neetorecord folders create --name "Onboarding" --parent-folder-id hqzptnv
+```
+
+<FoldersCreate />
+
+```json
+{
+  "data": {
+    "id": "wbrkxdm",
+    "name": "Onboarding",
+    "parent_id": "hqzptnv",
+    "created_at": "2025-07-14T08:12:03.000Z"
+  }
+}
+```
+
+With `--quiet` the command prints just the new folder's id, which makes it easy
+to chain:
+
+```bash
+id=$(neetorecord folders create --name "Onboarding" --quiet)
+neetorecord recordings update 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --folder-id "$id"
+```

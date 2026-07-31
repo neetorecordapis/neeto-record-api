@@ -1,0 +1,63 @@
+components:
+  schemas:
+    # Folder object structure
+    folder:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the folder.
+          example: "hqzptnv"
+        name:
+          type: string
+          description: Name of the folder.
+          example: "Product demos"
+        parent_id:
+          type: string
+          nullable: true
+          description: Identifier of the parent folder, or `null` for a top level folder.
+          example: null
+        recording_count:
+          type: integer
+          description: Number of recordings directly inside the folder.
+          example: 12
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the folder was created.
+          example: "2026-02-02T11:40:18.000Z"
+
+    # Folder list response structure
+    folder_list_response:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            $ref: "#/components/schemas/folder"
+          description: List of folders.
+        pagination:
+          $ref: "../schemas/common.yaml#/components/schemas/pagination"
+
+    # Folder create response structure
+    folder_create_response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the folder.
+          example: "wbrkxdm"
+        name:
+          type: string
+          description: Name of the folder.
+          example: "Onboarding"
+        parent_id:
+          type: string
+          nullable: true
+          description: Identifier of the parent folder, or `null` for a top level folder.
+          example: "hqzptnv"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the folder was created.
+          example: "2026-02-14T08:12:03.000Z"

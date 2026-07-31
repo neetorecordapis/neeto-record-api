@@ -1,0 +1,43 @@
+---
+title: "Introduction"
+description: "Connect an AI assistant to your NeetoRecord workspace over the Model Context Protocol."
+---
+
+NeetoRecord runs a hosted MCP server. Point a compatible AI assistant at it and
+the assistant can work with your recordings directly: no local install, no
+glue code.
+
+Once connected, an assistant can search recordings by title or by what was said
+in them, read transcripts and chapters, pull a still frame out of a video,
+produce share links and embed codes, organize recordings into folders and tags,
+and report view analytics. The full list is on the [Tools](/mcp/tools) page.
+
+## What you need
+
+- An AI assistant that supports MCP. Setup steps for Claude, ChatGPT, Claude
+  Code, Codex, Cursor, Gemini CLI, VS Code with GitHub Copilot, and Windsurf are
+  on [Connect your assistant](/mcp/connect).
+- A NeetoRecord API key, but only for workspace scoped access. Every client can
+  sign you in over OAuth instead, which needs nothing beyond the server URL. See
+  [Authentication](/mcp/authentication).
+
+The choice decides what the assistant can reach: an OAuth connection acts as you
+and sees what you see, while an API key acts as the workspace and sees everything
+in it.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/mcp/authentication">
+    Generate an API key and understand how the server uses it.
+  </Card>
+  <Card title="Connect your assistant" icon="plug" href="/mcp/connect">
+    Server details and per client configuration.
+  </Card>
+  <Card title="Examples" icon="comments" href="/mcp/examples">
+    Prompts that show what the connection is good for.
+  </Card>
+  <Card title="Tools" icon="screwdriver-wrench" href="/mcp/tools">
+    Every tool the server exposes, grouped by resource.
+  </Card>
+</CardGroup>
