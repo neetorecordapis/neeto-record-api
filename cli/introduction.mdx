@@ -29,6 +29,65 @@ CI job, or an AI coding assistant.
   </Card>
 </CardGroup>
 
+## CLI vs MCP: which should I use?
+
+NeetoRecord's [MCP server](/mcp/introduction) reaches nearly everything the CLI
+reaches - recordings, transcripts, chapters, folders, tags, CTAs, analytics, and
+recording requests. Two gaps are real: only the CLI manages
+[team members](/cli-reference/team-members), and only MCP reads a publicly
+shared recording that lives in someone else's workspace. Everywhere else the two
+overlap, so choose on how the work reaches NeetoRecord.
+
+### Reach for the CLI when
+
+- **No AI assistant should be in the loop.** A cron entry or a CI step runs
+  `neetorecord` with nothing but the binary and the workspace you already
+  signed in to - no assistant open, no model account, no tokens spent per run.
+  Over MCP, something with model access has to be running before any call
+  happens at all.
+- **The output feeds another program.** `--quiet` prints the bare identifier, so
+  `id=$(neetorecord folders create --name "Onboarding" --quiet)` drops straight
+  into the next command. `--json` returns the records plus a `pagination` block
+  for `jq`, a spreadsheet, or your own script. An assistant answers in prose you
+  would have to copy out by hand.
+- **You are working through the whole library.** Re-tagging or re-foldering
+  hundreds of recordings is one `neetorecord recordings update` per recording
+  either way, but over MCP each of those is a separate tool call, and every page
+  of results crowds out the assistant's context. The CLI pages on your terms:
+  `--page-size 100` with `--json` reports `total_pages` and `total_records`
+  beside the records, so a loop knows how many pages are left and walks all of
+  them unattended, writing each one to a file or into `jq`. The size of the
+  library stops mattering.
+- **The run has to be repeatable and reviewable.** The command is the artifact:
+  `neetorecord recordings trigger-transcript <id> --language en` in a runbook or
+  a pull request makes the identical call next time. Ask twice over MCP and the
+  assistant may take a different route.
+
+### Reach for MCP instead when
+
+- **The answer is inside the recording.** You remember a customer objection came
+  up in a demo, but not which demo or how it was phrased. The assistant searches
+  the transcripts, reads what comes back, names the recording, and then shows
+  you the frame at that timestamp, because the screenshot arrives as an image it
+  can actually look at. `neetorecord recordings search-by-transcript --query`
+  returns a list and `recordings screenshot` returns a URL - the reading and the
+  looking are still yours to do.
+- **The details live in your chat, not in your head.** A pasted support thread
+  becomes the recording's summary, its tags, or the label and link on a CTA,
+  with no retyping. The CLI cannot see any of it.
+- **One request should cover several steps.** Start the transcript, wait for it
+  to finish, generate chapters from it, then write the summary onto the
+  recording. Over MCP that is a single ask; with the CLI you write the polling
+  loop that sits between `trigger-transcript` and `transcript-status`.
+- **The person doing it does not use a terminal.** NeetoRecord hosts the server,
+  so there is nothing to install or keep updated.
+
+<Tip>
+  You can have both. Run [`neetorecord setup claude`](/cli/ai-assistants) and
+  your AI assistant drives the CLI itself, so a plain-language request still
+  ends in an exact command you can read, repeat, and paste into a script.
+</Tip>
+
 ## Prerequisites
 
 - A NeetoRecord workspace, and your [workspace subdomain](/getting-started/workspace-subdomain).
