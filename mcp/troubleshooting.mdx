@@ -103,11 +103,17 @@ description: "What to check when an assistant cannot reach NeetoRecord."
   </Accordion>
 
   <Accordion title="Claude shows the connector as unauthorized">
-    Custom connectors are added under **Settings → Connectors**, and the
-    connector has to be authorized against your workspace before it can be used.
-    Remove and re-add it if the authorization did not complete. The same
-    connector list backs claude.ai, the Claude desktop app, and Cowork, so
-    fixing it in one fixes it everywhere.
+    Adding NeetoRecord from
+    [Anthropic's connector directory](https://claude.ai/directory/neetorecord)
+    is only half of it. The connector still has to be authorized against your
+    workspace before it can be used. Open
+    **[Customize > Connectors](https://claude.ai/customize/connectors)**, remove
+    NeetoRecord, and add it again if the authorization did not complete. One
+    connector list backs claude.ai, the Claude desktop app, Claude mobile, and
+    Cowork, so fixing it in one fixes it everywhere.
+
+    On a Team plan the connector may be waiting on an admin instead. A
+    **Requested** button means your request has not been acted on yet.
   </Accordion>
 </AccordionGroup>
 

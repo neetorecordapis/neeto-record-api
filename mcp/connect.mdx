@@ -28,44 +28,85 @@ workspace.
 ## OAuth, scoped to you
 
 Nothing to create in NeetoRecord beforehand. You give the client the server URL
-and approve the connection in the browser.
+and approve the connection in the browser. In Claude there is not even a URL to
+give: NeetoRecord is in Anthropic's connector directory, so you connect it in
+two clicks.
 
 <Tabs>
   <Tab title="Claude">
-    Custom connectors work on claude.ai, in the Claude desktop app, and in
-    Cowork. The steps below are the same in all three, and a connector you add
-    in one shows up in the others.
+    NeetoRecord is listed in Anthropic's connector directory, so there is no
+    server URL to paste. One connector list backs claude.ai, the Claude desktop
+    app, Claude mobile, and Cowork, so what you add in one shows up in the
+    others.
 
-    1. Open **[Settings > Connectors](https://claude.ai/customize/connectors)**.
-    2. Click **Add**, then **Add custom connector**.
-
-       <Frame>
-         <img src="/assets/mcp/claude-add-custom-connector-menu.png" alt="Menu under the Add button with two items, Browse connectors and Add custom connector" />
-       </Frame>
-
-    3. Give it a name and paste the server URL:
+    1. Open the NeetoRecord listing:
 
        ```
-       https://connect.neetorecord.com/mcp/messages
+       https://claude.ai/directory/neetorecord
        ```
 
-       Leave **Advanced settings** alone. The OAuth client ID and secret there
-       are for servers that cannot register clients on their own, and
-       NeetoRecord does that automatically.
-
-       <Frame caption="The Add custom connector dialog, ready to submit.">
-         <img src="/assets/mcp/claude-add-custom-connector-dialog.png" alt="Claude's Add custom connector dialog with the name NeetoRecord and the server URL filled in, and empty optional OAuth client fields under Advanced settings" />
+       <Frame caption="The NeetoRecord listing in Anthropic's connector directory.">
+         <img src="/assets/mcp/claude-directory-neetorecord.png" alt="The NeetoRecord entry in Claude's connector directory, with a one line description and a Connect to Claude button" />
        </Frame>
 
-    4. Click **Add**, then **Connect** to start the sign in.
+    2. Click **Connect to Claude** and complete the sign in described below.
 
-    If connectors are managed centrally in your organization, an Owner adds it
-    once under
+    You can also reach the same listing from inside Claude. Open
+    **[Customize > Connectors](https://claude.ai/customize/connectors)**, click
+    **Add**, and choose **Browse connectors**.
+
+    <Frame caption="Browse connectors opens the same directory the link above points at.">
+      <img src="/assets/mcp/claude-add-menu.png" alt="Menu under the Add button in Claude's Connectors settings, with two items, Browse connectors and Add custom connector" />
+    </Frame>
+
+    Search for NeetoRecord and open the result.
+
+    <Frame caption="The NeetoRecord card in the directory search results.">
+      <img src="/assets/mcp/claude-browse-connectors-neetorecord.png" alt="NeetoRecord's card in Claude's connector directory search results, showing the logo, the name, and the start of the description" />
+    </Frame>
+
+    On a Team plan, members who may not enable connectors see **Request** in
+    place of **Connect to Claude**. Clicking it sends the connector to your
+    organization's admins and the button reads **Requested** until they act. An
+    admin enables it once under
     **[Organization settings > Connectors](https://claude.ai/admin-settings/connectors)**,
     after which everyone else connects from their own Connectors list.
 
+    To disconnect later, open
+    **[Customize > Connectors](https://claude.ai/customize/connectors)** and
+    remove NeetoRecord.
+
     Anthropic documents the current steps in
-    [Get started with custom connectors using remote MCP](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+    [Use connectors to extend Claude's capabilities](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities).
+
+    <Accordion title="Adding it as a custom connector instead">
+      The directory entry is the supported route, and you do not need this one.
+      It stays here for organizations that block the directory or that point
+      Claude at a different NeetoRecord endpoint.
+
+      1. Open
+         **[Customize > Connectors](https://claude.ai/customize/connectors)**,
+         click **Add**, then **Add custom connector**.
+      2. Give it a name and paste the server URL:
+
+         ```
+         https://connect.neetorecord.com/mcp/messages
+         ```
+
+         Leave **Advanced settings** alone. The OAuth client ID and secret
+         there are for servers that cannot register clients on their own, and
+         NeetoRecord does that automatically.
+
+         <Frame caption="The Add custom connector dialog, ready to submit.">
+           <img src="/assets/mcp/claude-add-custom-connector-dialog.png" alt="Claude's Add custom connector dialog with the name NeetoRecord and the server URL filled in, and empty optional OAuth client fields under Advanced settings" />
+         </Frame>
+
+      3. Click **Add**, then **Connect** to start the sign in.
+
+      A connector added this way is listed under **Custom** rather than as
+      NeetoRecord, and Claude never suggests it in a chat. Both routes run the
+      same server and the same sign in.
+    </Accordion>
   </Tab>
 
   <Tab title="ChatGPT">
