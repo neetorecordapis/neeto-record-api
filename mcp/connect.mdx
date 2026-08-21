@@ -265,6 +265,13 @@ Whichever client you started from, NeetoRecord runs the same steps.
   <Step title="Sign in">
     Sign in to that workspace if you are not signed in already.
   </Step>
+  <Step title="Choose what the connection can do">
+    **What this connection can do** lists four permissions. **Read** and **Stay
+    connected** are always granted and cannot be unticked. **Create and update**
+    and **Delete** are yours to decide, and a tool that needs one you did not
+    grant is refused with a message naming it. See
+    [Authentication](/mcp/authentication#what-you-approve).
+  </Step>
   <Step title="Pick the workspaces to connect">
     **Workspaces to connect** lists every workspace your email belongs to. The
     one you just signed in to is ticked and cannot be unticked. Tick any others
@@ -274,13 +281,13 @@ Whichever client you started from, NeetoRecord runs the same steps.
     workspace. With a single workspace, the screen goes straight to the details
     and the buttons.
 
-    <Frame caption="Selecting which workspaces the connection can reach.">
-      <img src="/assets/mcp/oauth-authorize.png" alt="NeetoRecord 'Authorize access' screen showing the workspace and signed-in email, a 'Workspaces to connect' list with three workspaces, and Cancel and Authorize buttons" />
+    <Frame caption="The approval screen: what the connection can do, and which workspaces it can reach.">
+      <img src="/assets/mcp/oauth-authorize.png" alt="NeetoRecord 'Authorize access' screen showing the workspace and signed-in email, a 'What this connection can do' list with Read and Stay connected always granted and Create and update and Delete as tickable boxes, a 'Workspaces to connect' list with three workspaces, and Cancel and Authorize buttons" />
     </Frame>
   </Step>
   <Step title="Authorize">
-    Click **Authorize**. The assistant is granted access as you, with your
-    permissions, to each workspace you ticked.
+    Click **Authorize**. The assistant is granted access as you, with the
+    permissions you ticked, to each workspace you ticked.
   </Step>
 </Steps>
 
@@ -369,30 +376,42 @@ you want for automation and not what you want on a shared machine.
 
   <Tab title="VS Code">
     Create `.vscode/mcp.json` in your workspace. VS Code nests servers under
-    `servers`, not `mcpServers`:
+    `servers`, not `mcpServers`, and an `inputs` entry is what keeps the key
+    out of the file:
 
     ```json
     {
+      "inputs": [
+        {
+          "type": "promptString",
+          "id": "neetorecord-api-key",
+          "description": "NeetoRecord API key",
+          "password": true
+        }
+      ],
       "servers": {
         "neetorecord": {
           "type": "http",
           "url": "https://connect.neetorecord.com/mcp/messages",
           "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
+            "Authorization": "Bearer ${input:neetorecord-api-key}"
           }
         }
       }
     }
     ```
 
-    This needs VS Code 1.99 or later with GitHub Copilot in Agent mode. The
-    editor prompts for your API key the first time the server is used.
+    This needs VS Code 1.99 or later with GitHub Copilot in Agent mode. Written
+    this way, VS Code asks for the key the first time the server is used and
+    stores it itself.
 
     <Warning>
       Unlike the other clients, this config lives inside your project rather
-      than your home directory, so a pasted key can end up in a commit. Add
-      `.vscode/mcp.json` to `.gitignore`, or leave the key out of the file and
-      let VS Code prompt for it.
+      than your home directory, so a pasted key can end up in a commit. The
+      `${input:...}` placeholder above is what avoids that. Paste the key
+      straight into `headers` instead and VS Code reads it from the file
+      without ever prompting, so add `.vscode/mcp.json` to `.gitignore` before
+      you do.
     </Warning>
   </Tab>
 

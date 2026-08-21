@@ -10,6 +10,12 @@ assistant that reaches for the wrong thing.
 Every tool takes an optional `workspace` argument, the subdomain of a connected
 workspace. Left out, it uses the workspace the connection was set up with.
 
+What a tool returns depends on how you connected. Over OAuth, listings are
+filtered to what the approving person can see and a recording they cannot open is
+refused rather than returned; an API key reaches the whole workspace. A tool that
+writes or deletes is also refused when the connection was not granted that
+permission at approval time. See [Authentication](/mcp/authentication).
+
 ## Recordings
 
 Backed by the recordings endpoints. For field level detail, see the

@@ -64,6 +64,16 @@ description: "What to check when an assistant cannot reach NeetoRecord."
     [Authentication](/mcp/authentication).
   </Accordion>
 
+  <Accordion title="A tool is refused because a permission was not granted">
+    The approval screen has two optional permissions, **Create and update** and
+    **Delete**, and a tool that needs one you left unticked is refused with a
+    message naming it. Nothing is broken and nothing half happened.
+
+    To grant it, remove the connector and add it again, ticking the permission
+    this time. See [Authentication](/mcp/authentication#what-you-approve). An API
+    key connection carries every permission, so this cannot happen on one.
+  </Accordion>
+
   <Accordion title="The assistant reaches the wrong workspace">
     An OAuth connection covers the workspaces you approved it from. Name the
     workspace in your prompt, or ask the assistant to list the workspaces it can

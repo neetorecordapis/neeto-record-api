@@ -47,11 +47,42 @@ to create.
 
 | Detail | Value |
 | --- | --- |
-| Grant type | Authorization code with PKCE (`S256`) |
-| Scope | `mcp` |
-| Client registration | Dynamic, per [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) |
+| Grant types | `authorization_code` with PKCE (`S256`), and `refresh_token` |
+| Scopes | `read`, `write`, `delete`, `offline_access` |
+| Client registration | Dynamic, per [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591), at `https://connect.neetorecord.com/mcp/oauth/register` |
 | Refresh | Refresh tokens are issued, so the connection survives without you signing in again |
-| Revoke | From your assistant, by removing the connector |
+| Revoke | From your assistant, by removing the connector, or at `https://connect.neetorecord.com/mcp/oauth/revoke` |
+
+Registration accepts loopback redirect URIs, which is what lets the terminal
+clients complete the same flow a browser client does.
+
+### What you approve
+
+The approval screen asks for more than a yes. It lists what the connection is
+allowed to do, and two of the four are yours to decide.
+
+| Scope | Shown as | What it allows | Always granted |
+| --- | --- | --- | --- |
+| `read` | **Read** | See everything in the selected workspaces. | Yes |
+| `offline_access` | **Stay connected** | Keep working in the background without asking you to sign in again. | Yes |
+| `write` | **Create and update** | Add new items and change existing ones. | No, you tick it |
+| `delete` | **Delete** | Permanently delete items. This cannot be undone. | No, you tick it |
+
+The two you tick are independent, so the reach of the connection is yours to
+size. Tick **Create and update** but not **Delete** and the assistant can
+retitle recordings, move them between folders and write a summary onto one,
+while `DeleteRecording` is refused with a message naming the permission it
+needs rather than quietly doing nothing. Tick neither and the connection is
+read only. Either way the refusal is explicit, which is the cheapest way to
+make an assistant safe to hand a workspace.
+
+**Stay connected** is the one that issues the refresh token. It is what keeps
+the connection working when no browser window is open, so the assistant can
+reach the workspace on a schedule rather than only while you are watching.
+
+<Frame caption="The approval screen, with the two optional permissions and the workspace list.">
+  <img src="/assets/mcp/oauth-authorize.png" alt="NeetoRecord 'Authorize access' screen showing the workspace and signed-in email, a 'What this connection can do' list with Read and Stay connected always granted and Create and update and Delete as tickable boxes, a 'Workspaces to connect' list, and Cancel and Authorize buttons" />
+</Frame>
 
 What you see when you connect:
 
@@ -63,11 +94,13 @@ What you see when you connect:
 </Frame>
 
 2. **Sign in to that workspace**, if you are not signed in already.
-3. **Pick the workspaces to connect.** When your email belongs to more than one
+3. **Choose what the connection can do.** Read and Stay connected are already
+   granted. Tick Create and update, and Delete, only if the assistant needs them.
+4. **Pick the workspaces to connect.** When your email belongs to more than one
    workspace, the approval screen lists them all. The one you signed in to is
    always included; tick any others the same connection should reach.
-4. **Authorize.** The assistant is granted access as you, to each workspace you
-   ticked.
+5. **Authorize.** The assistant is granted access as you, with the permissions
+   you ticked, to each workspace you ticked.
 
 One OAuth connection can therefore cover several workspaces. Name the one you
 mean in a prompt, or ask the assistant to list what it can reach. Every tool
