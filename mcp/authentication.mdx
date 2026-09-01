@@ -116,7 +116,7 @@ their own recordings.
 That is what you want for automation that has to see everything, and what you do
 not want on a laptop belonging to someone who should only see their own work.
 
-The key is the same one the [REST API](/getting-started/authentication) uses,
+The key is the same one the [REST API](/api-reference/authentication) uses,
 sent as a bearer token:
 
 ```json
@@ -145,6 +145,6 @@ API keys are created in your NeetoRecord workspace settings.
 
 | Interface | Credential | Scope | Where it goes |
 | --- | --- | --- | --- |
-| [REST API](/getting-started/authentication) | API key | Workspace | `X-Api-Key` header on each request. |
+| [REST API](/api-reference/authentication) | API key | Workspace | `X-Api-Key` header on each request. |
 | [CLI](/cli/authentication) | Browser sign in, stored per workspace | The signed in user | `~/.config/neetorecord/auth.json`. No API key involved. |
 | MCP | OAuth, or an API key | The approving user, or the workspace | Browser approval, or an `Authorization: Bearer` header in the assistant's config file. |

@@ -7,7 +7,6 @@ paths:
   - api-reference/**
   - docs-v1/**
   - docs/**
-  - getting-started/**
   - snippets/**
   - schemas/**
   - assets/**

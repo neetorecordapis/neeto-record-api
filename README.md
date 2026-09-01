@@ -1,7 +1,7 @@
 # NeetoRecord API Docs
 
 This repository contains the documentation for the
-[NeetoRecord APIs](https://apidocs.neetorecord.com/getting-started/introduction), built using
+[NeetoRecord APIs](https://apidocs.neetorecord.com/api-reference/introduction), built using
 [Mintlify](https://mintlify.com/).
 
 ## Development Setup

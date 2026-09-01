@@ -4,7 +4,7 @@ description: "Sign in to NeetoRecord from the CLI and work with more than one wo
 ---
 
 The CLI signs in through the browser and stores a session per workspace. It does
-not use the `X-Api-Key` header that the [REST API](/getting-started/authentication)
+not use the `X-Api-Key` header that the [REST API](/api-reference/authentication)
 uses, so there is no API key to create or rotate for CLI use.
 
 ## Sign in
@@ -25,7 +25,7 @@ Enter your NeetoRecord subdomain (e.g., 'acme' for acme.neetorecord.com):
 
 The subdomain is the first part of your workspace URL. If you sign in to
 NeetoRecord at `acme.neetorecord.com`, the subdomain is `acme`. See
-[Workspace subdomain](/getting-started/workspace-subdomain).
+[Workspace subdomain](/api-reference/workspace-subdomain).
 
 `login` opens your browser to complete the sign in and writes the resulting
 session to `~/.config/neetorecord/auth.json`. Running it again for the same

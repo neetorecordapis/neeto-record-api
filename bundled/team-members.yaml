@@ -8,7 +8,7 @@ servers:
     variables:
       your-subdomain:
         default: spinkart
-        description: Replace **spinkart** with your [workspace's subdomain](/getting-started/workspace-subdomain).
+        description: Replace **spinkart** with your [workspace's subdomain](/api-reference/workspace-subdomain).
 tags:
   - name: Team Members
     description: APIs to manage team members in the workspace.
@@ -206,7 +206,7 @@ components:
     api_key_header:
       in: header
       name: X-Api-Key
-      description: API key. Refer to [Authentication](/getting-started/authentication) for more information.
+      description: API key. Refer to [Authentication](/api-reference/authentication) for more information.
       required: true
       schema:
         type: string
