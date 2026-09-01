@@ -8,7 +8,7 @@ servers:
     variables:
       your-subdomain:
         default: spinkart
-        description: Replace **spinkart** with your [workspace's subdomain](/api-reference/workspace-subdomain).
+        description: Replace **spinkart** with your [workspace's subdomain](/api/workspace-subdomain).
 tags:
   - name: Recordings
     description: APIs to list recordings in your workspace.
@@ -80,7 +80,7 @@ components:
     api_key_header:
       in: header
       name: X-Api-Key
-      description: API key. Refer to [Authentication](/api-reference/authentication) for more information.
+      description: API key. Refer to [Authentication](/api/authentication) for more information.
       required: true
       schema:
         type: string

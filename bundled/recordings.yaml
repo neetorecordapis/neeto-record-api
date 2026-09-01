@@ -8,7 +8,7 @@ servers:
     variables:
       your-subdomain:
         default: spinkart
-        description: Replace **spinkart** with your [workspace's subdomain](/api-reference/workspace-subdomain).
+        description: Replace **spinkart** with your [workspace's subdomain](/api/workspace-subdomain).
 tags:
   - name: Recordings
     description: APIs to retrieve and manage recordings in your workspace.
@@ -262,7 +262,7 @@ paths:
                     folder_id:
                       type: string
                       nullable: true
-                      description: Folder to move the recording into. Accepts the folder `id` returned by the [List folders](/api-reference/folders/list) API. Send an empty value to remove the recording from its folder.
+                      description: Folder to move the recording into. Accepts the folder `id` returned by the [List folders](/api/folders/list) API. Send an empty value to remove the recording from its folder.
                       example: hqzptnv
                     tag_names:
                       type: array
@@ -610,7 +610,7 @@ paths:
       summary: Get view analytics for a recording
       tags:
         - Recordings
-      description: Retrieves the total view count for a recording, broken down by day. For workspace wide numbers, use the [Analytics](/api-reference/analytics/get) API.
+      description: Retrieves the total view count for a recording, broken down by day. For workspace wide numbers, use the [Analytics](/api/analytics/get) API.
       parameters:
         - $ref: '#/components/parameters/api_key_header'
         - $ref: '#/components/parameters/accept_header'
@@ -758,7 +758,7 @@ components:
     api_key_header:
       in: header
       name: X-Api-Key
-      description: API key. Refer to [Authentication](/api-reference/authentication) for more information.
+      description: API key. Refer to [Authentication](/api/authentication) for more information.
       required: true
       schema:
         type: string

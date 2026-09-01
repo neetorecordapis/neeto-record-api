@@ -37,84 +37,84 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Reference",
+        "tab": "API",
         "icon": "code",
         "groups": [
           {
             "group": "Getting Started",
             "icon": "rocket",
             "pages": [
-              "api-reference/introduction",
-              "api-reference/workspace-subdomain",
-              "api-reference/authentication",
-              "api-reference/pagination",
-              "api-reference/response-codes"
+              "api/introduction",
+              "api/workspace-subdomain",
+              "api/authentication",
+              "api/pagination",
+              "api/response-codes"
             ]
           },
           {
             "group": "Recordings",
             "icon": "video",
             "pages": [
-              "api-reference/recordings/list",
-              "api-reference/recordings/get",
-              "api-reference/recordings/update",
-              "api-reference/recordings/delete",
-              "api-reference/recordings/search",
-              "api-reference/recordings/search-by-transcript",
-              "api-reference/recordings/transcript",
-              "api-reference/recordings/transcript-status",
-              "api-reference/recordings/trigger-transcript",
-              "api-reference/recordings/chapters",
-              "api-reference/recordings/chapter-status",
-              "api-reference/recordings/trigger-chapters",
-              "api-reference/recordings/share-link",
-              "api-reference/recordings/embed-code",
-              "api-reference/recordings/download-url",
-              "api-reference/recordings/screenshot",
-              "api-reference/recordings/trigger-mp4",
-              "api-reference/recordings/analytics",
-              "api-reference/recordings/ctas",
-              "api-reference/recordings/create-cta"
+              "api/recordings/list",
+              "api/recordings/get",
+              "api/recordings/update",
+              "api/recordings/delete",
+              "api/recordings/search",
+              "api/recordings/search-by-transcript",
+              "api/recordings/transcript",
+              "api/recordings/transcript-status",
+              "api/recordings/trigger-transcript",
+              "api/recordings/chapters",
+              "api/recordings/chapter-status",
+              "api/recordings/trigger-chapters",
+              "api/recordings/share-link",
+              "api/recordings/embed-code",
+              "api/recordings/download-url",
+              "api/recordings/screenshot",
+              "api/recordings/trigger-mp4",
+              "api/recordings/analytics",
+              "api/recordings/ctas",
+              "api/recordings/create-cta"
             ]
           },
           {
             "group": "Folders",
             "icon": "folder",
             "pages": [
-              "api-reference/folders/list",
-              "api-reference/folders/create"
+              "api/folders/list",
+              "api/folders/create"
             ]
           },
           {
             "group": "Tags",
             "icon": "tag",
             "pages": [
-              "api-reference/tags/list"
+              "api/tags/list"
             ]
           },
           {
             "group": "Recording Requests",
             "icon": "paper-plane",
             "pages": [
-              "api-reference/recording-requests/create"
+              "api/recording-requests/create"
             ]
           },
           {
             "group": "Analytics",
             "icon": "chart-line",
             "pages": [
-              "api-reference/analytics/get"
+              "api/analytics/get"
             ]
           },
           {
             "group": "Team Members",
             "icon": "user-group",
             "pages": [
-              "api-reference/team-members/list",
-              "api-reference/team-members/get",
-              "api-reference/team-members/add",
-              "api-reference/team-members/update",
-              "api-reference/team-members/remove"
+              "api/team-members/list",
+              "api/team-members/get",
+              "api/team-members/add",
+              "api/team-members/update",
+              "api/team-members/remove"
             ]
           },
           {
@@ -216,23 +216,27 @@
   "redirects": [
     {
       "source": "/getting-started/introduction",
-      "destination": "/api-reference/introduction"
+      "destination": "/api/introduction"
     },
     {
       "source": "/getting-started/workspace-subdomain",
-      "destination": "/api-reference/workspace-subdomain"
+      "destination": "/api/workspace-subdomain"
     },
     {
       "source": "/getting-started/authentication",
-      "destination": "/api-reference/authentication"
+      "destination": "/api/authentication"
     },
     {
       "source": "/getting-started/pagination",
-      "destination": "/api-reference/pagination"
+      "destination": "/api/pagination"
     },
     {
       "source": "/getting-started/response-codes",
-      "destination": "/api-reference/response-codes"
+      "destination": "/api/response-codes"
+    },
+    {
+      "source": "/api-reference/:slug*",
+      "destination": "/api/:slug*"
     }
   ]
 }

@@ -19,7 +19,7 @@ paths:
       description: >-
         Lists every tag in the workspace, with the number of recordings carrying it. Tags are
         created implicitly: sending a name that does not exist yet in `tag_names` on the
-        [Update a recording](/api-reference/recordings/update) API creates the tag, so there is no
+        [Update a recording](/api/recordings/update) API creates the tag, so there is no
         separate create endpoint.
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'

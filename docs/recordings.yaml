@@ -273,7 +273,7 @@ paths:
                       nullable: true
                       description: >-
                         Folder to move the recording into. Accepts the folder `id` returned by the
-                        [List folders](/api-reference/folders/list) API. Send an empty value to
+                        [List folders](/api/folders/list) API. Send an empty value to
                         remove the recording from its folder.
                       example: "hqzptnv"
                     tag_names:
@@ -659,7 +659,7 @@ paths:
         - Recordings
       description: >-
         Retrieves the total view count for a recording, broken down by day. For workspace wide
-        numbers, use the [Analytics](/api-reference/analytics/get) API.
+        numbers, use the [Analytics](/api/analytics/get) API.
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'
         - $ref: '../schemas/common.yaml#/accept_header'

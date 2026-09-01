@@ -8,7 +8,7 @@ servers:
     variables:
       your-subdomain:
         default: spinkart
-        description: Replace **spinkart** with your [workspace's subdomain](/api-reference/workspace-subdomain).
+        description: Replace **spinkart** with your [workspace's subdomain](/api/workspace-subdomain).
 tags:
   - name: Analytics
     description: APIs to retrieve workspace wide recording and view counts.
@@ -18,7 +18,7 @@ paths:
       summary: Get workspace analytics
       tags:
         - Analytics
-      description: Retrieves how many uploaded recordings and views the workspace has, along with its ten most watched recordings. For a single recording's view history, use the [Get view analytics for a recording](/api-reference/recordings/analytics) API.
+      description: Retrieves how many uploaded recordings and views the workspace has, along with its ten most watched recordings. For a single recording's view history, use the [Get view analytics for a recording](/api/recordings/analytics) API.
       parameters:
         - $ref: '#/components/parameters/api_key_header'
         - $ref: '#/components/parameters/accept_header'
@@ -68,7 +68,7 @@ components:
     api_key_header:
       in: header
       name: X-Api-Key
-      description: API key. Refer to [Authentication](/api-reference/authentication) for more information.
+      description: API key. Refer to [Authentication](/api/authentication) for more information.
       required: true
       schema:
         type: string

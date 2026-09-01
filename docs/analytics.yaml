@@ -19,7 +19,7 @@ paths:
       description: >-
         Retrieves how many uploaded recordings and views the workspace has, along with its ten most
         watched recordings. For a single recording's view history, use the
-        [Get view analytics for a recording](/api-reference/recordings/analytics) API.
+        [Get view analytics for a recording](/api/recordings/analytics) API.
       parameters:
         - $ref: '../schemas/common.yaml#/api_key_header'
         - $ref: '../schemas/common.yaml#/accept_header'

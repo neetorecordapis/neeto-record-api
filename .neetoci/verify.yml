@@ -4,7 +4,7 @@ plan: standard-2
 
 paths:
   - api-reference-v1/**
-  - api-reference/**
+  - api/**
   - docs-v1/**
   - docs/**
   - snippets/**
