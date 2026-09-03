@@ -28,8 +28,10 @@ neetorecord analytics show --from-date 2025-01-01 --to-date 2025-06-30
 
 <AnalyticsShow />
 
-Both dates are ISO format (`YYYY-MM-DD`) and both are optional. `--from-date`
-and `--to-date` filter on when a recording was created, not when it was viewed.
+Both dates are ISO format (`YYYY-MM-DD`) and both are optional. A month on its
+own (`YYYY-MM`) is accepted too and covers that whole month. `--from-date` and
+`--to-date` filter on when a recording was created, not when it was viewed, and
+the request is rejected when `--from-date` is later than `--to-date`.
 
 ```json
 {

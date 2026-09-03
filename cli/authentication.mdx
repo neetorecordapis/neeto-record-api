@@ -28,8 +28,10 @@ NeetoRecord at `acme.neetorecord.com`, the subdomain is `acme`. See
 [Workspace subdomain](/api/workspace-subdomain).
 
 `login` opens your browser to complete the sign in and writes the resulting
-session to `~/.config/neetorecord/auth.json`. Running it again for the same
-subdomain refreshes that entry.
+session to `~/.config/neetorecord/auth.json`. If the browser does not open, the
+command prints the URL to visit. The sign in must finish within two minutes,
+after which `login` gives up and can be run again. Running it again for the
+same subdomain refreshes that entry.
 
 ## Check who you are signed in as
 

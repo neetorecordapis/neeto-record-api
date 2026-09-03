@@ -18,21 +18,25 @@ neetorecord setup claude
 | `setup claude` | Extracts the NeetoRecord plugin to `~/.config/neetorecord/claude-plugin` and prints the two slash commands that finish the install. |
 | `setup cursor` | `.cursor/rules/neetorecord.mdc` in the current directory. |
 | `setup windsurf` | `.windsurf/rules/neetorecord.md` in the current directory. |
-| `setup copilot` | Appends a `## NeetoRecord CLI` section to `.github/copilot-instructions.md`. |
-| `setup gemini` | Appends a `## NeetoRecord CLI` section to `GEMINI.md`. |
-| `setup codex` | Appends a `## NeetoRecord CLI` section to `AGENTS.md`. |
+| `setup copilot` | A `## NeetoRecord CLI` section in `.github/copilot-instructions.md`, between `<!-- neetorecord:start -->` and `<!-- neetorecord:end -->` markers. |
+| `setup gemini` | The same marked section in `GEMINI.md`. |
+| `setup codex` | The same marked section in `AGENTS.md`. |
 
-The Cursor, Windsurf, Copilot, and Codex files are written relative to the
-current directory, so run those from the root of the project you want them in.
-Cursor and Windsurf rules are left alone if the file already exists. The append
-mode commands replace their own section and leave the rest of the file
-untouched, so re-running them after a CLI upgrade is safe.
+Every subcommand except `setup claude` writes into the current directory, so
+run it from the root of the project you want the assistant to use NeetoRecord
+in. `setup cursor` and `setup windsurf` overwrite their rule file when it
+already exists. `setup copilot`, `setup gemini`, and `setup codex` keep the
+rest of the file and replace only the section between the markers, so there is
+never a duplicate. Run the command again after every CLI upgrade so the rules
+match the installed commands.
 
 ### Claude Code
 
 `setup claude` needs Claude Code to have been run at least once, so that
-`~/.claude/` exists. It extracts the plugin and then prints the slash commands
-to run inside Claude Code:
+`~/.claude/` exists. It replaces `~/.config/neetorecord/claude-plugin` with a
+fresh copy of the plugin, which holds the NeetoRecord skill, a session start
+hook that reports whether the CLI is signed in, and a `/neetorecord-doctor`
+command. It then prints the slash commands to run inside Claude Code:
 
 ```
 /plugin marketplace add ~/.config/neetorecord/claude-plugin
@@ -58,8 +62,8 @@ shell equivalent.
     failure is easy to detect and to act on.
   </Card>
   <Card title="Chainable output" icon="link">
-    `--quiet` prints just the identifier after a create or update, which is what
-    an assistant needs to feed the next command.
+    `--quiet` prints just the identifier after a create, which is what an
+    assistant needs to feed the next command.
   </Card>
 </CardGroup>
 

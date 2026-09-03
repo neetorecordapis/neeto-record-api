@@ -381,6 +381,8 @@ neetorecord recordings download-url 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --forma
 
 When the MP4 has not been prepared yet, the response carries
 `"is_download_file_ready": false` and no URL. Run `trigger-mp4`, then try again.
+An MP4 URL is valid for 600 seconds; a `--format webm` URL is valid for 60
+seconds and is ready as soon as the recording has been uploaded.
 
 ## recordings trigger-mp4
 

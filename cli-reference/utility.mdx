@@ -71,7 +71,9 @@ neetorecord doctor
 ✓ CLI version: 1.2.2
 ```
 
-Each check runs independently, so a failing one does not hide the others.
+Each check runs independently, so a failing one does not hide the others. With
+no saved session, pass `--subdomain` to still probe the workspace URL; without
+it the API check is skipped.
 
 ## version
 
@@ -95,6 +97,15 @@ otherwise, and the PowerShell script on Windows.
 ```bash
 neetorecord update
 ```
+
+```
+Detected Homebrew install.
+Running: brew update && brew upgrade neetozone/homebrew-tap/neetorecord
+```
+
+The command prints the install method it detected and the exact command it is
+about to run, then hands over to it. A failed download exits non-zero instead
+of being silently ignored.
 
 ## setup
 
@@ -168,10 +179,17 @@ neetorecord completion powershell
 
 </CodeGroup>
 
-The zsh, bash, and PowerShell variants add a small block to `~/.zshrc`,
-`~/.bashrc`, or your PowerShell profile. Re-running refreshes both the script
-and that block instead of duplicating it. The fish script goes to
-`~/.config/fish/completions`, which fish loads on its own.
+| Shell | Script | Loader block |
+| --- | --- | --- |
+| zsh | `~/.config/neetorecord/completions/_neetorecord` | `~/.zshrc` |
+| bash | `~/.config/neetorecord/completions/neetorecord.bash` | `~/.bashrc` |
+| fish | `~/.config/fish/completions/neetorecord.fish` | none, fish loads it on its own |
+| powershell | `~/.config/neetorecord/completions/neetorecord.ps1` | `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1` |
+
+The loader block sits between `# neetorecord completions` and
+`# end neetorecord completions` marker lines. Re-running overwrites the script
+and refreshes that block instead of duplicating it; the rest of the file is
+left as it was.
 
 Start a new shell to pick up the completions.
 

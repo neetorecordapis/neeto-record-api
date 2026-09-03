@@ -38,6 +38,25 @@ neetorecord doctor
     subdomain is `acme`. See [Workspace subdomain](/api/workspace-subdomain).
   </Accordion>
 
+  <Accordion title="NeetoRecord CLI authentication timed out after 2 minutes. Please try again.">
+    `login` waits two minutes for the browser sign in to finish. Run it again
+    and complete the sign in from the tab it opens. If no browser opened, paste
+    the URL that `login` printed into one. `Authentication session expired.
+    Please try again.` means the same thing from the server side.
+  </Accordion>
+
+  <Accordion title="API error (401): Unauthorized">
+    The saved session is no longer valid. The message ends with
+    `Suggestion: Authentication session expired. Run 'neetorecord login' to re-authenticate.`
+    Sign in again for that workspace.
+  </Accordion>
+
+  <Accordion title="Could not connect to NeetoRecord. Check your internet connection">
+    The request never reached the server. Check your network, and if you set
+    `NEETORECORD_BASE_URL`, check that the host it points at is running.
+    `neetorecord doctor` reports the same reachability check.
+  </Accordion>
+
   <Accordion title="required flag(s) &quot;query&quot; not set">
     A required flag is missing. Run the command with `--help`, or check the flag
     table on that command's [reference page](/cli-reference/overview).
@@ -67,15 +86,35 @@ neetorecord doctor
 
 ## API errors
 
-Errors returned by NeetoRecord come through with the server's own message. In
-JSON output they arrive inside the envelope, so inspect the payload for `error`
-or `errors` keys. A few worth knowing:
+When NeetoRecord rejects a request, the CLI prints the server's own message to
+stderr and exits with status 1. Nothing is written to stdout, so there is no
+envelope to parse. The line looks like this, followed by a suggestion for the
+common status codes:
+
+```
+API error (404): Couldn't find Recording
+
+Suggestion: Resource not found. Check the ID and try again.
+```
+
+| Status | Suggestion |
+| --- | --- |
+| 401 | `Authentication session expired. Run 'neetorecord login' to re-authenticate.` |
+| 403 | `You do not have permission to perform this action.` |
+| 404 | `Resource not found. Check the ID and try again.` |
+| 422 | `Check required fields with 'neetorecord <command> --help'.` |
+| 429 | `Rate limited. Wait and try again.` |
+
+A few responses worth knowing about, some of which succeed with a flag set
+rather than failing:
 
 | Situation | What you see |
 | --- | --- |
 | A screenshot before the MP4 is ready | `is_screenshot_ready: false`. Run [`recordings trigger-mp4`](/cli-reference/recordings#recordings-trigger-mp4), then retry. |
 | A download URL before the MP4 is ready | `is_download_file_ready: false`. Same fix. |
-| A screenshot timestamp past the end of a recording | `Timestamp must be a number between 0 and <duration> seconds.` |
+| A screenshot timestamp past the end of a recording | `API error (422): Timestamp must be a number between 0 and <duration> seconds.` |
+| A screenshot format other than png or jpeg | `API error (422): Format must be one of: png, jpeg.` |
+| A recording request for an email that is not an active member | `API error (422): Could not find active user with the specified email.` |
 | Removing the last admin | The request is rejected, because a workspace must keep at least one admin. |
 
 ## Reporting a problem
