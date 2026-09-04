@@ -1,106 +1,67 @@
 ---
-title: "Introduction"
-description: "Connect an AI assistant to your NeetoRecord workspace over the Model Context Protocol."
+title: "NeetoRecord MCP"
+description: "Manage your NeetoRecord recordings from an AI assistant in plain language."
 ---
 
-NeetoRecord runs a hosted MCP server. Point a compatible AI assistant at it and
-the assistant can work with your recordings directly: no local install, no
-glue code.
+The NeetoRecord **MCP server** lets your AI assistant work with your recordings from plain-language requests. Ask it to search recordings by what was said in them, read a transcript, pull a screenshot, or create a share link, and it works with your NeetoRecord workspace for you.
 
-Once connected, an assistant can search recordings by title or by what was said
-in them, read transcripts and chapters, pull a still frame out of a video,
-produce share links and embed codes, organize recordings into folders and tags,
-and report view analytics. The full list is on the [Tools](/mcp/tools) page.
+[MCP](https://modelcontextprotocol.io) (Model Context Protocol) is an open standard that connects AI assistants to tools such as NeetoRecord. You describe the task; the assistant uses the right tool.
+
+## What you can do
+
+<CardGroup cols={2}>
+  <Card title="Search recordings" icon="magnifying-glass">
+    Search recordings by title or by what was said in them.
+  </Card>
+  <Card title="Read transcripts and chapters" icon="closed-captioning">
+    Pull transcripts, chapters, and a screenshot out of a recording.
+  </Card>
+  <Card title="Share and organize" icon="share-nodes">
+    Create share links and embed codes, and sort recordings into folders and tags.
+  </Card>
+  <Card title="Hand off the busywork" icon="robot">
+    Ask your assistant to find the recording where a customer raised an objection and pull the frame where it happens.
+  </Card>
+</CardGroup>
 
 ## MCP vs CLI: which should I use?
 
-NeetoRecord's [CLI](/cli/introduction) reaches nearly everything this server
-reaches - recordings, transcripts, chapters, folders, tags, CTAs, analytics, and
-recording requests. Two gaps are real: only this server reads a publicly shared
-recording that lives in someone else's workspace, and only the CLI manages
-[team members](/cli-reference/team-members). Everywhere else the two overlap, so
-choose on how the work reaches NeetoRecord.
+NeetoRecord's [CLI](/cli/introduction) reaches nearly everything this server reaches - recordings, transcripts, chapters, folders, tags, CTAs, analytics, and recording requests. Two gaps are real: only this server reads a publicly shared recording that lives in someone else's workspace, and only the CLI manages [team members](/cli-reference/team-members). Everywhere else the two overlap, so choose on how the work reaches NeetoRecord.
 
 ### Reach for MCP when
 
-- **The answer is inside the recording.** You remember a customer objection came
-  up in a demo, but not which demo or how it was phrased. The assistant searches
-  the transcripts, reads what comes back, names the recording, and then shows
-  you the frame at that timestamp, because `GetScreenshot` returns the image
-  itself rather than a link to it. The CLI runs the same search with
-  `neetorecord recordings search-by-transcript --query`, and its
-  `recordings screenshot` returns a URL - the reading and the looking are still
-  yours to do.
-- **The details live in your chat, not in your head.** A pasted support thread
-  becomes the recording's summary, its tags, or the label and link on a CTA,
-  with no retyping. The CLI cannot see any of it.
-- **One request should cover several steps.** Start the transcript, wait for it
-  to finish, generate chapters from it, then write the summary onto the
-  recording. Here that is a single ask; with the CLI you write the polling loop
-  that sits between `trigger-transcript` and `transcript-status`.
-- **The person doing it does not use a terminal.** NeetoRecord hosts this
-  server, so there is nothing to install or keep updated.
+- **The details live in your chat, not in your head.** A pasted support thread becomes the recording's summary, its tags, or the label and link on a CTA, with no retyping. The CLI cannot see any of it.
+- **You have not decided the steps yet.** "Something in last week's demos worries me - find out what" means listening to what is there and judging what matters. A command can only carry out a decision you have already made.
+- **One request should cover several steps.** Start the transcript, wait for it to finish, generate chapters from it, then write the summary onto the recording. Here that is a single ask; with the CLI you write the polling loop that sits between `trigger-transcript` and `transcript-status`.
+- **The person doing it does not use a terminal.** NeetoRecord hosts this server, so there is nothing to install or keep updated.
 
 ### Reach for the CLI instead when
 
-- **No AI assistant should be in the loop.** A cron entry or a CI step runs the
-  CLI with nothing but the binary and a workspace it is already signed in
-  to - no assistant open, no model account, no tokens spent per run. Every call
-  here needs something with model access running first.
-- **The output feeds another program.** The CLI prints a bare identifier after a
-  create, and raw JSON with a `pagination` block for `jq`, a spreadsheet, or
-  your own script. Here you get prose you would have to copy out by hand.
-- **You are working through the whole library.** Re-tagging or re-foldering
-  hundreds of recordings is one call per recording either way, but here each of
-  those is a separate tool call, and every page of results crowds out the
-  assistant's context. The CLI reports `total_pages` and `total_records` beside
-  the records, so a shell loop walks all of them unattended and writes each page
-  to a file or into `jq`. The size of the library stops mattering.
-- **The run has to be repeatable and reviewable.** A command is the artifact: it
-  records exactly what ran and repeats identically in a runbook or a pull
-  request. Ask twice here and the assistant may take a different route.
+- **No AI assistant should be in the loop.** A cron entry or a CI step runs the CLI with nothing but the binary and a workspace it is already signed in to - no assistant open, no model account, no tokens spent per run. Every MCP call needs something with model access running first.
+- **The output feeds another program.** The CLI prints a bare identifier after a create, and raw JSON with a `pagination` block for `jq`, a spreadsheet, or your own script. Here you get prose you would have to copy out by hand.
+- **You are working through thousands of records.** Re-tagging or re-foldering hundreds of recordings is one call per recording either way, but here each of those is a separate tool call, and every page of results crowds out the assistant's context. The CLI reports `total_pages` and `total_records` beside the records, so a shell loop walks all of them unattended and writes each page to a file or into `jq`. The size of the library stops mattering.
+- **The run has to be repeatable and reviewable.** A command is the artifact: it records exactly what ran and repeats identically in a runbook or a pull request. Ask twice here and the assistant may take a different route.
 
 <Tip>
-  You can have both. Run [`neetorecord setup claude`](/cli/ai-assistants) and
-  the same assistant that talks to this MCP server also drives the CLI, so a
-  plain-language request still ends in an exact command you can read, repeat,
-  and paste into a script.
+  You can have both. Run [`neetorecord setup claude`](/cli/ai-assistants) and the
+  same assistant drives the CLI for you, so a plain-language request still ends
+  in an exact command you can read, repeat, and paste into a script.
 </Tip>
 
 <Warning>
   Ask your assistant to show you what it plans to do before it moves, retitles,
-  or deletes anything. These tools act on your live workspace, and
-  `DeleteRecording` cannot be undone.
+  or deletes anything. These tools act on your live workspace.
 </Warning>
 
 ## What you need
 
-- An AI assistant that supports MCP. Setup steps for Claude, ChatGPT, Claude
-  Code, Codex, Cursor, Gemini CLI, VS Code with GitHub Copilot, and Windsurf are
-  on [Connect your assistant](/mcp/connect).
-- A NeetoRecord API key, but only for workspace scoped access. Every client can
-  sign you in over OAuth instead, which needs nothing beyond the server
-  URL - and in Claude, not even that, because NeetoRecord is listed in
-  Anthropic's [connector directory](https://claude.ai/directory/neetorecord).
-  See [Authentication](/mcp/authentication).
+- An AI assistant that supports MCP. Setup steps for Claude, ChatGPT, Claude Code, Codex, Cursor, Gemini CLI, VS Code with GitHub Copilot, Windsurf, and Antigravity are on [Connect](/mcp/connect).
+- A NeetoRecord API key, but only for workspace scoped access, and for Antigravity, where it is the only documented route. Every other client can sign you in over OAuth instead, which needs nothing beyond the server URL. See [Authentication](/mcp/authentication).
 
-The choice decides what the assistant can reach: an OAuth connection acts as you
-and sees what you see, while an API key acts as the workspace and sees everything
-in it.
+The choice decides what the assistant can reach: an OAuth connection acts as you and sees what you see, while an API key acts as the workspace and sees everything in it.
 
-## Next steps
+<Note>
+  An OAuth connection is approved in the browser, much as the [CLI](/cli/authentication) signs you in, and you decide there whether the assistant may create, update, or delete. An API key is the same one the [REST API](/api/authentication) uses, passed as a bearer token from your assistant's config, and it carries every permission for the whole workspace.
+</Note>
 
-<CardGroup cols={2}>
-  <Card title="Authentication" icon="key" href="/mcp/authentication">
-    Generate an API key and understand how the server uses it.
-  </Card>
-  <Card title="Connect your assistant" icon="plug" href="/mcp/connect">
-    Server details and per client configuration.
-  </Card>
-  <Card title="Examples" icon="comments" href="/mcp/examples">
-    Prompts that show what the connection is good for.
-  </Card>
-  <Card title="Tools" icon="screwdriver-wrench" href="/mcp/tools">
-    Every tool the server exposes, grouped by resource.
-  </Card>
-</CardGroup>
+[Connect your assistant](/mcp/connect) to get started.
