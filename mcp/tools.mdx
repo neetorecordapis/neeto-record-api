@@ -18,7 +18,7 @@ permission at approval time. See [Authentication](/mcp/authentication).
 
 ## Recordings
 
-Backed by the recordings endpoints. For field level detail, see the
+Most of these tools are backed by the recordings endpoints. For field level detail, see the
 [API reference](/api/recordings/list).
 
 | Tool | What it does |
@@ -30,11 +30,21 @@ Backed by the recordings endpoints. For field level detail, see the
 | [`UpdateRecording`](/api/recordings/update) | Updates a recording's title, summary, or tags. |
 | [`MoveRecordingToFolder`](/api/recordings/update) | Moves a recording into a folder, or out of its current one. |
 | [`DeleteRecording`](/api/recordings/delete) | Permanently deletes a recording and everything derived from it. |
+| `search` | Takes a `query` string and searches recordings by title and by what was said in them, returning up to 25 of the most recent matches, each with its id, title, watch URL and a snippet of the matching transcript. |
+| `fetch` | Takes a recording `id`, the one `search` returns, and returns the recording's summary and transcript cut to 20,000 characters in total, along with its watch URL, duration, view count and tags. |
 
 <Warning>
   `DeleteRecording` cannot be undone. Assistants are told it is destructive, but
   confirm what is about to be deleted before you approve the call.
 </Warning>
+
+<Note>
+  `search` and `fetch` are the two tools the
+  [ChatGPT connector specification](https://developers.openai.com/api/docs/mcp) requires, so they
+  overlap with `SearchRecordingsByTitle` / `SearchRecordingsByTranscript` and `GetRecording`
+  rather than adding anything new. They have no separate REST endpoint, which is why they are
+  not linked above.
+</Note>
 
 ## Transcripts and chapters
 
