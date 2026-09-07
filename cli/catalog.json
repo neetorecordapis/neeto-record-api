@@ -48,7 +48,7 @@
       },
       {
         "command": "neetorecord folders list",
-        "description": "List all folders",
+        "description": "List folders",
         "flags": [
           {
             "name": "page",
@@ -396,7 +396,7 @@
     "subcommands": [
       {
         "command": "neetorecord tags list",
-        "description": "List all tags",
+        "description": "List tags",
         "flags": [
           {
             "name": "page",
