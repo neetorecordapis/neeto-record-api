@@ -1,5 +1,5 @@
 ---
-title: "tags"
+title: "Tags"
 description: "List the recording tags used in the workspace."
 ---
 
@@ -7,7 +7,7 @@ import TagsList from "/snippets/cli/tags/list.mdx";
 
 Tags label recordings for filtering and search. They are created implicitly:
 passing a name that does not exist yet to
-[`recordings update --tag`](/cli-reference/recordings#recordings-update) creates
+[`recordings update --tag`](/cli-reference/recordings#update-a-recording) creates
 the tag, so there is no separate create command. For fields and response
 details, see the [API reference](/api/tags/list).
 
@@ -17,7 +17,7 @@ details, see the [API reference](/api/tags/list).
   [Output formats](/cli/output-formats).
 </Info>
 
-## tags list
+## List tags
 
 Lists every tag in the workspace with the number of recordings carrying it. Use
 it to check the exact spelling of a tag before passing it to

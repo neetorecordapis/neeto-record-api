@@ -1,5 +1,5 @@
 ---
-title: "team-members"
+title: "Team members"
 description: "List, invite, update, and remove the people in your NeetoRecord workspace."
 ---
 
@@ -16,7 +16,7 @@ see the [API reference](/api/team-members/list).
   [Output formats](/cli/output-formats).
 </Info>
 
-## team-members list
+## List team members
 
 Lists the members of the workspace. Pass `--email` to look one up without
 paging through the list.
@@ -53,7 +53,7 @@ neetorecord team-members list --email oliver@example.com
 }
 ```
 
-## team-members show
+## Show a team member
 
 Shows one member.
 
@@ -82,7 +82,7 @@ neetorecord team-members show aaaabbbb-cccc-dddd-eeee-ffff00001111
 }
 ```
 
-## team-members create
+## Invite team members
 
 Invites one or more people to the workspace. Repeat `--email` to invite several
 at once.
@@ -108,7 +108,7 @@ without emailing them.
 }
 ```
 
-## team-members update
+## Update a team member
 
 Changes a member's name, email, time zone, or role. Only the flags you pass are
 changed.
@@ -126,7 +126,7 @@ neetorecord team-members update aaaabbbb-cccc-dddd-eeee-ffff00001111 \
 
 The output is the updated team member, wrapped in `data`.
 
-## team-members delete
+## Remove a team member
 
 Removes a member from the workspace.
 

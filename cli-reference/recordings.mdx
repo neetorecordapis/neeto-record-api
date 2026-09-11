@@ -1,5 +1,5 @@
 ---
-title: "recordings"
+title: "Recordings"
 description: "List, search, update, and delete recordings, and work with their transcripts, chapters, links, and CTAs."
 ---
 
@@ -26,7 +26,7 @@ segment of a watch URL such as
   [Output formats](/cli/output-formats).
 </Info>
 
-## recordings list
+## List recordings
 
 Lists the recordings in the workspace, newest first. Use it to find a recording
 id to pass to the other commands.
@@ -80,7 +80,7 @@ neetorecord recordings list --page 1 --page-size 30
 }
 ```
 
-## recordings show
+## Show a recording
 
 Shows one recording in full.
 
@@ -95,7 +95,7 @@ neetorecord recordings show 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 The output is the same recording object that `list` returns, wrapped in `data`
 with no pagination block.
 
-## recordings search
+## Search recordings by title
 
 Searches recordings by title. Use it when you know roughly what a recording is
 called but not its id.
@@ -108,7 +108,7 @@ neetorecord recordings search --query "sprint"
 
 The output matches `recordings list`.
 
-## recordings search-by-transcript
+## Search recordings by transcript
 
 Searches the text of recording transcripts. Use it to find the recording where
 something was said, rather than one whose title matches.
@@ -121,7 +121,7 @@ neetorecord recordings search-by-transcript --query "pricing page"
 
 The output matches `recordings list`.
 
-## recordings update
+## Update a recording
 
 Renames a recording, replaces its summary, moves it between folders, or replaces
 its tags. Only the flags you pass are changed.
@@ -141,11 +141,11 @@ neetorecord recordings update 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
 `--tag` replaces every tag on the recording, so pass the complete list each
 time. Tags that do not exist yet are created. Passing `--folder-id ""` removes
 the recording from its folder. `--folder-id` accepts the id returned by
-[`folders list`](/cli-reference/folders).
+[`folders list`](/cli-reference/folders#list-folders).
 
 The output is the updated recording object, wrapped in `data`.
 
-## recordings delete
+## Delete a recording
 
 Deletes a recording and everything derived from it. This cannot be undone.
 
@@ -161,7 +161,7 @@ neetorecord recordings delete 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 Recording deleted.
 ```
 
-## recordings transcript
+## Show a transcript
 
 Prints the full transcript with its timestamped segments.
 
@@ -191,7 +191,7 @@ neetorecord recordings transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings transcript-status
+## Check transcript status
 
 Reports whether a transcript exists and where generation has got to. Check this
 before polling for transcript text.
@@ -214,7 +214,7 @@ neetorecord recordings transcript-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings trigger-transcript
+## Generate a transcript
 
 Starts transcript generation, or regenerates an existing transcript in another
 language. Generation runs in the background.
@@ -238,7 +238,7 @@ neetorecord recordings trigger-transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d -
 }
 ```
 
-## recordings chapters
+## Show chapters
 
 Prints the auto generated chapters of a recording.
 
@@ -262,7 +262,7 @@ neetorecord recordings chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings chapter-status
+## Check chapter status
 
 Reports whether chapters exist and where generation has got to.
 
@@ -284,7 +284,7 @@ neetorecord recordings chapter-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings trigger-chapters
+## Generate chapters
 
 Starts chapter generation for a recording. It needs a transcript, so run
 `trigger-transcript` first if the recording does not have one.
@@ -306,7 +306,7 @@ neetorecord recordings trigger-chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings share-link
+## Get the share link
 
 Prints the public watch link, and whether that link has expired or is behind
 access control.
@@ -330,7 +330,7 @@ neetorecord recordings share-link 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings embed-code
+## Get the embed code
 
 Prints the iframe snippet for embedding a recording in another page.
 
@@ -352,7 +352,7 @@ neetorecord recordings embed-code 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings download-url
+## Get the download URL
 
 Returns a presigned URL for downloading the recording. The URL is short lived,
 so fetch it right before you use it.
@@ -384,7 +384,7 @@ When the MP4 has not been prepared yet, the response carries
 An MP4 URL is valid for 600 seconds; a `--format webm` URL is valid for 60
 seconds and is ready as soon as the recording has been uploaded.
 
-## recordings trigger-mp4
+## Generate the MP4
 
 Starts preparing the downloadable MP4 for a recording. Run it when
 `download-url` reports that the file is not ready.
@@ -410,7 +410,7 @@ neetorecord recordings trigger-mp4 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 when a conversion is already running, and `ready` when the MP4 is already up to
 date.
 
-## recordings screenshot
+## Get a screenshot
 
 Returns a URL to a still frame captured at a timestamp. Useful for pulling a
 thumbnail out of a recording, or for looking at what was on screen when
@@ -442,7 +442,7 @@ neetorecord recordings screenshot 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
 }
 ```
 
-## recordings analytics
+## Show recording analytics
 
 Reports the view count for a single recording, broken down by day.
 
@@ -467,9 +467,9 @@ neetorecord recordings analytics 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-For workspace wide numbers, see [`analytics show`](/cli-reference/analytics).
+For workspace wide numbers, see [`analytics show`](/cli-reference/analytics#show-workspace-analytics).
 
-## recordings ctas
+## List CTAs
 
 Lists the call to action buttons configured on a recording.
 
@@ -500,7 +500,7 @@ neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-## recordings create-cta
+## Create a CTA
 
 Adds a call to action button that appears over the video for a time range.
 

@@ -1,5 +1,5 @@
 ---
-title: "folders"
+title: "Folders"
 description: "List and create the folders that recordings are organized into."
 ---
 
@@ -7,7 +7,7 @@ import FoldersList from "/snippets/cli/folders/list.mdx";
 import FoldersCreate from "/snippets/cli/folders/create.mdx";
 
 Folders group recordings in the workspace and can be nested. Move a recording
-into a folder with [`recordings update --folder-id`](/cli-reference/recordings#recordings-update).
+into a folder with [`recordings update --folder-id`](/cli-reference/recordings#update-a-recording).
 For fields and response details, see the [API reference](/api/folders/list).
 
 <Info>
@@ -16,7 +16,7 @@ For fields and response details, see the [API reference](/api/folders/list).
   [Output formats](/cli/output-formats).
 </Info>
 
-## folders list
+## List folders
 
 Lists every folder in the workspace with the number of recordings in each.
 
@@ -46,7 +46,7 @@ neetorecord folders list --page-size 50
 }
 ```
 
-## folders create
+## Create a folder
 
 Creates a folder. Pass `--parent-folder-id` to nest it under an existing one.
 
