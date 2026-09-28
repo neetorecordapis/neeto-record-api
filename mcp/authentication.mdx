@@ -9,7 +9,7 @@ The MCP server accepts two kinds of credentials, and the difference is not a set
 | --- | --- | --- |
 | Scope | The person who approved it | The whole workspace |
 | Identity | Tied to a NeetoRecord user | Tied to nothing and nobody |
-| Set up by | Connecting from Claude's directory, or pasting the server URL | Pasting a key into a config file |
+| Set up by | Connecting from Claude's directory, or adding the server URL | Pasting a key into a config file |
 | Used by | Every client except Antigravity | Every client except Claude and ChatGPT |
 | Reaches several workspaces | Yes, tick them while approving | No, one key is one workspace |
 | Revoked by | Removing the connector | Revoking the key in workspace settings |
@@ -22,7 +22,7 @@ The assistant acts as the person who approved the connection. Every tool call ru
 
 That makes OAuth the better fit whenever a real person is driving the assistant, because the blast radius of the connection is the same as the blast radius of that person's account.
 
-There is nothing to create in NeetoRecord beforehand. You give the client the server URL and it works out the rest on its own. The server publishes its OAuth metadata at `https://connect.neetorecord.com/.well-known/oauth-authorization-server`, and registers each client automatically, so there is no client ID or secret for you to create.
+There is nothing to create in NeetoRecord beforehand. You give the client the server URL, or connect from the directory listing in Claude, and it works out the rest on its own. The server publishes its OAuth metadata at `https://connect.neetorecord.com/.well-known/oauth-authorization-server`, and registers each client automatically, so there is no client ID or secret for you to create.
 
 | Detail | Value |
 | --- | --- |
