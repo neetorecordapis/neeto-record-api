@@ -1,32 +1,26 @@
 ---
 title: "Folders"
-description: "List and create the folders that recordings are organized into."
+description: "List and create the folders that organize recordings."
 ---
 
-import FoldersList from "/snippets/cli/folders/list.mdx";
-import FoldersCreate from "/snippets/cli/folders/create.mdx";
+import FoldersListFlags from '/snippets/cli/folders/list.mdx'
+import FoldersCreateFlags from '/snippets/cli/folders/create.mdx'
 
-Folders group recordings in the workspace and can be nested. Move a recording
+A folder groups recordings in the workspace and can be nested. Move a recording
 into a folder with [`recordings update --folder-id`](/cli-reference/recordings#update-a-recording).
 For fields and response details, see the [API reference](/api/folders/list).
 
-<Info>
-  Sample output on this page is the JSON envelope you get with `--json`. On a
-  terminal the same data prints as a table or a key-value list. See
-  [Output formats](/cli/output-formats).
-</Info>
-
 ## List folders
 
-Lists every folder in the workspace with the number of recordings in each.
+This command lists every folder in the workspace with the number of recordings in each.
 
 ```bash
 neetorecord folders list --page-size 50
 ```
 
-<FoldersList />
+<FoldersListFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": [
     {
@@ -48,15 +42,15 @@ neetorecord folders list --page-size 50
 
 ## Create a folder
 
-Creates a folder. Pass `--parent-folder-id` to nest it under an existing one.
+This command creates a folder. Pass `--parent-folder-id` to nest it under an existing one.
 
 ```bash
 neetorecord folders create --name "Onboarding" --parent-folder-id hqzptnv
 ```
 
-<FoldersCreate />
+<FoldersCreateFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "id": "wbrkxdm",

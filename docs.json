@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "NeetoRecord Docs",
-  "description": "Developer documentation for NeetoRecord: the REST API, the command line interface, and the MCP server",
+  "description": "Developer docs for NeetoRecord: the REST API, the CLI and the MCP server.",
   "theme": "mint",
   "colors": {
     "primary": "#10B981",
@@ -41,7 +41,7 @@
         "icon": "code",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Getting started",
             "icon": "rocket",
             "pages": [
               "api/introduction",
@@ -93,7 +93,7 @@
             ]
           },
           {
-            "group": "Recording Requests",
+            "group": "Recording requests",
             "icon": "paper-plane",
             "pages": [
               "api/recording-requests/create"
@@ -107,7 +107,7 @@
             ]
           },
           {
-            "group": "Team Members",
+            "group": "Team members",
             "icon": "user-group",
             "pages": [
               "api/team-members/list",
@@ -118,8 +118,8 @@
             ]
           },
           {
-            "group": "API v1 (Deprecated)",
-            "icon": "clock-rotate-left",
+            "group": "API v1 (deprecated)",
+            "icon": "triangle-exclamation",
             "pages": [
               "api-reference-v1/recordings/list",
               "api-reference-v1/team-members/list",
@@ -135,7 +135,7 @@
         "icon": "rectangle-terminal",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Getting started",
             "icon": "rocket",
             "pages": [
               "cli/introduction",
@@ -168,7 +168,7 @@
         "icon": "plug",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Getting started",
             "icon": "rocket",
             "pages": [
               "mcp/introduction",

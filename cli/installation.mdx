@@ -1,13 +1,13 @@
 ---
 title: "Installation"
-description: "Install the NeetoRecord CLI on macOS, Linux, or Windows."
+description: "Install the neetorecord CLI on macOS, Linux, or Windows."
 ---
 
-## Install
+Install the `neetorecord` binary with the command for your platform, then [verify it](#verify-the-installation).
 
 <CodeGroup>
-
 ```bash macOS
+brew trust neetozone/tap
 brew install neetozone/tap/neetorecord
 ```
 
@@ -18,48 +18,42 @@ curl -fsSL https://neetorecord.com/cli/install.sh | sh
 ```powershell Windows
 irm https://neetorecord.com/cli/install.ps1 | iex
 ```
-
 </CodeGroup>
 
-The formula lives in the `neetozone/tap` tap. Passing the fully qualified name
-taps it for you, so there is no separate `brew tap` step. To upgrade a Homebrew
-install later, run `brew upgrade neetorecord`.
+The shell and Windows installers download the latest release for your architecture (`amd64` or `arm64`), extract it, and add `neetorecord` to your `PATH`.
 
-The shell script downloads the binary for your platform and installs it to
-`/usr/local/bin`, asking for `sudo` only if that directory is not writable. The
-PowerShell script installs to `%LOCALAPPDATA%\Programs\neetorecord` and adds
-that directory to your user `PATH`.
-
-### Other options
+## Other install methods
 
 <AccordionGroup>
-  <Accordion title="Shell script on macOS">
-    If you would rather not use Homebrew, the Linux shell script works on macOS
-    too:
-
+  <Accordion title="macOS - shell script">
     ```bash
     curl -fsSL https://neetorecord.com/cli/install.sh | sh
     ```
+
+    Installs to `/usr/local/bin` and may prompt for `sudo`. To update a Homebrew installation, run `brew upgrade neetorecord`.
   </Accordion>
-  <Accordion title="Command Prompt on Windows">
+  <Accordion title="Windows - Command Prompt (CMD)">
     ```cmd
     curl -fsSL https://neetorecord.com/cli/install.cmd -o install.cmd && install.cmd
     ```
+
+    Extracts to `%LOCALAPPDATA%\Programs\neetorecord` and adds it to your user `PATH`. This is equivalent to the PowerShell method.
   </Accordion>
 </AccordionGroup>
 
-## Verify the install
+## Verify the installation
+
+Restart your terminal, then run:
+
+```bash
+neetorecord --help
+```
+
+You should see the list of available commands. To check the installed version:
 
 ```bash
 neetorecord version
 ```
-
-```
-neetorecord 1.2.2 (commit: 1f96f14, built: 2025-07-14)
-```
-
-`neetorecord --help` lists every command, and `neetorecord doctor` checks that
-the binary can reach your workspace.
 
 ## Upgrade
 
@@ -67,16 +61,11 @@ the binary can reach your workspace.
 neetorecord update
 ```
 
-`update` detects how the CLI was installed and runs the matching upgrade: `brew
-upgrade` for a Homebrew install, the install script otherwise, and the
-PowerShell script on Windows.
+The command detects how the CLI was installed and runs the matching upgrade: `brew update && brew upgrade neetozone/tap/neetorecord` for a Homebrew install, the shell installer for other macOS and Linux installs, and the PowerShell installer on Windows. It prints the command it runs and exits non-zero if that command fails. You can also run the install command for your platform again. See [`neetorecord update`](/cli-reference/utility#update).
+
+After an upgrade, re-run `neetorecord completion <shell>` and any `neetorecord setup` command you use so their files match the new version.
 
 <Tip>
-  Shell completions are generated from the command tree at install time. Re-run
-  `neetorecord completion <shell>` after upgrading so completions cover the new
-  commands. See [Shell completion](/cli-reference/utility#shell-completion).
+  Next, [sign in](/cli/authentication) to a workspace and run `neetorecord doctor`
+  to confirm the CLI can reach NeetoRecord.
 </Tip>
-
-## Next step
-
-Sign in to your workspace: [Authentication](/cli/authentication).

@@ -1,125 +1,82 @@
 ---
 title: "Troubleshooting"
-description: "Common NeetoRecord CLI errors and how to clear them."
+description: "Diagnose authentication and connectivity issues with neetorecord doctor."
 ---
 
-Run `neetorecord doctor` first. It checks authentication, reachability of your
-workspace, and the installed version in one pass, and each check runs
-independently so one failure does not hide the rest.
+## Run the doctor
+
+When something goes wrong, start with `neetorecord doctor`. It checks your authentication, API connection, and CLI version.
 
 ```bash
 neetorecord doctor
 ```
 
+When multiple workspaces are signed in, name the one to check:
+
+```bash
+neetorecord doctor --subdomain your-workspace
+```
+
 ## Common errors
+
+When a command fails, it prints an error message to standard error and exits with status 1. Usage errors such as an unknown flag or a missing argument add `Run 'neetorecord --help' for usage.`
 
 <AccordionGroup>
   <Accordion title="Not authenticated. Run 'neetorecord login' to authenticate.">
-    No workspace is signed in. Run `neetorecord login --subdomain <name>` and
-    complete the browser sign in. See [Authentication](/cli/authentication).
+    **Problem**: no workspace is signed in. <br />
+    **Solution**: run [`neetorecord login --subdomain <name>`](/cli/authentication).
   </Accordion>
-
   <Accordion title="Multiple subdomains authenticated (acme, beta); specify --subdomain.">
-    More than one workspace is signed in, so the CLI will not guess which one
-    you mean. Add `--subdomain <name>` to the command. `logout` says
-    `specify --subdomain or --all` instead, because `--all` signs out of every
-    workspace at once. `neetorecord whoami` lists what is signed in.
+    **Problem**: more than one workspace is signed in, so the target is ambiguous. <br />
+    **Solution**: add `--subdomain <name>` to the command. For `logout`, `--all` signs out of every workspace.
   </Accordion>
-
-  <Accordion title="Not authenticated for &quot;foo&quot;. Authenticated subdomains: acme, beta.">
-    The `--subdomain` value does not match any saved session. Check the spelling
-    against `neetorecord whoami`, and sign in to that workspace if it is
-    missing.
+  <Accordion title='Not authenticated for "foo". Authenticated subdomains: acme, beta.'>
+    **Problem**: the `--subdomain` value does not match any signed-in workspace. <br />
+    **Solution**: use one of the listed subdomains, or [sign in](/cli/authentication) to the new one.
   </Accordion>
-
   <Accordion title="Subdomain not found. Please check that you entered the correct subdomain.">
-    The subdomain passed to `login` does not resolve to a NeetoRecord workspace.
-    It is the first part of your workspace URL: for `acme.neetorecord.com`, the
-    subdomain is `acme`. See [Workspace subdomain](/cli/workspace-subdomain).
+    **Problem**: `neetorecord login` could not find a workspace at `<subdomain>.neetorecord.com`. <br />
+    **Solution**: use the first part of your workspace URL. For `https://spinkart.neetorecord.com`, enter `spinkart`.
   </Accordion>
-
-  <Accordion title="NeetoRecord CLI authentication timed out after 2 minutes. Please try again.">
-    `login` waits two minutes for the browser sign in to finish. Run it again
-    and complete the sign in from the tab it opens. If no browser opened, paste
-    the URL that `login` printed into one. `Authentication session expired.
-    Please try again.` means the same thing from the server side.
+  <Accordion title="Authentication session expired. Please try again.">
+    **Problem**: the browser sign-in was not approved before the session expired. `NeetoRecord CLI authentication timed out after 5 minutes. Please try again.` means the CLI stopped waiting. <br />
+    **Solution**: run `neetorecord login` again and approve the sign-in in the browser. If the browser does not open, visit the URL the CLI prints.
   </Accordion>
-
-  <Accordion title="API error (401): Unauthorized">
-    The saved session is no longer valid. The message ends with
-    `Suggestion: Authentication session expired. Run 'neetorecord login' to re-authenticate.`
-    Sign in again for that workspace.
-  </Accordion>
-
   <Accordion title="Could not connect to NeetoRecord. Check your internet connection">
-    The request never reached the server. Check your network, and if you set
-    `NEETORECORD_BASE_URL`, check that the host it points at is running.
-    `neetorecord doctor` reports the same reachability check.
+    **Problem**: the CLI could not reach the API. <br />
+    **Solution**: check your network and run `neetorecord doctor`. If [`NEETORECORD_BASE_URL`](/cli/authentication#environment-variables) is set, confirm it points at a reachable server.
   </Accordion>
-
-  <Accordion title="required flag(s) &quot;query&quot; not set">
-    A required flag is missing. Run the command with `--help`, or check the flag
-    table on that command's [reference page](/cli-reference/overview).
+  <Accordion title='required flag(s) "xxx" not set'>
+    **Problem**: a required flag was omitted. <br />
+    **Solution**: check the command's [reference page](/cli-reference/overview) or run `neetorecord <command> --help` for the required flags.
   </Accordion>
-
-  <Accordion title="command not found: neetorecord">
-    The binary is not on your `PATH`. The shell installer puts it in
-    `/usr/local/bin` and the PowerShell installer in
-    `%LOCALAPPDATA%\Programs\neetorecord`, adding that directory to your user
-    `PATH`. Open a new shell after installing so the change takes effect, and
-    see [Installation](/cli/installation).
+  <Accordion title="API error (422): <message>">
+    **Problem**: the server rejected the request. The CLI prints `API error (<status>): <message>`, one line per additional error, and a `Suggestion:` line for common statuses: 401 (sign in again), 403 (no permission), 404 (check the ID), 422 (check required fields with `--help`), and 429 (rate limited, wait and retry). <br />
+    **Solution**: follow the suggestion. For 401, run `neetorecord login` to refresh the session.
   </Accordion>
-
-  <Accordion title="Completions do not include a new command">
-    Completion scripts are generated from the command tree at the moment you
-    install them, so they go stale after an upgrade. Re-run
-    `neetorecord completion <shell>` and start a new shell. See
-    [Shell completion](/cli-reference/utility#shell-completion).
-  </Accordion>
-
   <Accordion title="Claude Code not found (~/.claude/ does not exist).">
-    `neetorecord setup claude` looks for a Claude Code config directory in your
-    home directory. Run Claude Code once so it creates `~/.claude/`, then run
-    setup again.
+    **Problem**: `neetorecord setup claude` requires Claude Code to have been run at least once. <br />
+    **Solution**: install and open Claude Code, then run the command again.
   </Accordion>
 </AccordionGroup>
 
-## API errors
+## Known API responses
 
-When NeetoRecord rejects a request, the CLI prints the server's own message to
-stderr and exits with status 1. Nothing is written to stdout, so there is no
-envelope to parse. The line looks like this, followed by a suggestion for the
-common status codes:
-
-```
-API error (404): Couldn't find Recording
-
-Suggestion: Resource not found. Check the ID and try again.
-```
-
-| Status | Suggestion |
-| --- | --- |
-| 401 | `Authentication session expired. Run 'neetorecord login' to re-authenticate.` |
-| 403 | `You do not have permission to perform this action.` |
-| 404 | `Resource not found. Check the ID and try again.` |
-| 422 | `Check required fields with 'neetorecord <command> --help'.` |
-| 429 | `Rate limited. Wait and try again.` |
-
-A few responses worth knowing about, some of which succeed with a flag set
-rather than failing:
+Some requests succeed with a flag set, or fail with a NeetoRecord-specific message:
 
 | Situation | What you see |
 | --- | --- |
 | A screenshot before the MP4 is ready | `is_screenshot_ready: false`. Run [`recordings trigger-mp4`](/cli-reference/recordings#generate-the-mp4), then retry. |
-| A download URL before the MP4 is ready | `is_download_file_ready: false`. Same fix. |
+| A download URL before the MP4 is ready | `is_download_file_ready: false`. Run `recordings trigger-mp4`, then retry. |
 | A screenshot timestamp past the end of a recording | `API error (422): Timestamp must be a number between 0 and <duration> seconds.` |
-| A screenshot format other than png or jpeg | `API error (422): Format must be one of: png, jpeg.` |
+| A screenshot format other than `png` or `jpeg` | `API error (422): Format must be one of: png, jpeg.` |
 | A recording request for an email that is not an active member | `API error (422): Could not find active user with the specified email.` |
 | Removing the last admin | The request is rejected, because a workspace must keep at least one admin. |
 
-## Reporting a problem
+## Check the version
 
-Include the output of `neetorecord version` and `neetorecord doctor`, and the
-command you ran with `--json` so the response envelope is visible. Reach us
-through the [help center](https://help.neetorecord.com) or at
-[support@neetorecord.com](mailto:support@neetorecord.com).
+```bash
+neetorecord version
+```
+
+Prints the CLI version, commit hash, and build date - useful when reporting an issue. To upgrade, run [`neetorecord update`](/cli-reference/utility#update).

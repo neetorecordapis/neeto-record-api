@@ -1,9 +1,9 @@
 ---
 title: "HTTP response codes"
-description: "Learn about the HTTP status codes returned by the API."
+description: "Learn about the HTTP status codes returned by the NeetoRecord API."
 ---
 
-## Success Codes
+## Success codes
 
 <ResponseField name='200 OK'>
   The request was successful and the server returned the requested data.
@@ -45,7 +45,7 @@ description: "Learn about the HTTP status codes returned by the API."
   - Workspace subdomain is incorrect.
 </ResponseField>
 
-<ResponseField name='422 Unprocessable entity'>
+<ResponseField name='422 Unprocessable Entity'>
   The given request could not be processed by the server due to malformed
   request. Check the request body once again.
 </ResponseField>
@@ -53,6 +53,8 @@ description: "Learn about the HTTP status codes returned by the API."
 <ResponseField name='429 Too Many Requests'>
   Rate limit exceeded. Try again after some time.
 </ResponseField>
+
+## Server error codes
 
 <ResponseField name='500 Internal Server Error'>
   An unexpected error occurred on the server. If this persists, please contact
@@ -63,7 +65,7 @@ description: "Learn about the HTTP status codes returned by the API."
   The server does not support the functionality required to fulfill the request.
 </ResponseField>
 
-## Error Response Format
+## Error response format
 
 When an error occurs, the API returns a JSON response with error details:
 
@@ -78,8 +80,7 @@ When an error occurs, the API returns a JSON response with error details:
 </ResponseField>
 
 <Tip>
-  When debugging API issues, the HTTP status
-  code often provides
-  the first clue about what went wrong. Start by checking the status code before
-  diving into the response body.
+  When debugging API issues, the HTTP status code often provides the first clue
+  about what went wrong. Start by checking the status code before diving into
+  the response body.
 </Tip>

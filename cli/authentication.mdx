@@ -1,105 +1,76 @@
 ---
 title: "Authentication"
-description: "Sign in to NeetoRecord from the CLI and work with more than one workspace."
+description: "Sign in through the browser and manage credentials for one or more workspaces."
 ---
 
-The CLI signs in through the browser and stores a session per workspace. It does
-not use the `X-Api-Key` header that the [REST API](/api/authentication)
-uses, so there is no API key to create or rotate for CLI use.
+The CLI uses your browser to sign you in and securely saves your session, so you never need to enter an API key.
 
 ## Sign in
 
 ```bash
-neetorecord login --subdomain acme
+neetorecord login --subdomain your-workspace
 ```
 
+Your browser opens to complete sign-in. The CLI also prints the sign-in URL in case the browser does not open, and waits up to five minutes for you to approve. Once you approve it, the CLI saves credentials for that subdomain. If you omit `--subdomain`, the CLI prompts for it.
+
+<Tip>
+  Your subdomain is the first part of your workspace URL - for
+  `https://spinkart.neetorecord.com`, the subdomain is `spinkart`. See
+  [Workspace subdomain](/cli/workspace-subdomain).
+</Tip>
+
+## Where credentials are stored
+
+Credentials for every signed-in workspace live in a single file:
+
+```text
+~/.config/neetorecord/auth.json
 ```
-Authenticated as oliver@example.com on acme.neetorecord.com.
-```
 
-Without `--subdomain` the command asks for it:
+Removing this file signs you out of every workspace, the same as `neetorecord logout --all`.
 
-```
-Enter your NeetoRecord subdomain (e.g., 'acme' for acme.neetorecord.com):
-```
-
-The subdomain is the first part of your workspace URL. If you sign in to
-NeetoRecord at `acme.neetorecord.com`, the subdomain is `acme`. See
-[Workspace subdomain](/cli/workspace-subdomain).
-
-`login` opens your browser to complete the sign in and writes the resulting
-session to `~/.config/neetorecord/auth.json`. If the browser does not open, the
-command prints the URL to visit. The sign in must finish within two minutes,
-after which `login` gives up and can be run again. Running it again for the
-same subdomain refreshes that entry.
-
-## Check who you are signed in as
+## Check who you are
 
 ```bash
 neetorecord whoami
 ```
 
-```
-Authenticated as oliver@example.com on acme.neetorecord.com (default).
-```
-
-With several workspaces signed in, `whoami` lists all of them, and
-`neetorecord whoami --subdomain acme` shows just one.
-
-## Working with several workspaces
-
-`auth.json` holds one entry per subdomain. Which one a command uses depends on
-how many are signed in:
-
-| Signed in workspaces | What happens |
-| --- | --- |
-| None | Every command that calls the API fails with `Not authenticated. Run 'neetorecord login' to authenticate.` |
-| One | That workspace is the default. `--subdomain` is optional. |
-| Two or more | `--subdomain <name>` is required on every command that calls the API, including `doctor`. The error lists the signed in subdomains. |
-
-```bash
-neetorecord recordings list --subdomain acme
-```
+Lists every signed-in account. When exactly one is signed in, it is marked `(default)`. Pass `--subdomain <name>` to show just one.
 
 ## Sign out
 
 ```bash
-neetorecord logout --subdomain acme
+neetorecord logout --subdomain your-workspace    # remove one workspace
+neetorecord logout --all                         # remove every workspace
+neetorecord logout                               # remove the only one, if a single workspace is signed in
 ```
 
-```
-Signed out of acme.neetorecord.com.
-```
+## Working with multiple workspaces
 
-<Info>
-  `neetorecord logout` with no flags signs out of the only workspace when
-  exactly one is signed in, and errors when several are. `--all` signs out of
-  every workspace at once.
-</Info>
-
-## Check connectivity
-
-`doctor` reports authentication, API reachability, and the CLI version in one
-go. It is the first thing to run when a command fails for a reason you cannot
-place.
+You can sign in to several subdomains at once. To add another workspace, name its subdomain:
 
 ```bash
-neetorecord doctor
+neetorecord login --subdomain globex
 ```
 
-```
-✓ Authentication: authenticated as oliver@example.com on acme.neetorecord.com
-✓ API connection: https://acme.neetorecord.com (responding in 214ms)
-✓ CLI version: 1.2.2
-```
-
-## Point the CLI at another environment
-
-Set `NEETORECORD_BASE_URL` to override the default
-`https://<subdomain>.neetorecord.com` host. This is meant for local and staging
-servers.
+When more than one workspace is signed in, every command that talks to the API requires `--subdomain`. If you omit it, the CLI errors and lists the signed-in workspaces.
 
 ```bash
-export NEETORECORD_BASE_URL=http://acme.lvh.me:8980
+neetorecord recordings list --subdomain acme
+neetorecord recordings list --subdomain globex
+```
+
+With one signed-in workspace, it is the default and `--subdomain` stays optional.
+
+## Environment variables
+
+`NEETORECORD_BASE_URL` overrides the server the CLI talks to. By default every command, including `login`, uses `https://<subdomain>.neetorecord.com`. Set the variable to point the CLI at a staging or local server. Every request, including the session token saved in `~/.config/neetorecord/auth.json`, goes to that server, so only point it at a server you trust:
+
+```bash
+export NEETORECORD_BASE_URL=https://acme.neetorecord.net
 neetorecord login --subdomain acme
 ```
+
+## Troubleshooting
+
+If sign-in or connection problems come up, run `neetorecord doctor` first. See [Troubleshooting](/cli/troubleshooting) for common issues and fixes.

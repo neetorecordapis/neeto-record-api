@@ -7,7 +7,7 @@ description: "What to check when an assistant cannot reach NeetoRecord."
   <Accordion title="The assistant does not see any NeetoRecord tools">
     **Restart the client first.** Every client reads its MCP config at startup, and Cursor can also reload the window from the command palette. Then check the items for your kind of client.
 
-    On Claude or ChatGPT, which connect over OAuth, confirm the connector was actually added and that you completed the sign in rather than closing the browser tab partway. In ChatGPT the plugin is only created once you tick the risk acknowledgement.
+    On Claude or ChatGPT, confirm that you added the connector and finished the sign-in. In ChatGPT, the plugin is created only after you tick **I understand and want to continue**.
 
     On Claude Code, Cursor, Gemini CLI, Codex, VS Code, Windsurf, or Antigravity, which read a config file:
 
@@ -19,25 +19,31 @@ description: "What to check when an assistant cannot reach NeetoRecord."
     Full snippets for each client are on [Connect agent](/mcp/connect).
   </Accordion>
 
+  <Accordion title="ChatGPT does not show Developer mode">
+    Go to [chatgpt.com](https://chatgpt.com) and open **Settings → Security and login**. **Developer mode** is in that section.
+
+    If it is not there, your ChatGPT workspace admin has turned it off. Ask them to allow it, then follow the ChatGPT steps in [Connect agent](/mcp/connect).
+  </Accordion>
+
   <Accordion title="The connection is refused or unauthorized">
     On an API key connection, the `Authorization` header must read `Bearer YOUR_API_KEY`, with the word `Bearer` and a single space before the key. Confirm the key has not been revoked, and that it belongs to the workspace you expect: a key generated in one workspace does not work in another. Generate a new key from [workspace settings](https://help.neetorecord.com/articles/api-keys) if you are unsure.
 
-    On an OAuth connection there is no key to check. Remove the connector and add it again to run the sign in from the start.
+    On an OAuth connection there is no key to check. Remove the connector and add it again to run the sign-in from the start.
   </Accordion>
 
   <Accordion title="The client sends a key when you meant to sign in">
-    A client that finds a credential in its config never starts the OAuth flow. Remove the `headers` block, or the `bearer_token_env_var` line in Codex, and restart the client. It then answers the server's 401 by opening the sign in.
+    A client that finds a credential in its config never starts the OAuth flow. Remove the `headers` block, or the `bearer_token_env_var` line in Codex, and restart the client. It then answers the server's 401 by opening the sign-in.
   </Accordion>
 
   <Accordion title="The client asks you to sign in when you meant to use a key">
     The opposite case: the credential is missing, so the client falls back to OAuth. Add the `headers` block with `"Authorization": "Bearer YOUR_API_KEY"`, or set `bearer_token_env_var = "NEETORECORD_API_KEY"` in Codex and export that variable, then restart the client. Codex takes the *name* of an environment variable, not the key itself.
   </Accordion>
 
-  <Accordion title="The OAuth sign in fails at the workspace step">
+  <Accordion title="The OAuth sign-in fails at the workspace step">
     The first screen asks for a workspace subdomain, not a full URL or an email address. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/mcp/workspace-subdomain).
   </Accordion>
 
-  <Accordion title="An OAuth connected assistant sees fewer recordings than expected">
+  <Accordion title="An OAuth-connected assistant sees fewer recordings than expected">
     That is the scoping working as intended. An OAuth connection acts as the person who approved it, so lists and searches come back filtered to your permissions, and asking for a specific recording you cannot open is refused rather than answered.
 
     If the assistant genuinely needs to reach everything in the workspace, that is what an API key connection is for. See [Authentication](/mcp/authentication).
@@ -50,7 +56,7 @@ description: "What to check when an assistant cannot reach NeetoRecord."
   </Accordion>
 
   <Accordion title="The assistant reaches the wrong workspace">
-    An OAuth connection covers the workspaces you ticked while approving it. Name the workspace in your prompt, or ask the assistant to list the workspaces it can reach. To add another one, run the sign in again and tick it.
+    An OAuth connection covers the workspaces you ticked while approving it. Name the workspace in your prompt, or ask the assistant to list the workspaces it can reach. To add another one, run the sign-in again and tick it.
 
     An API key belongs to exactly one workspace, so a key connection reaching the wrong one means the wrong key. Add the server a second time, with the other key and a different server name.
   </Accordion>
@@ -64,17 +70,17 @@ description: "What to check when an assistant cannot reach NeetoRecord."
   </Accordion>
 
   <Accordion title="Claude shows the connector as unauthorized">
-    Adding NeetoRecord from [Anthropic's connector directory](https://claude.ai/directory/neetorecord) is only half of it. The connector still has to be authorized against your workspace before it can be used. Open **[Customize > Connectors](https://claude.ai/customize/connectors)**, remove NeetoRecord, and connect it again from the [directory listing](https://claude.ai/directory/neetorecord) if the authorization did not complete. One connector list backs claude.ai, the Claude desktop app, Claude mobile, and Cowork, so fixing it in one fixes it everywhere.
+    Open **[Customize > Connectors](https://claude.ai/customize/connectors)**, remove NeetoRecord, and connect it again from the [NeetoRecord listing](https://claude.ai/directory/neetorecord).
 
-    On a Team plan the connector may be waiting on an admin instead. A **Requested** button means your request has not been acted on yet. An admin enables it under **[Organization settings > Connectors](https://claude.ai/admin-settings/connectors)**.
+    On a Team plan, **Requested** means an admin has not turned NeetoRecord on yet. An admin turns it on under **[Organization settings > Connectors](https://claude.ai/admin-settings/connectors)**.
   </Accordion>
 
   <Accordion title="The assistant says a recording was not found">
-    Workspace tools only reach recordings in the workspace the API key belongs to. For a recording in someone else's workspace, the assistant has to use the public tools, and those work only when the recording is publicly accessible with no sign in required. Check that the watch URL's subdomain matches the workspace you connected.
+    Workspace tools only reach recordings in the workspace the API key belongs to. For a recording in someone else's workspace, the assistant has to use the public tools, and those work only when the recording is publicly accessible with no sign-in required. Check that the watch URL's subdomain matches the workspace you connected.
   </Accordion>
 
   <Accordion title="A transcript, chapters, or a screenshot come back empty">
-    Those are generated after a recording is uploaded, and they may not exist yet. Ask the assistant to check the transcript or chapter status and to trigger generation, then try again once it reports success. A screenshot also needs an up to date MP4, so the assistant may have to start MP4 generation first.
+    Those are generated after a recording is uploaded, and they may not exist yet. Ask the assistant to check the transcript or chapter status and to trigger generation, then try again once it reports success. A screenshot also needs an up-to-date MP4, so the assistant may have to start MP4 generation first.
 
     Public recordings can also have transcripts or downloads switched off by their owner, in which case there is nothing to fetch.
   </Accordion>

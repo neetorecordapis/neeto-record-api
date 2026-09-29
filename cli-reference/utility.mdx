@@ -1,108 +1,88 @@
 ---
 title: "Utility commands"
-description: "Sign in, check health, print the version, upgrade, and install shell completion."
+description: "Authentication, diagnostics, versioning, upgrades, AI-assistant setup, and shell completion."
 ---
 
-import Logout from "/snippets/cli/logout.mdx";
+import LogoutFlags from '/snippets/cli/logout.mdx'
 
-The commands that manage the CLI itself rather than workspace data. For the
-full story on signing in, see [Authentication](/cli/authentication).
+These commands manage the CLI itself rather than a NeetoRecord resource.
 
 ## Authentication
 
 ### login
 
-Signs in to a workspace through the browser and saves the session to
-`~/.config/neetorecord/auth.json`. Run it once per workspace you work with.
-
 ```bash
-neetorecord login --subdomain acme
+neetorecord login --subdomain your-workspace
 ```
 
-```
+Opens your browser to sign in and saves credentials for the workspace. Omit `--subdomain` to be prompted.
+
+```text Sample output
 Authenticated as oliver@example.com on acme.neetorecord.com.
 ```
 
-Without `--subdomain` the command prompts for it.
-
 ### logout
 
-Signs out of a workspace and removes its saved session.
-
 ```bash
-neetorecord logout --subdomain acme
+neetorecord logout --subdomain your-workspace
+neetorecord logout --all
 ```
 
-<Logout />
+<LogoutFlags />
 
-With exactly one workspace signed in, `--subdomain` can be left out. With
-several, pass `--subdomain` to pick one or `--all` to sign out of every
-workspace.
-
-```
+```text Sample output
 Signed out of acme.neetorecord.com.
 ```
 
 ### whoami
 
-Prints the account and workspace the CLI is signed in as. Run it when you are
-not sure which workspace a command is about to hit.
-
 ```bash
 neetorecord whoami
 ```
 
-```
+Lists each signed-in account and marks it `(default)` when only one is signed in. Pass `--subdomain <name>` to show one workspace.
+
+```text Sample output
 Authenticated as oliver@example.com on acme.neetorecord.com (default).
 ```
-
-When several workspaces are signed in, every one is listed.
 
 ## Diagnostics
 
 ### doctor
 
-Checks authentication, API reachability, and the CLI version in a single pass.
-Start here when a command fails and the message does not make the cause obvious.
-
 ```bash
 neetorecord doctor
 ```
 
-```
+Checks authentication, API reachability, and the CLI version. See [Troubleshooting](/cli/troubleshooting). When several workspaces are signed in, pass `--subdomain <name>`.
+
+```text Sample output
 ✓ Authentication: authenticated as oliver@example.com on acme.neetorecord.com
 ✓ API connection: https://acme.neetorecord.com (responding in 214ms)
-✓ CLI version: 1.2.2
+✓ CLI version: 1.4.0
 ```
 
-Each check runs independently, so a failing one does not hide the others. With
-no saved session, pass `--subdomain` to still probe the workspace URL; without
-it the API check is skipped.
-
 ### version
-
-Prints the version, commit, and build date of the installed binary. Include this
-in bug reports.
 
 ```bash
 neetorecord version
 ```
 
-```
-neetorecord 1.2.2 (commit: 1f96f14, built: 2025-07-14)
+Prints the CLI version, commit hash, and build date.
+
+```text Sample output
+neetorecord 1.4.0 (commit: a1b2c3d, built: 2026-07-01)
 ```
 
 ### commands
-
-Prints the full command tree, including every flag, as JSON. This is what an AI
-assistant should read when it needs a flag that its rules file does not cover,
-and it is always accurate for the installed binary.
 
 ```bash
 neetorecord commands
 ```
 
-```json
+Prints the complete command and flag catalog for the installed version as JSON. It is useful in scripts and with AI assistants.
+
+```json Sample output
 [
   {
     "command": "neetorecord folders",
@@ -112,12 +92,7 @@ neetorecord commands
         "command": "neetorecord folders create",
         "description": "Create a new folder",
         "flags": [
-          {
-            "name": "name",
-            "type": "string",
-            "description": "Folder name",
-            "required": true
-          }
+          { "name": "name", "type": "string", "description": "Folder name", "required": true }
         ]
       }
     ]
@@ -129,87 +104,72 @@ neetorecord commands
 
 ### update
 
-Upgrades the CLI in place. It detects how the binary was installed and runs the
-matching upgrade: `brew upgrade` for a Homebrew install, the install script
-otherwise, and the PowerShell script on Windows.
-
 ```bash
 neetorecord update
 ```
 
-```
+Updates the CLI to the latest release using the method that installed it. When the binary lives in a Homebrew Cellar it runs `brew update && brew upgrade neetozone/tap/neetorecord`; on other macOS and Linux installs it downloads the shell installer to a temporary file and runs it; on Windows it runs the PowerShell installer. The installers are the same ones the [Installation](/cli/installation) page uses, fetched over HTTPS. The command prints the detected method and the command it runs, and exits non-zero if that command fails.
+
+```text Sample output
 Detected Homebrew install.
-Running: brew update && brew upgrade neetozone/homebrew-tap/neetorecord
+Running: brew update && brew upgrade neetozone/tap/neetorecord
 ```
 
-The command prints the install method it detected and the exact command it is
-about to run, then hands over to it. A failed download exits non-zero instead
-of being silently ignored.
+After upgrading, re-run `neetorecord completion <shell>` and any `neetorecord setup` command you use so their files match the new version.
 
 ## AI-assistant setup
 
-### setup
-
-Teaches an AI coding assistant how to drive the CLI by writing that assistant's
-rules file. See [AI assistants](/cli/ai-assistants) for what each subcommand
-writes.
+Add NeetoRecord instructions to your AI coding assistant. See [AI assistants](/cli/ai-assistants) for details.
 
 ```bash
 neetorecord setup claude
+neetorecord setup cursor
+neetorecord setup windsurf
+neetorecord setup copilot
+neetorecord setup gemini
+neetorecord setup codex
 ```
 
-Available subcommands: `claude`, `cursor`, `windsurf`, `copilot`, `gemini`,
-`codex`.
+```text Sample output
+NeetoRecord plugin extracted to /Users/oliver/.config/neetorecord/claude-plugin
+
+To finish installation, open Claude Code and run these slash commands:
+  /plugin marketplace add /Users/oliver/.config/neetorecord/claude-plugin
+  /plugin install neetorecord@neetorecord
+
+(Claude Code installs plugins via interactive slash commands - there is no shell equivalent today.)
+```
 
 ## Shell completion
 
-`completion` writes the completion script under
-`~/.config/neetorecord/completions` and wires your shell to load it on the next
-start. There is nothing to source by hand.
+Shell completion fills in command names, subcommands, and flags when you press `Tab`. It saves you from having to remember the full command tree or look up `--help`.
+
+`neetorecord completion <shell>` installs completion for your shell. For zsh, bash, and PowerShell it writes the script under `~/.config/neetorecord/completions` and adds a marked block to `~/.zshrc`, `~/.bashrc`, or `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1` that loads it the next time the shell starts. For fish it writes `~/.config/fish/completions/neetorecord.fish`, which fish loads on its own.
 
 <CodeGroup>
-
-```bash zsh
+```bash Zsh
 neetorecord completion zsh
 ```
 
-```bash bash
+```bash Bash
 neetorecord completion bash
 ```
 
-```bash fish
+```bash Fish
 neetorecord completion fish
 ```
 
-```powershell powershell
+```powershell PowerShell
 neetorecord completion powershell
 ```
-
 </CodeGroup>
 
-| Shell | Script | Loader block |
-| --- | --- | --- |
-| zsh | `~/.config/neetorecord/completions/_neetorecord` | `~/.zshrc` |
-| bash | `~/.config/neetorecord/completions/neetorecord.bash` | `~/.bashrc` |
-| fish | `~/.config/fish/completions/neetorecord.fish` | none, fish loads it on its own |
-| powershell | `~/.config/neetorecord/completions/neetorecord.ps1` | `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1` |
+Start a new shell (or run `source ~/.zshrc`) to enable it. After upgrading the CLI, run the command again to update the available completions. Re-running it replaces the existing script and configuration without adding duplicates.
 
-The loader block sits between `# neetorecord completions` and
-`# end neetorecord completions` marker lines. Re-running overwrites the script
-and refreshes that block instead of duplicating it; the rest of the file is
-left as it was.
+<Note>
+  To configure it yourself, pass `--print` to write the raw script to standard output instead of installing it:
 
-Start a new shell to pick up the completions.
-
-<Tip>
-  The script is generated from the command tree at the time you run it. Re-run
-  `neetorecord completion <shell>` after every upgrade so completions include
-  the newest commands and flags.
-</Tip>
-
-Pass `--print` to write the script to standard output instead of installing it,
-which is handy when you manage shell config yourself:
-
-```bash
-neetorecord completion zsh --print > /usr/local/share/zsh/site-functions/_neetorecord
-```
+  ```bash
+  neetorecord completion zsh --print
+  ```
+</Note>

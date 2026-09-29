@@ -3,7 +3,7 @@ title: "Authentication"
 description: "Learn how to authenticate your requests to the NeetoRecord API using API keys."
 ---
 
-### Generating an API Key
+## Generating an API key
 
 To use the NeetoRecord APIs, you must first generate an API key:
 
@@ -16,22 +16,22 @@ To use the NeetoRecord APIs, you must first generate an API key:
 
 [Learn more about API keys here.](https://help.neetorecord.com/articles/api-keys)
 
-### Making authenticated API requests
+## Making authenticated API requests
 
-To authenticate your API requests, include a valid API key in the X-Api-Key header.
+To authenticate your API requests, include a valid API key in the `X-Api-Key` header.
 
 ```bash
-curl https://{your-subdomain}.neetorecord.com/api/external/v1/recordings \
+curl https://{your-subdomain}.neetorecord.com/api/external/v2/recordings \
   --header 'X-Api-Key: your-api-key' \
   --header 'Content-Type: application/json'
 ```
 
-### Header Format
+## Header format
 
 Include your API key in the `X-Api-Key` header of every request:
 
 ```http
-X-Api-Key: your_api_key_here
+X-Api-Key: your-api-key
 ```
 
 <Tip>
@@ -44,7 +44,7 @@ X-Api-Key: your_api_key_here
   follow security best practices.
 </Warning>
 
-## Error Responses
+## Error responses
 
 ### 401 Unauthorized
 
@@ -56,7 +56,7 @@ If your API key is missing, invalid, or expired, you'll receive a 401 error:
 }
 ```
 
-### Common Authentication Issues
+### Common authentication issues
 
 <AccordionGroup>
   <Accordion title='Invalid API key'>
@@ -64,10 +64,7 @@ If your API key is missing, invalid, or expired, you'll receive a 401 error:
     **Solution**: Verify your API key is correct and hasn't been revoked/expired.
   </Accordion>
   <Accordion title='Incorrect workspace subdomain'>
-    **Problem**: Subdomain is left as the default value (**spinkart**) or
-    incorrect.
-    <br />
-    **Solution**: Verify your subdomain name is properly added in the request
-    URL.
+    **Problem**: Subdomain is left as the default value (**spinkart**) or incorrect. <br />
+    **Solution**: Verify your subdomain name is properly added in the request URL.
   </Accordion>
 </AccordionGroup>

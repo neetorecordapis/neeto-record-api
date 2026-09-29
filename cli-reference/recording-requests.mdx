@@ -1,24 +1,18 @@
 ---
 title: "Recording requests"
-description: "Ask someone to record a video and get back a link to send them."
+description: "Create recording requests and get back a link to send to the person who records."
 ---
 
-import RecordingRequestsCreate from "/snippets/cli/recording-requests/create.mdx";
+import RecordingRequestsCreateFlags from '/snippets/cli/recording-requests/create.mdx'
 
 A recording request creates an empty recording in the workspace along with a
 URL the recipient opens to record and upload their video. For fields and
 response details, see the
 [API reference](/api/recording-requests/create).
 
-<Info>
-  Sample output on this page is the JSON envelope you get with `--json`. On a
-  terminal the same data prints as a table or a key-value list. See
-  [Output formats](/cli/output-formats).
-</Info>
-
 ## Create a recording request
 
-Creates a request and returns the URL to share with whoever will record it.
+This command creates a request and returns the URL to share with whoever will record it.
 
 ```bash
 neetorecord recording-requests create \
@@ -28,13 +22,13 @@ neetorecord recording-requests create \
   --request-notes "Raised by support ticket 4821."
 ```
 
-<RecordingRequestsCreate />
+<RecordingRequestsCreateFlags />
 
 `--created-by-email` must be the email of an active member of the workspace.
 That person is recorded as the requester, and the request counts against their
 monthly recording limit.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_request": {

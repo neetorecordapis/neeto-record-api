@@ -1,33 +1,27 @@
 ---
 title: "Team members"
-description: "List, invite, update, and remove the people in your NeetoRecord workspace."
+description: "List, view, invite, update, and remove team members."
 ---
 
-import TeamMembersList from "/snippets/cli/team-members/list.mdx";
-import TeamMembersCreate from "/snippets/cli/team-members/create.mdx";
-import TeamMembersUpdate from "/snippets/cli/team-members/update.mdx";
+import TeamMembersListFlags from '/snippets/cli/team-members/list.mdx'
+import TeamMembersCreateFlags from '/snippets/cli/team-members/create.mdx'
+import TeamMembersUpdateFlags from '/snippets/cli/team-members/update.mdx'
 
-Team members are the people in the workspace. For fields and response details,
+A team member is a person in your workspace. For fields and response details,
 see the [API reference](/api/team-members/list).
-
-<Info>
-  Sample output on this page is the JSON envelope you get with `--json`. On a
-  terminal the same data prints as a table or a key-value list. See
-  [Output formats](/cli/output-formats).
-</Info>
 
 ## List team members
 
-Lists the members of the workspace. Pass `--email` to look one up without
+This command lists the members of the workspace. Pass `--email` to look one up without
 paging through the list.
 
 ```bash
 neetorecord team-members list --email oliver@example.com
 ```
 
-<TeamMembersList />
+<TeamMembersListFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": [
     {
@@ -55,17 +49,17 @@ neetorecord team-members list --email oliver@example.com
 
 ## Show a team member
 
-Shows one member.
+This command shows one member.
 
 ```bash
 neetorecord team-members show aaaabbbb-cccc-dddd-eeee-ffff00001111
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the team member id, as returned by `team-members list`.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "team_member": {
@@ -82,9 +76,9 @@ neetorecord team-members show aaaabbbb-cccc-dddd-eeee-ffff00001111
 }
 ```
 
-## Invite team members
+## Add team members
 
-Invites one or more people to the workspace. Repeat `--email` to invite several
+This command invites one or more people to the workspace. Repeat `--email` to invite several
 at once.
 
 ```bash
@@ -94,13 +88,13 @@ neetorecord team-members create \
   --invited-by admin@example.com
 ```
 
-<TeamMembersCreate />
+<TeamMembersCreateFlags />
 
 `--role` must match one of the roles configured on your workspace's Roles page,
 and it is case sensitive. Pass `--send-invitation-email=false` to add people
 without emailing them.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "message": "Users added successfully"
@@ -110,7 +104,7 @@ without emailing them.
 
 ## Update a team member
 
-Changes a member's name, email, time zone, or role. Only the flags you pass are
+This command changes a member's name, email, time zone, or role. Only the flags you pass are
 changed.
 
 ```bash
@@ -118,27 +112,27 @@ neetorecord team-members update aaaabbbb-cccc-dddd-eeee-ffff00001111 \
   --first-name Oliver --last-name Smith --role Admin
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the team member id, as returned by `team-members list`.
 
-<TeamMembersUpdate />
+<TeamMembersUpdateFlags />
 
 The output is the updated team member, wrapped in `data`.
 
-## Remove a team member
+## Delete a team member
 
-Removes a member from the workspace.
+This command removes a member from the workspace.
 
 ```bash
 neetorecord team-members delete aaaabbbb-cccc-dddd-eeee-ffff00001111
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the team member id, as returned by `team-members list`.
 
-```
+```text Sample output
 Team member removed.
 ```
 

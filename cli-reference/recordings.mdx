@@ -3,16 +3,16 @@ title: "Recordings"
 description: "List, search, update, and delete recordings, and work with their transcripts, chapters, links, and CTAs."
 ---
 
-import RecordingsList from "/snippets/cli/recordings/list.mdx";
-import RecordingsSearch from "/snippets/cli/recordings/search.mdx";
-import RecordingsSearchByTranscript from "/snippets/cli/recordings/search-by-transcript.mdx";
-import RecordingsUpdate from "/snippets/cli/recordings/update.mdx";
-import RecordingsTriggerTranscript from "/snippets/cli/recordings/trigger-transcript.mdx";
-import RecordingsDownloadUrl from "/snippets/cli/recordings/download-url.mdx";
-import RecordingsScreenshot from "/snippets/cli/recordings/screenshot.mdx";
-import RecordingsCreateCta from "/snippets/cli/recordings/create-cta.mdx";
+import RecordingsListFlags from '/snippets/cli/recordings/list.mdx'
+import RecordingsSearchFlags from '/snippets/cli/recordings/search.mdx'
+import RecordingsSearchByTranscriptFlags from '/snippets/cli/recordings/search-by-transcript.mdx'
+import RecordingsUpdateFlags from '/snippets/cli/recordings/update.mdx'
+import RecordingsTriggerTranscriptFlags from '/snippets/cli/recordings/trigger-transcript.mdx'
+import RecordingsDownloadUrlFlags from '/snippets/cli/recordings/download-url.mdx'
+import RecordingsScreenshotFlags from '/snippets/cli/recordings/screenshot.mdx'
+import RecordingsCreateCtaFlags from '/snippets/cli/recordings/create-cta.mdx'
 
-Recordings are the core NeetoRecord resource. For fields and response details,
+A recording is the core NeetoRecord resource. For fields and response details,
 see the [API reference](/api/recordings/list).
 
 Every command below takes the recording as a positional argument. That argument
@@ -20,24 +20,18 @@ accepts either the recording's `id` or its `public_link_id`, which is the last
 segment of a watch URL such as
 `https://acme.neetorecord.com/watch/4f9c2a1b7e5d3086af12`.
 
-<Info>
-  Sample output on this page is the JSON envelope you get with `--json`. On a
-  terminal the same data prints as a table or a key-value list. See
-  [Output formats](/cli/output-formats).
-</Info>
-
 ## List recordings
 
-Lists the recordings in the workspace, newest first. Use it to find a recording
+This command lists the recordings in the workspace, newest first. Use this to find a recording
 id to pass to the other commands.
 
 ```bash
 neetorecord recordings list --page 1 --page-size 30
 ```
 
-<RecordingsList />
+<RecordingsListFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": [
     {
@@ -82,13 +76,13 @@ neetorecord recordings list --page 1 --page-size 30
 
 ## Show a recording
 
-Shows one recording in full.
+This command shows one recording in full.
 
 ```bash
 neetorecord recordings show 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
@@ -97,33 +91,33 @@ with no pagination block.
 
 ## Search recordings by title
 
-Searches recordings by title. Use it when you know roughly what a recording is
+This command searches recordings by title. Use this when you know roughly what a recording is
 called but not its id.
 
 ```bash
 neetorecord recordings search --query "sprint"
 ```
 
-<RecordingsSearch />
+<RecordingsSearchFlags />
 
 The output matches `recordings list`.
 
 ## Search recordings by transcript
 
-Searches the text of recording transcripts. Use it to find the recording where
+This command searches the text of recording transcripts. Use this to find the recording where
 something was said, rather than one whose title matches.
 
 ```bash
 neetorecord recordings search-by-transcript --query "pricing page"
 ```
 
-<RecordingsSearchByTranscript />
+<RecordingsSearchByTranscriptFlags />
 
 The output matches `recordings list`.
 
 ## Update a recording
 
-Renames a recording, replaces its summary, moves it between folders, or replaces
+This command renames a recording, replaces its summary, moves it between folders, or replaces
 its tags. Only the flags you pass are changed.
 
 ```bash
@@ -132,11 +126,11 @@ neetorecord recordings update 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
   --tag demo --tag internal
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-<RecordingsUpdate />
+<RecordingsUpdateFlags />
 
 `--tag` replaces every tag on the recording, so pass the complete list each
 time. Tags that do not exist yet are created. Passing `--folder-id ""` removes
@@ -147,33 +141,33 @@ The output is the updated recording object, wrapped in `data`.
 
 ## Delete a recording
 
-Deletes a recording and everything derived from it. This cannot be undone.
+This command deletes a recording and everything derived from it. This cannot be undone.
 
 ```bash
 neetorecord recordings delete 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```
+```text Sample output
 Recording deleted.
 ```
 
 ## Show a transcript
 
-Prints the full transcript with its timestamped segments.
+This command prints the full transcript with its timestamped segments.
 
 ```bash
 neetorecord recordings transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -193,18 +187,18 @@ neetorecord recordings transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Check transcript status
 
-Reports whether a transcript exists and where generation has got to. Check this
+This command reports whether a transcript exists and where generation has got to. Check this
 before polling for transcript text.
 
 ```bash
 neetorecord recordings transcript-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -216,20 +210,20 @@ neetorecord recordings transcript-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Generate a transcript
 
-Starts transcript generation, or regenerates an existing transcript in another
+This command starts transcript generation, or regenerates an existing transcript in another
 language. Generation runs in the background.
 
 ```bash
 neetorecord recordings trigger-transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --language en
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-<RecordingsTriggerTranscript />
+<RecordingsTriggerTranscriptFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -240,17 +234,17 @@ neetorecord recordings trigger-transcript 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d -
 
 ## Show chapters
 
-Prints the auto generated chapters of a recording.
+This command prints the auto-generated chapters of a recording.
 
 ```bash
 neetorecord recordings chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -264,17 +258,17 @@ neetorecord recordings chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Check chapter status
 
-Reports whether chapters exist and where generation has got to.
+This command reports whether chapters exist and where generation has got to.
 
 ```bash
 neetorecord recordings chapter-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -286,18 +280,18 @@ neetorecord recordings chapter-status 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Generate chapters
 
-Starts chapter generation for a recording. It needs a transcript, so run
+This command starts chapter generation for a recording. It needs a transcript, so run
 `trigger-transcript` first if the recording does not have one.
 
 ```bash
 neetorecord recordings trigger-chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -308,18 +302,18 @@ neetorecord recordings trigger-chapters 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Get the share link
 
-Prints the public watch link, and whether that link has expired or is behind
+This command prints the public watch link, and whether that link has expired or is behind
 access control.
 
 ```bash
 neetorecord recordings share-link 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -332,17 +326,17 @@ neetorecord recordings share-link 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Get the embed code
 
-Prints the iframe snippet for embedding a recording in another page.
+This command prints the iframe snippet for embedding a recording in another page.
 
 ```bash
 neetorecord recordings embed-code 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -354,20 +348,20 @@ neetorecord recordings embed-code 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Get the download URL
 
-Returns a presigned URL for downloading the recording. The URL is short lived,
+This command returns a presigned URL for downloading the recording. The URL is short lived,
 so fetch it right before you use it.
 
 ```bash
 neetorecord recordings download-url 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --format mp4
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-<RecordingsDownloadUrl />
+<RecordingsDownloadUrlFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -386,18 +380,18 @@ seconds and is ready as soon as the recording has been uploaded.
 
 ## Generate the MP4
 
-Starts preparing the downloadable MP4 for a recording. Run it when
+This command starts preparing the downloadable MP4 for a recording. Run it when
 `download-url` reports that the file is not ready.
 
 ```bash
 neetorecord recordings trigger-mp4 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -412,8 +406,8 @@ date.
 
 ## Get a screenshot
 
-Returns a URL to a still frame captured at a timestamp. Useful for pulling a
-thumbnail out of a recording, or for looking at what was on screen when
+This command returns a URL to a still frame captured at a timestamp. Use this to pull a
+thumbnail out of a recording, or to look at what was on screen when
 something was said.
 
 ```bash
@@ -421,15 +415,15 @@ neetorecord recordings screenshot 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
   --timestamp 48.5 --format png
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-<RecordingsScreenshot />
+<RecordingsScreenshotFlags />
 
 `--timestamp` must fall within the recording's duration.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -444,17 +438,17 @@ neetorecord recordings screenshot 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
 
 ## Show recording analytics
 
-Reports the view count for a single recording, broken down by day.
+This command reports the view count for a single recording, broken down by day.
 
 ```bash
 neetorecord recordings analytics 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -467,21 +461,21 @@ neetorecord recordings analytics 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 }
 ```
 
-For workspace wide numbers, see [`analytics show`](/cli-reference/analytics#show-workspace-analytics).
+For workspace-wide numbers, see [`analytics show`](/cli-reference/analytics#show-workspace-analytics).
 
 ## List CTAs
 
-Lists the call to action buttons configured on a recording.
+This command lists the call-to-action buttons configured on a recording.
 
 ```bash
 neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "recording_id": "4f9c2a1b7e5d3086af12",
@@ -502,7 +496,7 @@ neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
 
 ## Create a CTA
 
-Adds a call to action button that appears over the video for a time range.
+This command adds a call-to-action button that appears over the video for a time range.
 
 ```bash
 neetorecord recordings create-cta 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
@@ -511,13 +505,13 @@ neetorecord recordings create-cta 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d \
   --start 30 --end 90 --position bottom-right
 ```
 
-**Required arguments**
+**Required arguments:**
 
 - `<id>` - the recording id or public link id.
 
-<RecordingsCreateCta />
+<RecordingsCreateCtaFlags />
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "id": "c47e2f81-6a90-4b3d-8e21-5f0c9d7b1a63",

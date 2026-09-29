@@ -1,370 +1,349 @@
 ---
 title: "Connect agent"
-description: "Step by step setup for Claude, ChatGPT, and other AI agents."
+description: "Step-by-step setup for Claude, ChatGPT, and other AI agents."
 ---
-
-Pick your agent below and follow its steps.
-
-Claude and ChatGPT connect by signing in with your NeetoRecord account. The other agents can sign in the same way, or use an API key instead. For the server URL and which agent supports which option, see [MCP server](/mcp/server). For what each option lets the agent see, see [Authentication](/mcp/authentication).
 
 ## Sign in with your NeetoRecord account
 
-Nothing to create in NeetoRecord beforehand. You give the client the server URL, and approve the connection in the browser.
-
 <Tabs>
   <Tab title="Claude">
-    NeetoRecord is listed in Anthropic's connector directory, so there is no server URL to paste. One connector list backs claude.ai, the Claude desktop app, Claude mobile, and Cowork, so what you add in one shows up in the others.
-
-    1. Open the NeetoRecord listing:
-
-       ```
-       https://claude.ai/directory/neetorecord
-       ```
+    1. Visit the [NeetoRecord listing](https://claude.ai/directory/neetorecord) in Anthropic's connector directory.
 
        <Frame caption="The NeetoRecord listing in Anthropic's connector directory.">
-         <img src="/assets/mcp/claude-directory-neetorecord.png" alt="The NeetoRecord entry in Claude's connector directory, with a one line description and a Connect to Claude button" />
+         <img src="/assets/mcp/claude-directory-neetorecord.png" alt="The NeetoRecord entry in Claude's connector directory, with a one-line description and a Connect to Claude button" />
        </Frame>
 
-    2. Click **Connect to Claude** and complete the sign in described in [What the sign in looks like](#what-the-sign-in-looks-like).
+    2. Click **Connect to Claude**.
+    3. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
 
-    You can also reach the same listing from inside Claude. Open **[Customize > Connectors](https://claude.ai/customize/connectors)**, choose **Discover**, search for NeetoRecord, and open the result.
+    NeetoRecord then works in claude.ai, the Claude desktop app, Claude mobile, and Cowork.
 
-    <Frame caption="The NeetoRecord card in the directory search results.">
-      <img src="/assets/mcp/claude-browse-connectors-neetorecord.png" alt="NeetoRecord's card in Claude's connector directory search results, showing the logo, the name, and the start of the description" />
-    </Frame>
+    If you see **Request** instead of **Connect to Claude**, your Team plan admin must turn NeetoRecord on under **[Organization settings > Connectors](https://claude.ai/admin-settings/connectors)**. After that, click **Connect to Claude**.
 
-    On a Team plan, members who may not enable connectors see **Request** in place of **Connect to Claude**. Clicking it sends the connector to your organization's admins and the button reads **Requested** until they act. An admin enables it once under **[Organization settings > Connectors](https://claude.ai/admin-settings/connectors)**, after which everyone else connects from their own Connectors list.
+    To disconnect, open **[Customize > Connectors](https://claude.ai/customize/connectors)** and remove NeetoRecord.
 
-    To disconnect later, open **[Customize > Connectors](https://claude.ai/customize/connectors)** and remove NeetoRecord.
+    <Accordion title="Add it as a custom connector instead">
+      Use this only if your organization blocks the connector directory.
 
-    Anthropic documents the current steps in [Use connectors to extend Claude's capabilities](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities).
-
-    <Accordion title="Adding it as a custom connector instead">
-      The directory entry is the supported route, and you do not need this one. It stays here for organizations that block the directory or that point Claude at a different NeetoRecord endpoint.
-
-      1. Open **[Customize > Connectors](https://claude.ai/customize/connectors)**, click **Add**, then choose **Add custom connector**.
+      1. Open **[Customize > Connectors](https://claude.ai/customize/connectors)**, click **Add**, then click **Add custom connector**.
 
          <Frame caption="Add custom connector is the only item under the Add button.">
            <img src="/assets/mcp/claude-add-menu.png" alt="Menu under the Add button in Claude's Connectors settings, with the single item Add custom connector" />
          </Frame>
 
-      2. Name it NeetoRecord and paste the server URL:
+      2. Enter the name NeetoRecord and paste the server URL.
 
          ```
          https://connect.neetorecord.com/mcp/messages
          ```
 
-         If Claude asks for an OAuth client ID or secret, leave them empty. Those are for servers that cannot register clients on their own, and NeetoRecord does that automatically.
-
          <Frame caption="The Add custom connector dialog, ready to submit.">
            <img src="/assets/mcp/claude-add-custom-connector-dialog.png" alt="Claude's Add custom connector dialog with the name NeetoRecord and the server URL https://connect.neetorecord.com/mcp/messages filled in, and a Continue button" />
          </Frame>
 
-      3. Click **Continue** and follow Claude's prompts to the sign in described in [What the sign in looks like](#what-the-sign-in-looks-like).
-
-      A connector added this way is listed under **Custom** rather than as NeetoRecord, and Claude never suggests it in a chat. Both routes run the same server and the same sign in.
+      3. Click **Continue** and sign in to NeetoRecord.
     </Accordion>
   </Tab>
 
   <Tab title="ChatGPT">
-    Custom MCP servers are added through developer mode.
-
-    1. Open **Settings → Security and login** and turn on **Developer mode**. The **Plugins** settings section links straight to it.
+    1. Go to [chatgpt.com](https://chatgpt.com) and open **Settings → Security and login**.
+    2. Turn on **Developer mode**.
 
        <Frame>
          <img src="/assets/mcp/chatgpt-developer-mode.png" alt="ChatGPT's Developer mode setting, tagged Elevated risk, with its toggle switched on" />
        </Frame>
 
-    2. Go to **Plugins**, click **Browse plugins**, then the **plus** button.
-    3. In **New Plugin**, enter a name, set **Connection** to **Server URL**, and paste:
+       If you do not see **Developer mode**, your ChatGPT workspace admin has turned it off. Ask them to allow it.
+
+    3. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins) and click the **plus** button.
+    4. In **New Plugin**, enter the name NeetoRecord, set **Connection** to **Server URL**, and paste:
 
        ```
        https://connect.neetorecord.com/mcp/messages
        ```
 
-    4. Leave **Authentication** on **OAuth**. ChatGPT reads NeetoRecord's OAuth settings from the URL, so **Advanced OAuth settings** needs nothing from you.
-    5. Tick **I understand and want to continue**, then click **Create** and approve the NeetoRecord sign in.
-
-       <Frame caption="The New Plugin dialog with OAuth discovered from the server URL.">
-         <img src="/assets/mcp/chatgpt-new-plugin.png" alt="ChatGPT's New Plugin dialog with the name NeetoRecord, the server URL, Authentication set to OAuth, and a notice that OpenAI has not reviewed this MCP server" />
-       </Frame>
-
-    OpenAI documents the current steps in [Building MCP servers for plugins and API integrations](https://developers.openai.com/api/docs/mcp). They renamed the app directory to the plugin directory in July 2026, so older walkthroughs may say "apps" or "connectors" where the UI now says "plugins".
+    5. Leave **Authentication** on **OAuth**.
+    6. Tick **I understand and want to continue**, then click **Create**.
+    7. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
   </Tab>
 
   <Tab title="Claude Code">
-    Add the server without a header. The missing credential is what makes Claude Code sign you in rather than send a key.
+    1. Add the server:
 
-    ```bash
-    claude mcp add --transport http neetorecord https://connect.neetorecord.com/mcp/messages
-    ```
+       ```bash
+       claude mcp add --transport http neetorecord https://connect.neetorecord.com/mcp/messages
+       ```
 
-    Run `claude mcp list` and the server reads `Needs authentication`. Start Claude Code, run `/mcp`, pick **neetorecord**, and complete the sign in in the browser.
+    2. Start Claude Code and run `/mcp`.
+    3. Pick **neetorecord** and sign in to NeetoRecord in the browser.
   </Tab>
 
   <Tab title="Cursor">
-    Add the server to `~/.cursor/mcp.json`, or to `.cursor/mcp.json` for a single project, with no `headers` block:
+    1. Add the server to `~/.cursor/mcp.json`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "url": "https://connect.neetorecord.com/mcp/messages"
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "url": "https://connect.neetorecord.com/mcp/messages"
+           }
+         }
+       }
+       ```
 
-    Restart Cursor, then approve the NeetoRecord sign in when it prompts.
+    2. Restart Cursor.
+    3. Sign in to NeetoRecord when Cursor asks.
   </Tab>
 
   <Tab title="Gemini CLI">
-    Add the server to `~/.gemini/settings.json`, or to `.gemini/settings.json` for a single project, with no `headers` block. Streamable HTTP servers go under `httpUrl`, not `url`, which Gemini CLI reserves for SSE:
+    1. Add the server to `~/.gemini/settings.json`. Use `httpUrl`, not `url`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "httpUrl": "https://connect.neetorecord.com/mcp/messages"
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "httpUrl": "https://connect.neetorecord.com/mcp/messages"
+           }
+         }
+       }
+       ```
 
-    Gemini CLI starts the sign in when the server answers with a 401, and registers itself automatically.
+    2. Start Gemini CLI and sign in to NeetoRecord when it asks.
   </Tab>
 
   <Tab title="Codex">
-    Codex uses TOML rather than JSON. Add the server to `~/.codex/config.toml`, or to `.codex/config.toml` for a single project, with no credential fields. OAuth is what Codex falls back to when none are given:
+    1. Add the server to `~/.codex/config.toml`:
 
-    ```toml
-    [mcp_servers.neetorecord]
-    url = "https://connect.neetorecord.com/mcp/messages"
-    ```
+       ```toml
+       [mcp_servers.neetorecord]
+       url = "https://connect.neetorecord.com/mcp/messages"
+       ```
 
-    Then start the sign in:
+    2. Run this command and sign in to NeetoRecord in the browser:
 
-    ```bash
-    codex mcp login neetorecord
-    ```
+       ```bash
+       codex mcp login neetorecord
+       ```
   </Tab>
 
   <Tab title="VS Code">
-    Create `.vscode/mcp.json` with no `headers` block. VS Code nests servers under `servers`, not `mcpServers`:
+    You need VS Code 1.99 or later, with GitHub Copilot in **Agent** mode.
 
-    ```json
-    {
-      "servers": {
-        "neetorecord": {
-          "type": "http",
-          "url": "https://connect.neetorecord.com/mcp/messages"
-        }
-      }
-    }
-    ```
+    1. Create `.vscode/mcp.json` in your workspace. Use `servers`, not `mcpServers`:
 
-    This requires VS Code 1.99 or later with GitHub Copilot in **Agent** mode. Approve the NeetoRecord sign in when it prompts.
+       ```json
+       {
+         "servers": {
+           "neetorecord": {
+             "type": "http",
+             "url": "https://connect.neetorecord.com/mcp/messages"
+           }
+         }
+       }
+       ```
 
-    Microsoft documents the current steps in [Use MCP servers in VS Code](https://code.visualstudio.com/docs/copilot/customization/mcp-servers).
+    2. Sign in to NeetoRecord when VS Code asks.
   </Tab>
 
   <Tab title="Windsurf">
-    Add the server to `~/.codeium/windsurf/mcp_config.json` with no `headers` block. Windsurf uses `serverUrl` rather than `url`:
+    1. Add the server to `~/.codeium/windsurf/mcp_config.json`. Use `serverUrl`, not `url`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "serverUrl": "https://connect.neetorecord.com/mcp/messages"
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "serverUrl": "https://connect.neetorecord.com/mcp/messages"
+           }
+         }
+       }
+       ```
 
-    Enable the server under **Settings → Cascade → MCP Servers**, then approve the NeetoRecord sign in when it prompts.
+    2. Turn on the server under **Settings → Cascade → MCP Servers**.
+    3. Sign in to NeetoRecord when Windsurf asks.
   </Tab>
 </Tabs>
 
-### What the sign in looks like
-
-Whichever client you started from, NeetoRecord runs the same steps.
+### What the sign-in looks like
 
 <Steps>
   <Step title="Connect your workspace">
-    Enter the subdomain of the workspace you want the assistant to reach. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/mcp/workspace-subdomain).
+    Enter your workspace subdomain. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/mcp/workspace-subdomain).
 
-    <Frame caption="The first screen of the NeetoRecord sign in.">
+    <Frame caption="The first screen of the NeetoRecord sign-in.">
       <img src="/assets/mcp/oauth-connect-workspace.png" alt="NeetoRecord dialog headed 'Connect your workspace' with a field for the workspace subdomain, a .neetorecord.com suffix, and a Continue button" />
     </Frame>
   </Step>
   <Step title="Sign in">
-    Sign in to that workspace if you are not signed in already.
+    Sign in to that workspace, if you are not signed in already.
   </Step>
-  <Step title="Choose what the connection can do">
-    **Authorize access** names the workspace, the email you signed in as, and the host the client sends you back to. Under **What this connection can do**, **Read** and **Stay connected** are always granted; tick **Create and update** and **Delete** only if the assistant needs them.
+  <Step title="Choose what the assistant can do">
+    **Read** and **Stay connected** are always on. Tick **Create and update** and **Delete** only if the assistant needs them.
 
-    **Workspaces to connect** lists every workspace your email belongs to, with the one you just signed in to ticked and not untickable. This section only appears when your email belongs to more than one workspace.
+    If your email belongs to more than one workspace, tick each workspace the assistant can reach.
 
     <Frame caption="Choosing the permissions and the workspaces the connection can reach.">
       <img src="/assets/mcp/oauth-authorize.png" alt="NeetoRecord 'Authorize access' screen showing the workspace and signed-in email, a 'What this connection can do' list with Read and Stay connected always granted and Create and update and Delete as tickable boxes, a 'Workspaces to connect' list with three workspaces, and Cancel and Authorize buttons" />
     </Frame>
   </Step>
   <Step title="Authorize">
-    Click **Authorize**. The assistant is granted access as you, with the scopes you ticked, to each workspace you ticked.
+    Click **Authorize**.
   </Step>
 </Steps>
 
-There is no API key to create for this route, and nothing to paste back into the assistant.
-
-Once connected, name the workspace in a prompt when you want a specific one. To add a workspace, or to grant a permission you left unticked, run the sign in again and tick it.
+To add a workspace or a permission later, sign in again and tick it.
 
 ## Use an API key
 
-The same clients, configured with a key instead. Every tool call then reaches the whole workspace rather than only what you can see, which is what you want for automation and not what you want on a shared machine.
+An API key reaches the whole workspace, not only what you can see. Use it for automation. See [Authentication](/mcp/authentication).
 
 <Tabs>
   <Tab title="Claude Code">
-    Add the server to `~/.claude.json` under `mcpServers`:
+    1. Add the server to `~/.claude.json`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "type": "http",
-          "url": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "type": "http",
+             "url": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer YOUR_API_KEY"
+             }
+           }
+         }
+       }
+       ```
 
-    Save the file, then restart Claude Code.
+    2. Restart Claude Code.
   </Tab>
 
   <Tab title="Cursor">
-    Add the server to `~/.cursor/mcp.json` under `mcpServers`:
+    1. Add the server to `~/.cursor/mcp.json`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "type": "http",
-          "url": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "type": "http",
+             "url": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer YOUR_API_KEY"
+             }
+           }
+         }
+       }
+       ```
 
-    Save the file, then restart Cursor or reload its window.
+    2. Restart Cursor.
   </Tab>
 
   <Tab title="Gemini CLI">
-    Add the server to `~/.gemini/settings.json` under `mcpServers`. Streamable HTTP servers go under `httpUrl`, not `url`:
+    1. Add the server to `~/.gemini/settings.json`. Use `httpUrl`, not `url`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "httpUrl": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "httpUrl": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer YOUR_API_KEY"
+             }
+           }
+         }
+       }
+       ```
+
+    2. Restart Gemini CLI.
   </Tab>
 
   <Tab title="Codex">
-    Codex uses TOML rather than JSON, and takes the name of an environment variable rather than the key itself, which keeps the key out of the file:
+    1. Add the server to `~/.codex/config.toml`:
 
-    ```toml
-    [mcp_servers.neetorecord]
-    url = "https://connect.neetorecord.com/mcp/messages"
-    bearer_token_env_var = "NEETORECORD_API_KEY"
-    ```
+       ```toml
+       [mcp_servers.neetorecord]
+       url = "https://connect.neetorecord.com/mcp/messages"
+       bearer_token_env_var = "NEETORECORD_API_KEY"
+       ```
 
-    Export `NEETORECORD_API_KEY` in the environment Codex runs in.
+    2. Set `NEETORECORD_API_KEY` to your API key in the shell where you run Codex.
   </Tab>
 
   <Tab title="VS Code">
-    Create `.vscode/mcp.json` in your workspace. VS Code nests servers under `servers`, not `mcpServers`, and an `inputs` entry is what keeps the key out of the file:
+    You need VS Code 1.99 or later, with GitHub Copilot in **Agent** mode.
 
-    ```json
-    {
-      "inputs": [
-        {
-          "type": "promptString",
-          "id": "neetorecord-api-key",
-          "description": "NeetoRecord API key",
-          "password": true
-        }
-      ],
-      "servers": {
-        "neetorecord": {
-          "type": "http",
-          "url": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer ${input:neetorecord-api-key}"
-          }
-        }
-      }
-    }
-    ```
+    1. Create `.vscode/mcp.json` in your workspace:
 
-    This requires VS Code 1.99 or later with GitHub Copilot in **Agent** mode. Written this way, VS Code asks for the key the first time the server is used and stores it itself.
+       ```json
+       {
+         "inputs": [
+           {
+             "type": "promptString",
+             "id": "neetorecord-api-key",
+             "description": "NeetoRecord API key",
+             "password": true
+           }
+         ],
+         "servers": {
+           "neetorecord": {
+             "type": "http",
+             "url": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer ${input:neetorecord-api-key}"
+             }
+           }
+         }
+       }
+       ```
+
+    2. Paste your API key when VS Code asks.
 
     <Warning>
-      Unlike the other clients, this config lives inside your project rather than your home directory, so a pasted key can end up in a commit. The `${input:...}` placeholder above is what avoids that. Paste the key straight into `headers` instead and VS Code reads it from the file without ever prompting, so add `.vscode/mcp.json` to `.gitignore` before you do.
+      This file lives in your project. Do not paste the key into the file itself, or it can end up in a commit.
     </Warning>
   </Tab>
 
   <Tab title="Windsurf">
-    Add the server to `~/.codeium/windsurf/mcp_config.json`. Windsurf uses `serverUrl` rather than `url`:
+    1. Add the server to `~/.codeium/windsurf/mcp_config.json`. Use `serverUrl`, not `url`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "serverUrl": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "serverUrl": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer YOUR_API_KEY"
+             }
+           }
+         }
+       }
+       ```
 
-    Enable the server under **Settings → Cascade → MCP Servers**. Windsurf allows at most 100 tools across every connected server, so disable servers you are not using if NeetoRecord's tools do not appear.
+    2. Turn on the server under **Settings → Cascade → MCP Servers**.
   </Tab>
 
   <Tab title="Antigravity">
-    Open **Settings → Customizations → Open MCP Config**, then add the server to `mcp_config.json`. Antigravity uses `serverUrl` rather than `url`:
+    1. Open **Settings → Customizations → Open MCP Config**.
+    2. Add the server to `mcp_config.json`. Use `serverUrl`, not `url`:
 
-    ```json
-    {
-      "mcpServers": {
-        "neetorecord": {
-          "serverUrl": "https://connect.neetorecord.com/mcp/messages",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
+       ```json
+       {
+         "mcpServers": {
+           "neetorecord": {
+             "serverUrl": "https://connect.neetorecord.com/mcp/messages",
+             "headers": {
+               "Authorization": "Bearer YOUR_API_KEY"
+             }
+           }
+         }
+       }
+       ```
 
-    Save the file, then reload Antigravity.
+    3. Reload Antigravity.
   </Tab>
 </Tabs>
 
-Replace `YOUR_API_KEY` with a key from your workspace. See [Authentication](/mcp/authentication).
+Replace `YOUR_API_KEY` with a key from your workspace. [Learn how to generate your API key.](https://help.neetorecord.com/articles/api-keys)
 
 ## Confirm the connection
 
-Ask the assistant something only the server can answer, for example *"List my five most recent NeetoRecord recordings."* If it answers with real recordings, the connection works. Find more prompts in [Examples](/mcp/examples), and if nothing comes back, see [Troubleshooting](/mcp/troubleshooting).
+Ask the assistant *"List my five most recent NeetoRecord recordings."* If it answers with your recordings, the connection works. For more prompts, see [Examples](/mcp/examples). If it does not work, see [Troubleshooting](/mcp/troubleshooting).

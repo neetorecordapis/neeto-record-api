@@ -1,24 +1,18 @@
 ---
 title: "Analytics"
-description: "Workspace wide recording and view counts, with the most watched recordings."
+description: "Show workspace-wide recording and view counts, with the most watched recordings."
 ---
 
-import AnalyticsShow from "/snippets/cli/analytics/show.mdx";
+import AnalyticsShowFlags from '/snippets/cli/analytics/show.mdx'
 
-Workspace level numbers across every uploaded recording. For the view history of
+Analytics are workspace-level numbers across every uploaded recording. For the view history of
 a single recording, use
 [`recordings analytics`](/cli-reference/recordings#show-recording-analytics). For
 fields and response details, see the [API reference](/api/analytics/get).
 
-<Info>
-  Sample output on this page is the JSON envelope you get with `--json`. On a
-  terminal the same data prints as a table or a key-value list. See
-  [Output formats](/cli/output-formats).
-</Info>
-
 ## Show workspace analytics
 
-Reports how many recordings and views the workspace has, plus its ten most
+This command reports how many recordings and views the workspace has, plus its ten most
 watched recordings. Pass a date range to scope it to recordings created in that
 window.
 
@@ -26,14 +20,14 @@ window.
 neetorecord analytics show --from-date 2025-01-01 --to-date 2025-06-30
 ```
 
-<AnalyticsShow />
+<AnalyticsShowFlags />
 
 Both dates are ISO format (`YYYY-MM-DD`) and both are optional. A month on its
 own (`YYYY-MM`) is accepted too and covers that whole month. `--from-date` and
 `--to-date` filter on when a recording was created, not when it was viewed, and
 the request is rejected when `--from-date` is later than `--to-date`.
 
-```json
+```json Sample output (--json)
 {
   "data": {
     "total_recordings": 95,

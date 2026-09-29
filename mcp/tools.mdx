@@ -3,30 +3,28 @@ title: "Tools"
 description: "Every tool the NeetoRecord MCP server exposes, grouped by resource."
 ---
 
-You do not call these by name. Ask for what you want and the assistant picks the
-tool. The list is here so you know what is possible, and so you can nudge an
-assistant that reaches for the wrong thing.
+You do not need these names to use the server. Ask in plain language and the assistant picks the right tool. The list is here for when you want to know exactly what a connection can do. Most tools match a [REST API](/api/introduction) endpoint and link to its reference.
 
-Every tool takes an optional `workspace` argument, the subdomain of a connected
-workspace. Left out, it uses the workspace the connection was set up with.
+Every tool takes an optional `workspace` argument, the subdomain of a connected workspace. Left out, it runs against the workspace the connection was set up with. `ListWorkspaces` reports the values you can pass.
 
-What a tool returns depends on how you connected. Over OAuth, listings are
-filtered to what the approving person can see and a recording they cannot open is
-refused rather than returned; an API key reaches the whole workspace. A tool that
-writes or deletes is also refused when the connection was not granted that
-permission at approval time. See [Authentication](/mcp/authentication).
+What a tool returns depends on the credential. Over [OAuth](/mcp/authentication#oauth-scoped-to-you), lists come back filtered to the permissions of the person who approved the connection, and a record they cannot open is refused rather than returned; an [API key](/mcp/authentication#api-key-scoped-to-the-workspace) reaches the whole workspace. A tool that creates, updates, or deletes is also refused when the connection was not granted the **Create and update** or **Delete** permission.
+
+## Workspaces
+
+| Tool | What it does |
+| --- | --- |
+| `ListWorkspaces` | Lists the workspaces this connection can reach, with their subdomains. |
+
+`ListWorkspaces` has no REST endpoint, which is why it is not linked.
 
 ## Recordings
-
-Most of these tools are backed by the recordings endpoints. For field level detail, see the
-[API reference](/api/recordings/list).
 
 | Tool | What it does |
 | --- | --- |
 | [`ListRecordings`](/api/recordings/list) | Lists recordings with optional filters and pagination. |
 | [`GetRecording`](/api/recordings/get) | Gets full details of one recording by id. |
 | [`SearchRecordingsByTitle`](/api/recordings/search) | Exact or partial title search across recordings. |
-| [`SearchRecordingsByTranscript`](/api/recordings/search-by-transcript) | Full text search across transcript content. |
+| [`SearchRecordingsByTranscript`](/api/recordings/search-by-transcript) | Full-text search across transcript content. |
 | [`UpdateRecording`](/api/recordings/update) | Updates a recording's title, summary, or tags. |
 | [`MoveRecordingToFolder`](/api/recordings/update) | Moves a recording into a folder, or out of its current one. |
 | [`DeleteRecording`](/api/recordings/delete) | Permanently deletes a recording and everything derived from it. |
@@ -53,7 +51,7 @@ Most of these tools are backed by the recordings endpoints. For field level deta
 | [`GetTranscript`](/api/recordings/transcript) | Gets the full transcript with timestamps. |
 | [`GetTranscriptStatus`](/api/recordings/transcript-status) | Reports whether a transcript exists and how generation is going. |
 | [`TriggerTranscriptGeneration`](/api/recordings/trigger-transcript) | Starts or restarts transcript generation. |
-| [`GetChapters`](/api/recordings/chapters) | Gets the auto generated chapters. |
+| [`GetChapters`](/api/recordings/chapters) | Gets the auto-generated chapters. |
 | [`GetChapterStatus`](/api/recordings/chapter-status) | Reports whether chapters exist and how generation is going. |
 | [`TriggerChapterGeneration`](/api/recordings/trigger-chapters) | Starts chapter generation. |
 
@@ -98,7 +96,7 @@ Most of these tools are backed by the recordings endpoints. For field level deta
 ## Public recordings
 
 These reach recordings in other workspaces, and only when the recording is
-publicly accessible with no sign in required. They return less than their
+publicly accessible with no sign-in required. They return less than their
 workspace counterparts, and they respect what the owner allowed, so a transcript
 or a download may be unavailable.
 
@@ -111,9 +109,3 @@ or a download may be unavailable.
 | `GetPublicEmbedCode` | Gets its embed code. |
 | `GetPublicDownloadUrl` | Gets a presigned download URL for it. |
 | `GetPublicScreenshot` | Captures a still frame from it at a timestamp. |
-
-## Workspaces
-
-| Tool | What it does |
-| --- | --- |
-| `ListWorkspaces` | Lists the workspaces this connection can reach, with their subdomains. |

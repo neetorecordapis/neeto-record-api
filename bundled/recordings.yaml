@@ -775,14 +775,14 @@ components:
     page_number_param:
       in: query
       name: page_number
-      description: Page number. If absent, all results are returned.
+      description: Page of results to retrieve, starting from 1. Defaults to 1 when omitted.
       required: false
       schema:
         type: integer
     page_size_param:
       in: query
       name: page_size
-      description: Number of results per page. Defaults to 30.
+      description: Number of results per page. Defaults to 30 when omitted.
       required: false
       schema:
         type: integer

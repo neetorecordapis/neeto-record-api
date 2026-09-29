@@ -1,111 +1,62 @@
 ---
-title: "Introduction"
-description: "Manage NeetoRecord recordings, folders, tags, and analytics from the terminal."
+title: "NeetoRecord CLI"
+description: "Manage recordings, folders, tags, and more from your terminal."
 ---
 
-`neetorecord` is the command line interface for NeetoRecord. It calls the same
-v2 REST API that powers the web app, so anything you can read or change through
-the [API](/api/recordings/list) you can also do from a shell script, a
-CI job, or an AI coding assistant.
+The **NeetoRecord CLI** (`neetorecord`) lets you manage NeetoRecord from your terminal. It covers the [v2 REST API](/api/introduction): list and search recordings, generate transcripts and chapters, organize folders and tags, pull analytics, and automate bulk changes.
 
-## Why use the CLI
+It is designed for people comfortable with a terminal or HTTP. You do not need to be a developer: run `neetorecord setup` to connect an AI assistant such as Claude or Cursor, then describe the task in plain language.
+
+## Why use the CLI?
 
 <CardGroup cols={2}>
-  <Card title="No API key to manage" icon="key">
-    `neetorecord login` signs you in through the browser and stores a session
-    per workspace. There is no key to paste into a config file or a CI secret.
+  <Card title="Script your recordings" icon="terminal">
+    Generate transcripts and chapters, move recordings between folders, and update tags from shell scripts and cron jobs.
   </Card>
-  <Card title="Readable and scriptable" icon="terminal">
-    Commands print a table on a terminal and JSON when piped. `--quiet` prints
-    the bare identifier, which is what you want inside a shell pipeline.
+  <Card title="Audit from the terminal" icon="magnifying-glass">
+    Pull recordings, search them by title or transcript, pipe them to `jq`, and create one-off reports without leaving your shell.
   </Card>
-  <Card title="Several workspaces at once" icon="layer-group">
-    Sign in to as many subdomains as you need and choose one per command with
-    `--subdomain`.
+  <Card title="Change things in bulk" icon="layer-group">
+    Page through thousands of recordings in one loop, update them unattended, and switch workspaces with a single flag.
   </Card>
-  <Card title="Ready for AI assistants" icon="robot">
-    `--toon` trims output tokens, and `neetorecord setup` teaches Claude Code,
-    Cursor, Windsurf, Copilot, Gemini, and Codex how to drive the CLI.
+  <Card title="Built for AI agents" icon="robot">
+    Use token-efficient `--toon` output and one-command setup for Claude, Cursor, Copilot, and more.
   </Card>
 </CardGroup>
 
 ## CLI vs MCP: which should I use?
 
-NeetoRecord's [MCP server](/mcp/introduction) reaches nearly everything the CLI
-reaches - recordings, transcripts, chapters, folders, tags, CTAs, analytics, and
-recording requests. Two gaps are real: only the CLI manages
-[team members](/cli-reference/team-members), and only MCP reads a publicly
-shared recording that lives in someone else's workspace. Everywhere else the two
-overlap, so choose on how the work reaches NeetoRecord.
+NeetoRecord's [MCP server](/mcp/introduction) reaches nearly everything the CLI does - recordings, transcripts, chapters, folders, tags, CTAs, analytics, and recording requests. Only the CLI manages [team members](/cli-reference/team-members), and only MCP reads a publicly shared recording in another workspace. Everywhere else the two overlap, so choose on how the work reaches NeetoRecord.
 
 ### Reach for the CLI when
 
-- **No AI assistant should be in the loop.** A cron entry or a CI step runs
-  `neetorecord` with nothing but the binary and the workspace you already
-  signed in to - no assistant open, no model account, no tokens spent per run.
-  Over MCP, something with model access has to be running before any call
-  happens at all.
-- **The output feeds another program.** `--quiet` prints the bare identifier, so
-  `id=$(neetorecord folders create --name "Onboarding" --quiet)` drops straight
-  into the next command. `--json` returns the records plus a `pagination` block
-  for `jq`, a spreadsheet, or your own script. An assistant answers in prose you
-  would have to copy out by hand.
-- **You are working through the whole library.** Re-tagging or re-foldering
-  hundreds of recordings is one `neetorecord recordings update` per recording
-  either way, but over MCP each of those is a separate tool call, and every page
-  of results crowds out the assistant's context. The CLI pages on your terms:
-  `--page-size 100` with `--json` reports `total_pages` and `total_records`
-  beside the records, so a loop knows how many pages are left and walks all of
-  them unattended, writing each one to a file or into `jq`. The size of the
-  library stops mattering.
-- **The run has to be repeatable and reviewable.** The command is the artifact:
-  `neetorecord recordings trigger-transcript <id> --language en` in a runbook or
-  a pull request makes the identical call next time. Ask twice over MCP and the
-  assistant may take a different route.
+- **No AI assistant should be in the loop.** A cron entry or a CI step runs `neetorecord` with nothing but the binary and the workspace you already signed in to - no assistant open, no model account, no tokens spent per run. Over MCP, something with model access has to be running before any call happens at all.
+- **The output feeds another program.** `--quiet` prints the bare folder id for the next command; `--json` returns records plus pagination for `jq`, a spreadsheet, or your own script. An assistant replies in prose you would have to copy out by hand.
+- **You are working through thousands of records.** Over MCP every page is a separate tool call, and a list that long crowds out the assistant's context. The CLI pages on your terms instead: `--page-size 100` with `--json` returns `total_pages` and `total_records` alongside the records, so a loop knows how many pages are left and walks all of them unattended. Each page lands in a file or goes straight into `jq`, so nothing has to be held in memory and the size of the list stops mattering.
+- **You need the same run every time.** A `neetorecord` command is plain text you can save. Drop it into a runbook or a pull request and anyone can read exactly what it will do before it runs, then run it later and get the identical call. An assistant works from a prompt rather than a fixed command, so the same request can come out as a different set of calls on a different day.
 
 ### Reach for MCP instead when
 
-- **The answer is inside the recording.** You remember a customer objection came
-  up in a demo, but not which demo or how it was phrased. The assistant searches
-  the transcripts, reads what comes back, names the recording, and then shows
-  you the frame at that timestamp, because the screenshot arrives as an image it
-  can actually look at. `neetorecord recordings search-by-transcript --query`
-  returns a list and `recordings screenshot` returns a URL - the reading and the
-  looking are still yours to do.
-- **The details live in your chat, not in your head.** A pasted support thread
-  becomes the recording's summary, its tags, or the label and link on a CTA,
-  with no retyping. The CLI cannot see any of it.
-- **One request should cover several steps.** Start the transcript, wait for it
-  to finish, generate chapters from it, then write the summary onto the
-  recording. Over MCP that is a single ask; with the CLI you write the polling
-  loop that sits between `trigger-transcript` and `transcript-status`.
-- **The person doing it does not use a terminal.** NeetoRecord hosts the server,
-  so there is nothing to install or keep updated.
+- **The details live in your chat, not in your head.** An email, a thread, or a pasted note turns into a recording's summary, its tags, or a CTA with no retyping. The CLI cannot see any of it.
+- **You have not decided the steps yet.** "Find the demo where the customer asked about pricing and share it" means looking at what is there and choosing. A command can only carry out a decision you have already made.
+- **One request should cover several steps.** Generate the transcript, wait for it to finish, generate chapters from it, and write the summary onto the recording, with no glue between commands.
+- **The answer is inside the recording.** The assistant searches the transcripts, names the recording, and looks at the frame at that timestamp, because the screenshot arrives as an image. The CLI returns a list and a screenshot URL, so the reading and the looking stay with you.
+- **The person doing it does not use a terminal.** NeetoRecord hosts the server, so there is nothing to install or keep updated.
 
 <Tip>
-  You can have both. Run [`neetorecord setup claude`](/cli/ai-assistants) and
-  your AI assistant drives the CLI itself, so a plain-language request still
-  ends in an exact command you can read, repeat, and paste into a script.
+  You can have both. Run [`neetorecord setup claude`](/cli/ai-assistants) and your
+  AI assistant drives the CLI itself, so a plain-language request still ends in
+  an exact command you can read, repeat, and paste into a script.
 </Tip>
 
-## Prerequisites
+## What you need
 
-- A NeetoRecord workspace, and your [workspace subdomain](/cli/workspace-subdomain).
-- macOS, Linux, or Windows.
+1. Access to one or more NeetoRecord workspaces.
+2. Permission to manage the resources you want to work with (recordings, folders, team members, and so on).
+3. The `neetorecord` binary. See [Installation](/cli/installation).
 
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Installation" icon="download" href="/cli/installation">
-    Install the CLI with Homebrew, a shell script, or PowerShell.
-  </Card>
-  <Card title="Authentication" icon="lock" href="/cli/authentication">
-    Sign in, switch workspaces, and check who you are signed in as.
-  </Card>
-  <Card title="Output formats" icon="brackets-curly" href="/cli/output-formats">
-    Tables, JSON envelopes, quiet mode, and TOON.
-  </Card>
-  <Card title="Commands" icon="list" href="/cli-reference/overview">
-    Every command grouped by resource.
-  </Card>
-</CardGroup>
+<Note>
+  Unlike the API, which authenticates with an `X-Api-Key` header, the CLI signs
+  you in through your browser and stores credentials locally. See
+  [Authentication](/cli/authentication).
+</Note>
