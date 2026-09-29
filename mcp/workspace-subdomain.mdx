@@ -1,0 +1,26 @@
+---
+title: "Workspace subdomain"
+description: "Find your workspace subdomain and use it to connect an assistant."
+---
+
+Every NeetoRecord workspace has its own subdomain. It is the part of your workspace URL before `neetorecord.com`. For `https://spinkart.neetorecord.com`, the subdomain is `spinkart`.
+
+The MCP server URL is the same for every workspace, `https://connect.neetorecord.com/mcp/messages`. The subdomain is how you tell NeetoRecord which workspace the assistant can reach.
+
+## Find your subdomain
+
+<Steps>
+  <Step title="Open your workspace">
+    Sign in to NeetoRecord in your browser and look at the address bar.
+  </Step>
+  <Step title="Take the part before neetorecord.com">
+    For `https://green-earth.neetorecord.com`, the subdomain is `green-earth`.
+  </Step>
+</Steps>
+
+## Where you use it
+
+- **OAuth.** The first sign-in screen asks you to connect your workspace. Enter only the subdomain, such as `green-earth`, not the full URL or an email address.
+- **API key.** Create the key in the workspace you want the assistant to reach. One key reaches one workspace.
+
+See [Authentication](/mcp/authentication) for both routes.

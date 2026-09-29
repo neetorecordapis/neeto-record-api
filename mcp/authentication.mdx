@@ -53,7 +53,7 @@ A scope you leave unticked is enforced when a tool is called, not silently ignor
 
 What you see when you connect:
 
-1. **Connect your workspace.** Enter the subdomain of the workspace you want the assistant to reach. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/api/workspace-subdomain).
+1. **Connect your workspace.** Enter the subdomain of the workspace you want the assistant to reach. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/mcp/workspace-subdomain).
 
 <Frame caption="The first screen of the NeetoRecord OAuth flow.">
   <img src="/assets/mcp/oauth-connect-workspace.png" alt="NeetoRecord dialog headed 'Connect your workspace' with a field for the workspace subdomain, a .neetorecord.com suffix, and a Continue button" />
@@ -79,7 +79,7 @@ The key is the same one the [REST API](/api/authentication) uses, sent as a bear
 }
 ```
 
-That block goes inside the server entry in the assistant's config file rather than on its own. [Connect](/mcp/connect) has the complete file, in the right format, for each client.
+That block goes inside the server entry in the assistant's config file rather than on its own. [Connect agent](/mcp/connect) has the complete file, in the right format, for each client.
 
 API keys are created in your NeetoRecord workspace settings. [Learn how to generate your API key here.](https://help.neetorecord.com/articles/api-keys)
 

@@ -1,0 +1,39 @@
+---
+title: "Workspace subdomain"
+description: "Find your workspace subdomain and tell the CLI which workspace to use."
+---
+
+Every NeetoRecord workspace has its own subdomain. It is the part of your workspace URL before `neetorecord.com`. For `https://spinkart.neetorecord.com`, the subdomain is `spinkart`.
+
+The CLI uses the subdomain to know which workspace to sign in to and which workspace a command works on.
+
+## Find your subdomain
+
+<Steps>
+  <Step title="Open your workspace">
+    Sign in to NeetoRecord in your browser and look at the address bar.
+  </Step>
+  <Step title="Take the part before neetorecord.com">
+    For `https://green-earth.neetorecord.com`, the subdomain is `green-earth`.
+  </Step>
+</Steps>
+
+## Sign in with it
+
+Pass the subdomain to `login`:
+
+```bash
+neetorecord login --subdomain green-earth
+```
+
+If you omit `--subdomain`, the CLI asks for it.
+
+## Pick a workspace for a command
+
+With one signed-in workspace, the CLI uses it and `--subdomain` stays optional. When you sign in to more than one, add `--subdomain` to every command that talks to the API:
+
+```bash
+neetorecord recordings list --subdomain green-earth
+```
+
+See [Authentication](/cli/authentication) for signing in to several workspaces.
