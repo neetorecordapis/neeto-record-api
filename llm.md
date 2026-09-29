@@ -2,7 +2,7 @@
 
 ## MCP Documentation Rules
 
-1. **`mcp/introduction.mdx`, `mcp/authentication.mdx`, `mcp/connect.mdx`, `mcp/troubleshooting.mdx` and `mcp/workspace-subdomain.mdx` follow the shared neeto MCP template.** Every neeto product runs the same MCP server stack, so every neeto docs site carries the same sections, tables, client list and troubleshooting entries on these five pages, with only the product name, its resources, its help center and its support address swapped. The NeetoCal pages in neeto-cal-api are the reference copy. Change the shared wording in every product's docs or in none.
+1. **`mcp/introduction.mdx`, `mcp/authentication.mdx`, `mcp/server.mdx`, `mcp/connect.mdx`, `mcp/troubleshooting.mdx` and `mcp/workspace-subdomain.mdx` follow the shared neeto MCP template.** Every neeto product runs the same MCP server stack, so every neeto docs site carries the same sections, tables, client list and troubleshooting entries on these six pages, with only the product name, its resources, its help center and its support address swapped. The NeetoCal pages in neeto-cal-api are the reference copy. Change the shared wording in every product's docs or in none.
 
 2. **The server endpoint is always the product's own connect host, `https://connect.neetorecord.com/mcp/messages`.** Never document a workspace subdomain host such as `https://YOUR_SUBDOMAIN.neetorecord.com/mcp/messages`. The credential selects the workspace, not the host.
 

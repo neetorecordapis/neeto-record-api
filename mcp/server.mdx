@@ -1,0 +1,24 @@
+---
+title: "MCP server"
+description: "The NeetoRecord MCP server endpoint, transport, and the sign in options each agent supports."
+---
+
+NeetoRecord hosts the MCP server, so there is nothing to install or run locally.
+
+| | |
+| --- | --- |
+| **Endpoint** | `https://connect.neetorecord.com/mcp/messages` |
+| **Transport** | HTTP |
+| **Authentication** | OAuth, or `Authorization: Bearer YOUR_API_KEY` |
+
+How you connect decides what the assistant can see, so pick the credential before the client. See [Authentication](/mcp/authentication) for what the two mean in practice.
+
+| Your assistant | OAuth, scoped to you | API key, scoped to the workspace |
+| --- | --- | --- |
+| Claude, ChatGPT | Yes | Not supported |
+| Claude Code, Codex, Cursor, Gemini CLI, VS Code, Windsurf | Yes | Yes |
+| Antigravity | Not documented | Yes |
+
+Claude and ChatGPT only ever act as you. The editor and terminal clients support both, and the difference is one line of config: leave the credential out and the client signs you in over OAuth, supply one and the client reaches the whole workspace.
+
+For step by step setup in each agent, see [Connect agent](/mcp/connect).

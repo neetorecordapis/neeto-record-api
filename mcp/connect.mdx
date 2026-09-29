@@ -1,29 +1,13 @@
 ---
 title: "Connect agent"
-description: "Server details and per client setup for the NeetoRecord MCP server."
+description: "Step by step setup for Claude, ChatGPT, and other AI agents."
 ---
 
-NeetoRecord hosts the MCP server, so there is nothing to install or run locally.
+Pick your agent below and follow its steps.
 
-## Server details
+Claude and ChatGPT connect by signing in with your NeetoRecord account. The other agents can sign in the same way, or use an API key instead. For the server URL and which agent supports which option, see [MCP server](/mcp/server). For what each option lets the agent see, see [Authentication](/mcp/authentication).
 
-| | |
-| --- | --- |
-| **Endpoint** | `https://connect.neetorecord.com/mcp/messages` |
-| **Transport** | HTTP |
-| **Authentication** | OAuth, or `Authorization: Bearer YOUR_API_KEY` |
-
-How you connect decides what the assistant can see, so pick the credential before the client. See [Authentication](/mcp/authentication) for what the two mean in practice.
-
-| Your assistant | OAuth, scoped to you | API key, scoped to the workspace |
-| --- | --- | --- |
-| Claude, ChatGPT | Yes | Not supported |
-| Claude Code, Codex, Cursor, Gemini CLI, VS Code, Windsurf | Yes | Yes |
-| Antigravity | Not documented | Yes |
-
-Claude and ChatGPT only ever act as you. The editor and terminal clients support both, and the difference is one line of config: leave the credential out and the client signs you in over OAuth, supply one and the client reaches the whole workspace.
-
-## OAuth, scoped to you
+## Sign in with your NeetoRecord account
 
 Nothing to create in NeetoRecord beforehand. You give the client the server URL, and approve the connection in the browser.
 
@@ -209,7 +193,7 @@ Whichever client you started from, NeetoRecord runs the same steps.
   <Step title="Connect your workspace">
     Enter the subdomain of the workspace you want the assistant to reach. For `acme.neetorecord.com`, enter `acme`. See [Workspace subdomain](/mcp/workspace-subdomain).
 
-    <Frame caption="The first screen of the NeetoRecord OAuth flow.">
+    <Frame caption="The first screen of the NeetoRecord sign in.">
       <img src="/assets/mcp/oauth-connect-workspace.png" alt="NeetoRecord dialog headed 'Connect your workspace' with a field for the workspace subdomain, a .neetorecord.com suffix, and a Continue button" />
     </Frame>
   </Step>
@@ -234,7 +218,7 @@ There is no API key to create for this route, and nothing to paste back into the
 
 Once connected, name the workspace in a prompt when you want a specific one. To add a workspace, or to grant a permission you left unticked, run the sign in again and tick it.
 
-## API key, scoped to the workspace
+## Use an API key
 
 The same clients, configured with a key instead. Every tool call then reaches the whole workspace rather than only what you can see, which is what you want for automation and not what you want on a shared machine.
 
