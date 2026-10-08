@@ -45,15 +45,15 @@ description: "Step-by-step setup for Claude, ChatGPT, and other AI agents."
     </Accordion>
   </Tab>
 
-  <Tab title="ChatGPT">
+  <Tab title="ChatGPT web app">
     1. Go to [chatgpt.com](https://chatgpt.com) and open **Settings → Security and login**.
-    2. Turn on **Developer mode**.
+    2. Scroll to the bottom of the page and turn on **Developer mode**. It is below **Lockdown mode**.
 
        <Frame>
          <img src="/assets/mcp/chatgpt-developer-mode.png" alt="ChatGPT's Developer mode setting, tagged Elevated risk, with its toggle switched on" />
        </Frame>
 
-       If you do not see **Developer mode**, your ChatGPT workspace admin has turned it off. Ask them to allow it.
+       ChatGPT does not allow **Lockdown mode** and **Developer mode** at the same time. If **Lockdown mode** is on, turn it off first. If you still do not see **Developer mode**, your ChatGPT workspace admin has turned it off. Ask them to allow it.
 
     3. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins) and click the **plus** button.
     4. In **New Plugin**, enter the name NeetoRecord, set **Connection** to **Server URL**, and paste:
@@ -64,6 +64,43 @@ description: "Step-by-step setup for Claude, ChatGPT, and other AI agents."
 
     5. Leave **Authentication** on **OAuth**.
     6. Tick **I understand and want to continue**, then click **Create**.
+    7. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
+  </Tab>
+
+  <Tab title="ChatGPT desktop app">
+    The desktop app does not need **Developer mode**.
+
+    1. Click your profile picture at the bottom left, then click **Settings**.
+
+       <Frame>
+         <img src="/assets/mcp/chatgpt-desktop-settings-menu.png" alt="The profile menu in the ChatGPT desktop app, with Settings in the list" />
+       </Frame>
+
+    2. Click **Plugins**. Click **Add**, then click **Add MCP server**.
+
+       <Frame>
+         <img src="/assets/mcp/chatgpt-desktop-add-mcp-server.png" alt="The Plugins page in the ChatGPT desktop app, with the Add menu open and Add MCP server in the list" />
+       </Frame>
+
+    3. Enter the name NeetoRecord and set **Type** to **Streamable HTTP**.
+    4. In **URL**, paste:
+
+       ```
+       https://connect.neetorecord.com/mcp/messages
+       ```
+
+    5. Leave the other fields empty and click **Save**.
+
+       <Frame>
+         <img src="/assets/mcp/chatgpt-desktop-custom-mcp-form.png" alt="The Connect to a custom MCP form with the name NeetoRecord, the type Streamable HTTP, the server URL filled in, and a Save button" />
+       </Frame>
+
+    6. Click the **MCPs** tab. Next to **neetorecord**, click **Authenticate**.
+
+       <Frame>
+         <img src="/assets/mcp/chatgpt-desktop-authenticate.png" alt="The neetorecord row in the MCPs list, with an Authenticate button" />
+       </Frame>
+
     7. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
   </Tab>
 
