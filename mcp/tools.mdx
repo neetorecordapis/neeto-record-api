@@ -21,7 +21,7 @@ What a tool returns depends on the credential. Over [OAuth](/mcp/authentication#
 
 | Tool | What it does |
 | --- | --- |
-| [`ListRecordings`](/api/recordings/list) | Lists recordings with optional filters and pagination. |
+| [`ListRecordings`](/api/recordings/list) | Lists recordings you can see, filtered by owner (`me`), created date, folder, tags, title or transcript presence. |
 | [`GetRecording`](/api/recordings/get) | Gets full details of one recording by id. |
 | [`SearchRecordingsByTitle`](/api/recordings/search) | Exact or partial title search across recordings. |
 | [`SearchRecordingsByTranscript`](/api/recordings/search-by-transcript) | Full-text search across transcript content. |
@@ -51,6 +51,8 @@ What a tool returns depends on the credential. Over [OAuth](/mcp/authentication#
 | [`GetTranscript`](/api/recordings/transcript) | Gets the full transcript with timestamps. |
 | [`GetTranscriptStatus`](/api/recordings/transcript-status) | Reports whether a transcript exists and how generation is going. |
 | [`TriggerTranscriptGeneration`](/api/recordings/trigger-transcript) | Starts or restarts transcript generation. |
+| [`GetActionItems`](/api/recordings/action-items) | Gets the action items extracted from the transcript, each with the second it was mentioned. |
+| [`TriggerActionItemsGeneration`](/api/recordings/trigger-action-items) | Starts action item extraction. The transcript is sent to OpenAI. |
 | [`GetChapters`](/api/recordings/chapters) | Gets the auto-generated chapters. |
 | [`GetChapterStatus`](/api/recordings/chapter-status) | Reports whether chapters exist and how generation is going. |
 | [`TriggerChapterGeneration`](/api/recordings/trigger-chapters) | Starts chapter generation. |
@@ -92,6 +94,18 @@ What a tool returns depends on the credential. Over [OAuth](/mcp/authentication#
 | Tool | What it does |
 | --- | --- |
 | [`CreateRecordingRequest`](/api/recording-requests/create) | Creates a recording request for an active user in the workspace. |
+
+## Team members
+
+| Tool | What it does |
+| --- | --- |
+| [`ListTeamMembers`](/api/team-members/list) | Lists the members of the workspace, optionally by email. |
+| [`GetTeamMember`](/api/team-members/get) | Gets one member by id. |
+| [`CreateTeamMember`](/api/team-members/add) | Invites one or more members by email. |
+| [`UpdateTeamMember`](/api/team-members/update) | Updates a member's name, email, time zone or role. |
+| [`DeleteTeamMember`](/api/team-members/remove) | Removes a member. You cannot remove your own account. |
+
+`ListTeamMembers` and `GetTeamMember` need the permission to view team members. The other three need the permission to manage team members.
 
 ## Public recordings
 

@@ -74,7 +74,9 @@
               "api/recordings/trigger-mp4",
               "api/recordings/analytics",
               "api/recordings/ctas",
-              "api/recordings/create-cta"
+              "api/recordings/create-cta",
+              "api/recordings/action-items",
+              "api/recordings/trigger-action-items"
             ]
           },
           {

@@ -24,6 +24,26 @@ paths:
         - $ref: '#/components/parameters/accept_header'
         - $ref: '#/components/parameters/page_number_param'
         - $ref: '#/components/parameters/page_size_param'
+        - in: query
+          name: sort_by
+          required: false
+          description: 'Field to sort by: `created_at`, `name`. Defaults to `created_at`.'
+          schema:
+            type: string
+            enum:
+              - created_at
+              - name
+            default: created_at
+        - in: query
+          name: sort_direction
+          required: false
+          description: 'Sort direction: `asc` or `desc`. Defaults to `desc`.'
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
       responses:
         '200':
           description: Successfully retrieved folders.
@@ -158,7 +178,7 @@ components:
           example: null
         recording_count:
           type: integer
-          description: Number of recordings directly inside the folder.
+          description: Number of recordings directly inside the folder. Counts only uploaded recordings the caller can see.
           example: 12
         created_at:
           type: string

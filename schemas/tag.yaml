@@ -19,7 +19,8 @@ components:
           example: "secondary"
         recording_count:
           type: integer
-          description: Number of recordings carrying the tag.
+          description: >-
+            Number of recordings carrying the tag. Counts only uploaded recordings the caller can see.
           example: 12
 
     # Tag list response structure

@@ -15,8 +15,10 @@ For fields and response details, see the [API reference](/api/folders/list).
 This command lists every folder in the workspace with the number of recordings in each.
 
 ```bash
-neetorecord folders list --page-size 50
+neetorecord folders list --page-size 50 --sort-by name --sort-direction asc
 ```
+
+`recording_count` counts only the uploaded recordings you can see.
 
 <FoldersListFlags />
 

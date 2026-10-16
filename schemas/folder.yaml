@@ -19,7 +19,8 @@ components:
           example: null
         recording_count:
           type: integer
-          description: Number of recordings directly inside the folder.
+          description: >-
+            Number of recordings directly inside the folder. Counts only uploaded recordings the caller can see.
           example: 12
         created_at:
           type: string

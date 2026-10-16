@@ -22,6 +22,22 @@ paths:
         - $ref: '../schemas/common.yaml#/accept_header'
         - $ref: '../schemas/common.yaml#/page_number_param'
         - $ref: '../schemas/common.yaml#/page_size_param'
+        - in: query
+          name: sort_by
+          required: false
+          description: "Field to sort by: `created_at`, `name`. Defaults to `created_at`."
+          schema:
+            type: string
+            enum: ['created_at', 'name']
+            default: 'created_at'
+        - in: query
+          name: sort_direction
+          required: false
+          description: "Sort direction: `asc` or `desc`. Defaults to `desc`."
+          schema:
+            type: string
+            enum: ['asc', 'desc']
+            default: 'desc'
       responses:
         '200':
           description: Successfully retrieved folders.

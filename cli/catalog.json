@@ -61,6 +61,16 @@
             "type": "int",
             "default": "0",
             "description": "Items per page (max 100)"
+          },
+          {
+            "name": "sort-by",
+            "type": "string",
+            "description": "Sort by created_at or name"
+          },
+          {
+            "name": "sort-direction",
+            "type": "string",
+            "description": "Sort direction: asc or desc"
           }
         ]
       }
@@ -93,8 +103,7 @@
           {
             "name": "created-by-email",
             "type": "string",
-            "description": "Email of the recording requester",
-            "required": true
+            "description": "Email of the member who owns the request (defaults to the signed-in member)"
           },
           {
             "name": "request-instructions",
@@ -120,6 +129,10 @@
     "command": "neetorecord recordings",
     "description": "Manage recordings",
     "subcommands": [
+      {
+        "command": "neetorecord recordings action-items",
+        "description": "Get the action items extracted from a recording"
+      },
       {
         "command": "neetorecord recordings analytics",
         "description": "Get view analytics for a recording"
@@ -189,7 +202,31 @@
       },
       {
         "command": "neetorecord recordings ctas",
-        "description": "List CTAs for a recording"
+        "description": "List CTAs for a recording",
+        "flags": [
+          {
+            "name": "page",
+            "type": "int",
+            "default": "0",
+            "description": "Page number"
+          },
+          {
+            "name": "page-size",
+            "type": "int",
+            "default": "0",
+            "description": "Items per page (max 100)"
+          },
+          {
+            "name": "sort-by",
+            "type": "string",
+            "description": "Sort by created_at, start or label"
+          },
+          {
+            "name": "sort-direction",
+            "type": "string",
+            "description": "Sort direction: asc or desc"
+          }
+        ]
       },
       {
         "command": "neetorecord recordings delete",
@@ -216,6 +253,27 @@
         "description": "List recordings",
         "flags": [
           {
+            "name": "folder-id",
+            "type": "string",
+            "description": "Only recordings in this folder"
+          },
+          {
+            "name": "from-date",
+            "type": "string",
+            "description": "Created on or after (YYYY-MM-DD or YYYY-MM)"
+          },
+          {
+            "name": "has-transcript",
+            "type": "bool",
+            "default": "false",
+            "description": "Only recordings with a transcript (use =false for those without)"
+          },
+          {
+            "name": "owner-email",
+            "type": "string",
+            "description": "Only recordings owned by this email, or 'me'"
+          },
+          {
             "name": "page",
             "type": "int",
             "default": "0",
@@ -226,6 +284,38 @@
             "type": "int",
             "default": "0",
             "description": "Items per page (max 100)"
+          },
+          {
+            "name": "requested-only",
+            "type": "bool",
+            "default": "false",
+            "description": "Only recording requests"
+          },
+          {
+            "name": "sort-by",
+            "type": "string",
+            "description": "Sort by created_at, title, duration or view_count"
+          },
+          {
+            "name": "sort-direction",
+            "type": "string",
+            "description": "Sort direction: asc or desc"
+          },
+          {
+            "name": "tag",
+            "type": "stringArray",
+            "default": "[]",
+            "description": "Tag name (repeatable; matches any)"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "Partial title match"
+          },
+          {
+            "name": "to-date",
+            "type": "string",
+            "description": "Created on or before (YYYY-MM-DD or YYYY-MM)"
           }
         ]
       },
@@ -311,6 +401,10 @@
       {
         "command": "neetorecord recordings transcript-status",
         "description": "Check transcript generation status for a recording"
+      },
+      {
+        "command": "neetorecord recordings trigger-action-items",
+        "description": "Start action item extraction for a recording"
       },
       {
         "command": "neetorecord recordings trigger-chapters",
@@ -409,6 +503,16 @@
             "type": "int",
             "default": "0",
             "description": "Items per page (max 100)"
+          },
+          {
+            "name": "sort-by",
+            "type": "string",
+            "description": "Sort by created_at or name"
+          },
+          {
+            "name": "sort-direction",
+            "type": "string",
+            "description": "Sort direction: asc or desc"
           }
         ]
       }

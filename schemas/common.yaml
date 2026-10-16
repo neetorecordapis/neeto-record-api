@@ -82,6 +82,15 @@ components:
           example:
             error: "Recording does not exist."
 
+    recording_forbidden:
+      description: The caller is not allowed to access this recording.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            error: "You are not authorized to perform this action."
+
   schemas:
     # Error object structure
     error:

@@ -1,4 +1,14 @@
 | Flag | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| `--folder-id` | `string` |  |  | Only recordings in this folder |
+| `--from-date` | `string` |  |  | Created on or after (YYYY-MM-DD or YYYY-MM) |
+| `--has-transcript` | `bool` |  | `false` | Only recordings with a transcript (use =false for those without) |
+| `--owner-email` | `string` |  |  | Only recordings owned by this email, or 'me' |
 | `--page` | `int` |  | `0` | Page number |
 | `--page-size` | `int` |  | `0` | Items per page (max 100) |
+| `--requested-only` | `bool` |  | `false` | Only recording requests |
+| `--sort-by` | `string` |  |  | Sort by created_at, title, duration or view_count |
+| `--sort-direction` | `string` |  |  | Sort direction: asc or desc |
+| `--tag` | `stringArray` |  | `[]` | Tag name (repeatable; matches any) |
+| `--title` | `string` |  |  | Partial title match |
+| `--to-date` | `string` |  |  | Created on or before (YYYY-MM-DD or YYYY-MM) |

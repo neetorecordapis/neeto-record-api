@@ -10,6 +10,7 @@ import RecordingsUpdateFlags from '/snippets/cli/recordings/update.mdx'
 import RecordingsTriggerTranscriptFlags from '/snippets/cli/recordings/trigger-transcript.mdx'
 import RecordingsDownloadUrlFlags from '/snippets/cli/recordings/download-url.mdx'
 import RecordingsScreenshotFlags from '/snippets/cli/recordings/screenshot.mdx'
+import RecordingsCtasFlags from '/snippets/cli/recordings/ctas.mdx'
 import RecordingsCreateCtaFlags from '/snippets/cli/recordings/create-cta.mdx'
 
 A recording is the core NeetoRecord resource. For fields and response details,
@@ -22,11 +23,26 @@ segment of a watch URL such as
 
 ## List recordings
 
-This command lists the recordings in the workspace, newest first. Use this to find a recording
-id to pass to the other commands.
+This command lists the uploaded recordings you can see, newest first. Use this to find a recording
+id to pass to the other commands. Narrow the list with the filter flags, and use `--sort-by` and
+`--sort-direction` to change the order.
 
 ```bash
 neetorecord recordings list --page 1 --page-size 30
+```
+
+To list the recordings you made in a week, filter by owner and created date. `me` means the
+signed-in member, and both dates are inclusive.
+
+```bash
+neetorecord recordings list --owner-email me --from-date 2026-10-05 --to-date 2026-10-11
+```
+
+To find recordings that still need a transcript, use `--has-transcript=false`. Repeat `--tag` to
+match any of several tags.
+
+```bash
+neetorecord recordings list --has-transcript=false --tag demo --tag onboarding
 ```
 
 <RecordingsListFlags />
@@ -59,7 +75,8 @@ neetorecord recordings list --page 1 --page-size 30
         }
       ],
       "folder_name": "Product demos",
-      "folder_id": "8c1d4e77-2b3a-4f56-9e08-7d5c6b4a3f21"
+      "folder_id": "8c1d4e77-2b3a-4f56-9e08-7d5c6b4a3f21",
+      "has_transcript": true
     }
   ],
   "breadcrumbs": [
@@ -468,8 +485,10 @@ For workspace-wide numbers, see [`analytics show`](/cli-reference/analytics#show
 This command lists the call-to-action buttons configured on a recording.
 
 ```bash
-neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d --sort-by start --sort-direction asc
 ```
+
+<RecordingsCtasFlags />
 
 **Required arguments:**
 
@@ -487,9 +506,75 @@ neetorecord recordings ctas 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
         "start": 30.0,
         "end": 90.0,
         "position": "top-right",
+        "background_color": "#000000",
+        "text_color": "#FFFFFF",
         "show_only_at_end": false
       }
     ]
+  },
+  "pagination": {
+    "total_records": 1,
+    "total_pages": 1,
+    "current_page_number": 1,
+    "page_size": 30
+  }
+}
+```
+
+## Show action items
+
+This command shows the action items extracted from a recording's transcript, each with the second
+at which it was mentioned. Check `status` first: `success`, `no_transcript`, `in_progress`,
+`failed` or `not_generated`. The items are listed only when the status is `success`.
+
+```bash
+neetorecord recordings action-items 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments:**
+
+- `<id>` - the recording id or public link id.
+
+```json Sample output (--json)
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "success",
+    "action_items": [
+      {
+        "id": "9b1f3c52-7d84-4e0a-a6c1-2f5d8e7b3a90",
+        "text": "Finalize the single sign-on pricing page",
+        "start": 125.0
+      }
+    ]
+  },
+  "breadcrumbs": [
+    { "label": "Trigger", "command": "neetorecord recordings trigger-action-items <id>" }
+  ]
+}
+```
+
+## Generate action items
+
+This command starts action item extraction. The transcript is sent to OpenAI and the items are
+produced in the background, so the command returns at once. Run `recordings action-items` until the
+status is `success` or `failed`. If the status is already `success`, `no_transcript` or
+`in_progress`, it is returned unchanged and nothing new starts.
+
+```bash
+neetorecord recordings trigger-action-items 3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d
+```
+
+**Required arguments:**
+
+- `<id>` - the recording id or public link id.
+
+```json Sample output (--json)
+{
+  "data": {
+    "recording_id": "4f9c2a1b7e5d3086af12",
+    "status": "in_progress",
+    "action_items": []
   }
 }
 ```

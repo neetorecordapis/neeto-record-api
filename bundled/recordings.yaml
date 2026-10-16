@@ -18,12 +18,90 @@ paths:
       summary: List all recordings
       tags:
         - Recordings
-      description: List all recordings.
+      description: Lists the uploaded recordings the caller can see, newest first.
       parameters:
         - $ref: '#/components/parameters/api_key_header'
         - $ref: '#/components/parameters/accept_header'
         - $ref: '#/components/parameters/page_number_param'
         - $ref: '#/components/parameters/page_size_param'
+        - in: query
+          name: owner_email
+          required: false
+          description: Only recordings owned by the member with this email address. Send `me` for the signed-in member, which works only with a CLI session. An unknown email returns an empty list.
+          schema:
+            type: string
+          example: oliver@example.com
+        - in: query
+          name: from_date
+          required: false
+          description: Only recordings created on or after this date, in `YYYY-MM-DD` or `YYYY-MM` format, evaluated in UTC.
+          schema:
+            type: string
+          example: '2026-10-05'
+        - in: query
+          name: to_date
+          required: false
+          description: Only recordings created on or before this date, in `YYYY-MM-DD` or `YYYY-MM` format, evaluated in UTC.
+          schema:
+            type: string
+          example: '2026-10-11'
+        - in: query
+          name: folder_id
+          required: false
+          description: Only recordings in this folder. Accepts the folder `id` from the folders API.
+          schema:
+            type: string
+        - in: query
+          name: tag_names[]
+          required: false
+          description: Only recordings carrying at least one of these tags. Repeat the parameter for each tag.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: title
+          required: false
+          description: Only recordings whose title or default title contains this text.
+          schema:
+            type: string
+        - in: query
+          name: has_transcript
+          required: false
+          description: '`true` for only recordings with a transcript, `false` for only recordings without one.'
+          schema:
+            type: boolean
+        - in: query
+          name: requested_only
+          required: false
+          description: List only recordings created from a recording request.
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: sort_by
+          required: false
+          description: 'Field to sort by: `created_at`, `title`, `duration`, `view_count`. Defaults to `created_at`.'
+          schema:
+            type: string
+            enum:
+              - created_at
+              - title
+              - duration
+              - view_count
+            default: created_at
+        - in: query
+          name: sort_direction
+          required: false
+          description: 'Sort direction: `asc` or `desc`. Defaults to `desc`.'
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
       responses:
         '200':
           description: Successfully retrieved recordings.
@@ -55,6 +133,7 @@ paths:
                         style: blue
                     folder_name: Sales
                     folder_id: f1a2b3c4-d5e6-7890-abcd-ef1234567890
+                    has_transcript: true
                   - id: b2c3d4e5-f6a7-8901-bcde-f23456789012
                     title: Sprint planning meeting
                     default_title: Recording 2026-02-14
@@ -74,11 +153,35 @@ paths:
                     tags: []
                     folder_name: null
                     folder_id: null
+                    has_transcript: false
                 pagination:
                   total_records: 150
                   total_pages: 5
                   current_page_number: 1
                   page_size: 30
+        '404':
+          description: The `folder_id` does not match a folder in this workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                error: Folder does not exist.
+        '422':
+          description: A date could not be parsed, `from_date` is after `to_date`, or `owner_email` is `me` on a request made with an API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                invalid_date:
+                  summary: A date could not be parsed
+                  value:
+                    error: Invalid from_date. Use YYYY-MM-DD or YYYY-MM.
+                owner_me_with_api_key:
+                  summary: '`me` used with an API key'
+                  value:
+                    error: owner_email 'me' requires a signed-in member.
   /recordings/{id}/screenshot:
     get:
       summary: Get a screenshot at a timestamp
@@ -144,6 +247,8 @@ paths:
                 is_screenshot_ready: true
                 screenshot_url: https://example-bucket.s3.amazonaws.com/.../frames/12500.png?X-Amz-Signature=...
                 url_expires_in_seconds: 600
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '422':
           description: Invalid timestamp or image format, recording still processing, or extraction failed.
           content:
@@ -188,6 +293,8 @@ paths:
               example:
                 recording_id: x9y8z7w6v5u4t3s2
                 status: generating
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
   /recordings/{id}:
     get:
       summary: Get a recording
@@ -228,6 +335,8 @@ paths:
                     style: secondary
                 folder_name: Sales
                 folder_id: f1a2b3c4-d5e6-7890-abcd-ef1234567890
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
     patch:
@@ -279,6 +388,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/recording'
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
         '422':
@@ -301,6 +412,8 @@ paths:
       responses:
         '204':
           description: The recording was deleted.
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/search:
@@ -394,6 +507,8 @@ paths:
                     - start: 0
                       end: 3.4
                       text: Let me walk through the new folders view.
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/transcript-status:
@@ -417,6 +532,8 @@ paths:
                 recording_id: x9y8z7w6v5u4t3s2
                 status: success
                 has_transcript: true
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/trigger-transcript:
@@ -450,6 +567,8 @@ paths:
               example:
                 recording_id: x9y8z7w6v5u4t3s2
                 status: triggered
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/chapters:
@@ -476,6 +595,8 @@ paths:
                     start: 0
                   - title: Folders view
                     start: 48
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/chapter-status:
@@ -499,6 +620,8 @@ paths:
                 recording_id: x9y8z7w6v5u4t3s2
                 status: success
                 has_chapters: true
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/trigger-chapters:
@@ -521,6 +644,8 @@ paths:
               example:
                 recording_id: x9y8z7w6v5u4t3s2
                 status: triggered
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/share-link:
@@ -545,6 +670,8 @@ paths:
                 public_url: https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2
                 is_expired: false
                 access_control_protected: false
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/embed-code:
@@ -568,6 +695,8 @@ paths:
                 recording_id: x9y8z7w6v5u4t3s2
                 embed_url: https://your-workspace.neetorecord.com/embeds/a1b2c3d4-e5f6-7890-abcd-ef1234567890
                 embed_html: <iframe src="https://your-workspace.neetorecord.com/embeds/a1b2c3d4-e5f6-7890-abcd-ef1234567890" width="100%" height="480" frameborder="0" allowfullscreen></iframe>
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/download-url:
@@ -603,6 +732,8 @@ paths:
                 is_download_file_ready: true
                 download_url: https://example-bucket.s3.amazonaws.com/.../recording.mp4?X-Amz-Signature=...
                 url_expires_in_seconds: 600
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/analytics:
@@ -630,6 +761,61 @@ paths:
                     count: 27
                   - date: '2026-02-16'
                     count: 15
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
+        '404':
+          $ref: '#/components/responses/recording_not_found'
+  /recordings/{id}/action-items:
+    get:
+      summary: Get action items
+      tags:
+        - Recordings
+      description: Retrieves the action items extracted from the recording's transcript, each with the second at which it was mentioned. Check `status` before reading `action_items`. If the status is `not_generated` or `failed`, call `POST /recordings/{id}/trigger-action-items`. A `no_transcript` status is final until the recording has a transcript, and triggering does not change it.
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - $ref: '#/components/parameters/recording_id_param'
+      responses:
+        '200':
+          description: Successfully retrieved the action items and their generation status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action_items_response'
+              example:
+                recording_id: x9y8z7w6v5u4t3s2
+                status: success
+                action_items:
+                  - id: 9b1f3c52-7d84-4e0a-a6c1-2f5d8e7b3a90
+                    text: Finalize the single sign-on pricing page
+                    start: 125
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
+        '404':
+          $ref: '#/components/responses/recording_not_found'
+  /recordings/{id}/trigger-action-items:
+    post:
+      summary: Generate action items
+      tags:
+        - Recordings
+      description: Starts action item extraction. The recording's transcript is sent to OpenAI and the items are produced in the background, so the response lists them only if they already existed. Poll `GET /recordings/{id}/action-items` until `status` is `success` or `failed`. The status is returned unchanged, without starting a new run, when it is already `success`, `no_transcript` or `in_progress`.
+      parameters:
+        - $ref: '#/components/parameters/api_key_header'
+        - $ref: '#/components/parameters/accept_header'
+        - $ref: '#/components/parameters/recording_id_param'
+      responses:
+        '200':
+          description: Action item generation was started, or the current state was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action_items_response'
+              example:
+                recording_id: x9y8z7w6v5u4t3s2
+                status: in_progress
+                action_items: []
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
   /recordings/{id}/ctas:
@@ -642,6 +828,29 @@ paths:
         - $ref: '#/components/parameters/api_key_header'
         - $ref: '#/components/parameters/accept_header'
         - $ref: '#/components/parameters/recording_id_param'
+        - $ref: '#/components/parameters/page_number_param'
+        - $ref: '#/components/parameters/page_size_param'
+        - in: query
+          name: sort_by
+          required: false
+          description: 'Field to sort by: `created_at`, `start`, `label`. Defaults to `created_at`.'
+          schema:
+            type: string
+            enum:
+              - created_at
+              - start
+              - label
+            default: created_at
+        - in: query
+          name: sort_direction
+          required: false
+          description: 'Sort direction: `asc` or `desc`. Defaults to `desc`.'
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
       responses:
         '200':
           description: Successfully retrieved the CTAs.
@@ -658,7 +867,16 @@ paths:
                     start: 30
                     end: 90
                     position: top-right
+                    background_color: '#000000'
+                    text_color: '#FFFFFF'
                     show_only_at_end: false
+                pagination:
+                  total_records: 1
+                  total_pages: 1
+                  current_page_number: 1
+                  page_size: 30
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
     post:
@@ -743,6 +961,8 @@ paths:
                 background_color: '#000000'
                 text_color: '#FFFFFF'
                 show_only_at_end: false
+        '403':
+          $ref: '#/components/responses/recording_forbidden'
         '404':
           $ref: '#/components/responses/recording_not_found'
         '422':
@@ -868,6 +1088,9 @@ components:
           type: string
           nullable: true
           description: Unique identifier of the folder containing the recording.
+        has_transcript:
+          type: boolean
+          description: Whether the recording has transcript text.
         created_at:
           type: string
           format: date-time
@@ -1086,6 +1309,37 @@ components:
           items:
             $ref: '#/components/schemas/views_by_day_entry'
           description: View counts grouped by day, oldest first.
+    action_items_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        status:
+          type: string
+          enum:
+            - success
+            - no_transcript
+            - in_progress
+            - failed
+            - not_generated
+          description: State of action item generation. `no_transcript` means the recording has no transcript to extract from.
+        action_items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Unique identifier for the action item.
+              text:
+                type: string
+                description: The action item.
+              start:
+                type: number
+                description: Second of the recording at which the item was mentioned.
+          description: Action items extracted from the transcript. Empty unless `status` is `success`.
     cta:
       type: object
       properties:
@@ -1114,6 +1368,12 @@ components:
             - bottom-right
             - bottom-left
           description: Corner of the player the button is anchored to.
+        background_color:
+          type: string
+          description: Button background color, as a hex string.
+        text_color:
+          type: string
+          description: Button text color, as a hex string.
         show_only_at_end:
           type: boolean
           description: Whether the button is shown only after the recording finishes.
@@ -1128,6 +1388,8 @@ components:
           items:
             $ref: '#/components/schemas/cta'
           description: CTAs configured on the recording.
+        pagination:
+          $ref: '#/components/schemas/pagination'
     cta_create_response:
       allOf:
         - $ref: '#/components/schemas/cta'
@@ -1136,13 +1398,15 @@ components:
             recording_id:
               type: string
               description: Public link identifier of the recording.
-            background_color:
-              type: string
-              description: Button background color, as a hex string.
-            text_color:
-              type: string
-              description: Button text color, as a hex string.
   responses:
+    recording_forbidden:
+      description: The caller is not allowed to access this recording.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            error: You are not authorized to perform this action.
     recording_not_found:
       description: The recording does not exist in this workspace.
       content:

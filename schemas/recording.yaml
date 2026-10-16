@@ -77,6 +77,9 @@ components:
           type: string
           nullable: true
           description: Unique identifier of the folder containing the recording.
+        has_transcript:
+          type: boolean
+          description: Whether the recording has transcript text.
         created_at:
           type: string
           format: date-time
@@ -316,6 +319,12 @@ components:
           type: string
           enum: ["top-right", "top-left", "bottom-right", "bottom-left"]
           description: Corner of the player the button is anchored to.
+        background_color:
+          type: string
+          description: Button background color, as a hex string.
+        text_color:
+          type: string
+          description: Button text color, as a hex string.
         show_only_at_end:
           type: boolean
           description: Whether the button is shown only after the recording finishes.
@@ -332,6 +341,38 @@ components:
           items:
             $ref: "#/components/schemas/cta"
           description: CTAs configured on the recording.
+        pagination:
+          $ref: "common.yaml#/components/schemas/pagination"
+
+    # Action items response structure
+    action_items_response:
+      type: object
+      properties:
+        recording_id:
+          type: string
+          description: Public link identifier of the recording.
+        status:
+          type: string
+          enum: ["success", "no_transcript", "in_progress", "failed", "not_generated"]
+          description: >-
+            State of action item generation. `no_transcript` means the recording has no transcript
+            to extract from.
+        action_items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Unique identifier for the action item.
+              text:
+                type: string
+                description: The action item.
+              start:
+                type: number
+                description: Second of the recording at which the item was mentioned.
+          description: Action items extracted from the transcript. Empty unless `status` is `success`.
 
     # CTA create response structure
     cta_create_response:
@@ -342,9 +383,3 @@ components:
             recording_id:
               type: string
               description: Public link identifier of the recording.
-            background_color:
-              type: string
-              description: Button background color, as a hex string.
-            text_color:
-              type: string
-              description: Button text color, as a hex string.

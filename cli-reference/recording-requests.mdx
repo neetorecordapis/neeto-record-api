@@ -17,16 +17,16 @@ This command creates a request and returns the URL to share with whoever will re
 ```bash
 neetorecord recording-requests create \
   --title "Walk me through the billing bug" \
-  --created-by-email oliver@example.com \
   --request-instructions "Start from the invoice list and reproduce the error." \
   --request-notes "Raised by support ticket 4821."
 ```
 
 <RecordingRequestsCreateFlags />
 
-`--created-by-email` must be the email of an active member of the workspace.
-That person is recorded as the requester, and the request counts against their
-monthly recording limit.
+The request belongs to the signed-in member and counts against their monthly
+recording limit. To create it for another member, pass `--created-by-email` with
+the email of an active member of the workspace. That needs the permission to
+manage every recording.
 
 ```json Sample output (--json)
 {
