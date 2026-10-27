@@ -182,6 +182,163 @@ paths:
                   value:
                     error: "owner_email 'me' requires a signed-in member."
 
+  /recordings/uploads:
+    post:
+      summary: Start a video upload
+      tags:
+        - Recordings
+      description: >-
+        Reserves a new recording for an MP4 video of up to 2 GB and returns a presigned URL to
+        send the file to. Uploading a video takes three steps. First, call this endpoint. Second,
+        send the raw file bytes with an HTTP `PUT` to `upload_url`, with every header in
+        `upload_headers`. The URL is valid for 15 minutes. **Do not send your `X-Api-Key` header
+        on this `PUT` request**, because the URL goes to storage and not to NeetoRecord. Third, call
+        `POST /recordings/{id}/complete-upload` so the video is processed. Uploading needs a paid
+        plan and enough upload storage left for the owner.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - file_size
+              properties:
+                file_size:
+                  type: integer
+                  minimum: 1
+                  maximum: 2147483648
+                  description: Size of the MP4 file in bytes. It must be between 1 and 2,147,483,648 bytes (2 GB).
+                  example: 52428800
+                title:
+                  type: string
+                  description: Title of the recording. A default title is used when omitted.
+                  example: "Quarterly product demo"
+                folder_id:
+                  type: string
+                  description: Folder to put the recording in. Accepts the folder `id` from the folders API.
+                owner_email:
+                  type: string
+                  description: >-
+                    Email of the active workspace member who owns the recording. Required with a
+                    workspace API key. With a signed-in CLI session it defaults to the signed-in
+                    member, and naming another member needs the permission to manage every
+                    recording.
+                  example: "oliver@example.com"
+      responses:
+        '200':
+          description: The recording was reserved. Send the file to `upload_url` next.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - recording
+                  - upload_url
+                  - upload_headers
+                properties:
+                  recording:
+                    $ref: '../schemas/recording.yaml#/components/schemas/upload_recording'
+                  upload_url:
+                    type: string
+                    description: Presigned URL to `PUT` the file to. Valid for 15 minutes.
+                  upload_headers:
+                    type: object
+                    description: Headers the `PUT` request must send unchanged.
+                    properties:
+                      Content-Type:
+                        type: string
+                        example: "video/mp4"
+              example:
+                recording:
+                  id: "3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d"
+                  title: "Quarterly product demo"
+                  url: "https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2"
+                upload_url: "https://example-bucket.s3.amazonaws.com/.../video.mp4?X-Amz-Signature=..."
+                upload_headers:
+                  Content-Type: "video/mp4"
+        '401':
+          description: The API key or session is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+        '403':
+          description: >-
+            Upload is not enabled for the owner's plan, the file would exceed the owner's remaining
+            upload storage, or the caller named another owner without the permission to manage
+            every recording.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "Upload is not enabled for this workspace"
+        '404':
+          description: The folder does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+        '422':
+          description: >-
+            `file_size` is missing, is not a whole number, or is outside 1 byte to 2 GB, or
+            `owner_email` is required but missing or does not name an active member.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "File size must be a whole number of bytes between 1 and 2 GB."
+
+  /recordings/{id}/complete-upload:
+    post:
+      summary: Complete a video upload
+      tags:
+        - Recordings
+      description: >-
+        Marks an upload as finished after the file has been sent to the `upload_url` from
+        `POST /recordings/uploads`. NeetoRecord reads the real file size from storage and starts
+        processing the video.
+      parameters:
+        - $ref: '../schemas/common.yaml#/api_key_header'
+        - $ref: '../schemas/common.yaml#/accept_header'
+        - $ref: '../schemas/common.yaml#/recording_id_param'
+      responses:
+        '200':
+          description: The upload was accepted and the video is being processed.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - recording
+                properties:
+                  recording:
+                    $ref: '../schemas/recording.yaml#/components/schemas/upload_recording'
+              example:
+                recording:
+                  id: "3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d"
+                  title: "Quarterly product demo"
+                  url: "https://your-workspace.neetorecord.com/watch/x9y8z7w6v5u4t3s2"
+        '403':
+          $ref: '../schemas/common.yaml#/components/responses/recording_forbidden'
+        '404':
+          $ref: '../schemas/common.yaml#/components/responses/recording_not_found'
+        '422':
+          description: >-
+            The file is not in storage yet, or the stored file is over 2 GB or over the owner's
+            remaining upload storage.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/error'
+              example:
+                error: "The video file has not been uploaded yet. Upload it to the upload URL first."
+
   /recordings/{id}/screenshot:
     get:
       summary: Get a screenshot at a timestamp

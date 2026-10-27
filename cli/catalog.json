@@ -451,6 +451,22 @@
             "description": "New title"
           }
         ]
+      },
+      {
+        "command": "neetorecord recordings upload",
+        "description": "Upload an mp4 video as a recording",
+        "flags": [
+          {
+            "name": "folder-id",
+            "type": "string",
+            "description": "Folder ID to put the recording in"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "Title for the recording"
+          }
+        ]
       }
     ]
   },

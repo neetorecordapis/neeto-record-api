@@ -1,6 +1,6 @@
 ---
 title: "Recordings"
-description: "List, search, update, and delete recordings, and work with their transcripts, chapters, links, and CTAs."
+description: "List, search, upload, update, and delete recordings, and work with their transcripts, chapters, links, and CTAs."
 ---
 
 import RecordingsListFlags from '/snippets/cli/recordings/list.mdx'
@@ -12,6 +12,7 @@ import RecordingsDownloadUrlFlags from '/snippets/cli/recordings/download-url.md
 import RecordingsScreenshotFlags from '/snippets/cli/recordings/screenshot.mdx'
 import RecordingsCtasFlags from '/snippets/cli/recordings/ctas.mdx'
 import RecordingsCreateCtaFlags from '/snippets/cli/recordings/create-cta.mdx'
+import RecordingsUploadFlags from '/snippets/cli/recordings/upload.mdx'
 
 A recording is the core NeetoRecord resource. For fields and response details,
 see the [API reference](/api/recordings/list).
@@ -131,6 +132,44 @@ neetorecord recordings search-by-transcript --query "pricing page"
 <RecordingsSearchByTranscriptFlags />
 
 The output matches `recordings list`.
+
+## Upload a video
+
+This command uploads an MP4 file as a new recording. It reserves the recording, sends the file to
+storage, and then starts processing. The file must be an `.mp4` of up to 2 GB, and your plan must
+allow uploads. The command stops before it sends anything if the file is missing, is not an `.mp4`,
+or is over 2 GB. It retries network errors, timeouts, and 408, 429, and 5xx responses up to 3 times.
+
+```bash
+neetorecord recordings upload ./demo.mp4 --title "Quarterly product demo"
+```
+
+**Required arguments:**
+
+- `<file.mp4>` - the path to the video file.
+
+<RecordingsUploadFlags />
+
+```json Sample output (--json)
+{
+  "data": {
+    "recording": {
+      "id": "3f6a1c58-9b2e-4d77-8a10-5c0b1e2f3a4d",
+      "title": "Quarterly product demo",
+      "url": "https://acme.neetorecord.com/watch/4f9c2a1b7e5d3086af12"
+    }
+  },
+  "breadcrumbs": [
+    {
+      "label": "Show",
+      "command": "neetorecord recordings show <id>"
+    }
+  ]
+}
+```
+
+Use `--quiet` to print only the recording id. The recording is processed in the background, so its
+watch page may take a short while to play.
 
 ## Update a recording
 

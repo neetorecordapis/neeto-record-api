@@ -27,9 +27,18 @@ What a tool returns depends on the credential. Over [OAuth](/mcp/authentication#
 | [`SearchRecordingsByTranscript`](/api/recordings/search-by-transcript) | Full-text search across transcript content. |
 | [`UpdateRecording`](/api/recordings/update) | Updates a recording's title, summary, or tags. |
 | [`MoveRecordingToFolder`](/api/recordings/update) | Moves a recording into a folder, or out of its current one. |
+| [`CreateRecordingUpload`](/api/recordings/start-upload) | Reserves a recording for an MP4 video of up to 2 GB and returns the `upload_url` and `upload_headers` to send the file with. |
+| [`CompleteRecordingUpload`](/api/recordings/complete-upload) | Finishes an upload after the file has been sent, so the video is processed. |
 | [`DeleteRecording`](/api/recordings/delete) | Permanently deletes a recording and everything derived from it. |
 | `search` | Takes a `query` string and searches recordings by title and by what was said in them, returning up to 25 of the most recent matches, each with its id, title, watch URL and a snippet of the matching transcript. |
 | `fetch` | Takes a recording `id`, the one `search` returns, and returns the recording's summary and transcript cut to 20,000 characters in total, along with its watch URL, duration, view count and tags. |
+
+<Note>
+  To upload a video, an assistant calls `CreateRecordingUpload`, sends the file bytes with an HTTP
+  `PUT` to the returned `upload_url` with the `upload_headers` unchanged, and then calls
+  `CompleteRecordingUpload` with the `recording_id`. Assistants that cannot send a `PUT` request
+  from their own machine cannot finish the upload.
+</Note>
 
 <Warning>
   `DeleteRecording` cannot be undone. Assistants are told it is destructive, but

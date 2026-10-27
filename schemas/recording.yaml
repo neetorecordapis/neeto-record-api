@@ -14,6 +14,19 @@ components:
           type: string
           description: Style/color of the tag.
 
+    upload_recording:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier (UUID) for the recording. Pass it to the complete-upload endpoint.
+        title:
+          type: string
+          description: Title of the recording.
+        url:
+          type: string
+          description: Watch URL of the recording once it is processed.
+
     # Recording object structure
     recording:
       type: object

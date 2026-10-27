@@ -56,6 +56,8 @@
             "icon": "video",
             "pages": [
               "api/recordings/list",
+              "api/recordings/start-upload",
+              "api/recordings/complete-upload",
               "api/recordings/get",
               "api/recordings/update",
               "api/recordings/delete",
