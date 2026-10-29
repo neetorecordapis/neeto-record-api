@@ -19,14 +19,6 @@ description: "What to check when an assistant cannot reach NeetoRecord."
     Full snippets for each client are on [Connect agent](/mcp/connect).
   </Accordion>
 
-  <Accordion title="ChatGPT does not show Developer mode">
-    Go to [chatgpt.com](https://chatgpt.com) and open **Settings → Security and login**. Scroll to the bottom of the page. **Developer mode** is the last section, below **Lockdown mode**.
-
-    If **Lockdown mode** is on, turn it off first. ChatGPT does not allow both at the same time. If **Developer mode** is still not there, your ChatGPT workspace admin has turned it off. Ask them to allow it, then follow the **ChatGPT web app** steps in [Connect agent](/mcp/connect).
-
-    The ChatGPT desktop app does not need **Developer mode**. Follow the **ChatGPT desktop app** steps in [Connect agent](/mcp/connect) instead.
-  </Accordion>
-
   <Accordion title="The connection is refused or unauthorized">
     On an API key connection, the `Authorization` header must read `Bearer YOUR_API_KEY`, with the word `Bearer` and a single space before the key. Confirm the key has not been revoked, and that it belongs to the workspace you expect: a key generated in one workspace does not work in another. Generate a new key from [workspace settings](https://help.neetorecord.com/articles/api-keys) if you are unsure.
 

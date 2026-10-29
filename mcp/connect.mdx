@@ -46,30 +46,28 @@ description: "Step-by-step setup for Claude, ChatGPT, and other AI agents."
   </Tab>
 
   <Tab title="ChatGPT web app">
-    1. Go to [chatgpt.com](https://chatgpt.com) and open **Settings → Security and login**.
-    2. Scroll to the bottom of the page and turn on **Developer mode**. It is below **Lockdown mode**.
+    1. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins). Click **Add** at the top right, then click **Add custom MCP server**.
 
        <Frame>
-         <img src="/assets/mcp/chatgpt-developer-mode.png" alt="ChatGPT's Developer mode setting, tagged Elevated risk, with its toggle switched on" />
+         <img src="/assets/mcp/chatgpt-add-custom-mcp-server.png" alt="The Add menu on the ChatGPT Plugins page, with Create plugin, Upload plugin archive and Add custom MCP server in the list" />
        </Frame>
 
-       ChatGPT does not allow **Lockdown mode** and **Developer mode** at the same time. If **Lockdown mode** is on, turn it off first. If you still do not see **Developer mode**, your ChatGPT workspace admin has turned it off. Ask them to allow it.
-
-    3. Go to [chatgpt.com/plugins](https://chatgpt.com/plugins) and click the **plus** button.
-    4. In **New Plugin**, enter the name NeetoRecord, set **Connection** to **Server URL**, and paste:
+    2. In **Add custom MCP server**, enter the name NeetoRecord, keep **Connection** on **Server URL**, and paste:
 
        ```
        https://connect.neetorecord.com/mcp/messages
        ```
 
-    5. Leave **Authentication** on **OAuth**.
-    6. Tick **I understand and want to continue**, then click **Create**.
-    7. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
+    3. Leave **Authentication** on **OAuth**. Tick **I understand and want to continue**, then click **Create as a plugin**.
+
+       <Frame>
+         <img src="/assets/mcp/chatgpt-custom-mcp-form.png" alt="The Add custom MCP server form with the name NeetoRecord, the server URL filled in, Authentication set to OAuth, and a Create as a plugin button" />
+       </Frame>
+
+    4. Sign in to NeetoRecord. See [What the sign-in looks like](#what-the-sign-in-looks-like).
   </Tab>
 
   <Tab title="ChatGPT desktop app">
-    The desktop app does not need **Developer mode**.
-
     1. Click your profile picture at the bottom left, then click **Settings**.
 
        <Frame>
